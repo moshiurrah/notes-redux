@@ -8,8 +8,8 @@
     "react-scripts": "1.0.17"
   },
   "proxy": "http://localhost:8080",
-  "homepage": "https://recipestorage.herokuapp.com/",
-  "althome": "https://fccwebapps-mtanzim.c9users.io/",
+  "homepage": "https://notesapp-mtanzim.c9users.io/",
+  "althome": "",
   "scripts": {
     "start": "PORT=8081 react-scripts start",
     "build": "react-scripts build",
