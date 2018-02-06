@@ -2,21 +2,64 @@
 mtanzim@gmail.com
 Feb 2018
 */
-
 import React, { Component } from 'react';
+//import Redux from 'redux';
+import { Provider, connect } from 'react-redux'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
+
+
 import logo from './logo.svg';
 import './style.css';
 
+//components
+import UserLogin from './UserLogin';
+import Header from './Header';
+
+//Redux
+//simple example with redux managing authentication state
+//LOGIN REDUCER
+const LOGIN="LOGIN";
+const LOGOUT="LOGOUT";
+
+//auth action creators
+const loginUser = () => {
+	return {type:LOGIN}
+}
+const logoutUser = () => {
+	return {type:LOGOUT}
+}
+
+//auth reducer
+const defaultAuth = {
+	authenticated: false
+}
+
+const authReducer = (state=defaultAuth, action) => {
+	switch (action.type) {
+		case LOGIN:
+			return {authenticated: true}
+		case LOGOUT:
+			return {authenticated: false}
+		default:
+			return state;
+	}
+}
+
+const store = createStore(authReducer);
+
+//React
 class Notes extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			isAuth: true,
+			userInfo: {},
 			note: [{id:(new Date).getTime(), 
 							note:'Welcome to the Bulletin Board! On desktop, Hover on the note to access the controls.'
 						}],
 			numNotes:1,
 			addDisabled:false,
-			maxZ:0
 		};
 
 		this.NUM_LIMIT=25;
@@ -44,11 +87,6 @@ class Notes extends React.Component {
 		});
 	}
 
-	changeZ () {
-		this.setState ({
-			maxZ: this.state.maxZ +1
-		});
-	}
 	add () {
 		//use time as the id as a hack for now
 		//this will also serve as the default color picker
@@ -122,19 +160,25 @@ class Notes extends React.Component {
 						</Note>);
 	}
 
-  render() {
+	render () {
+		return (((this.state.isAuth) ? this.renderNotes() : this.renderLoginPage()));
+	}
+
+	renderLoginPage = () => {
+		return (
+			<UserLogin/>
+		)
+	}
+
+  renderNotes = () =>  {
     // change code below this line
 		return (
 			<div className="">
-				<div className="sticky-top">
-					<nav className="navbar navbar-light bg-light">
-						<a className="navbar-brand" href="#">Bulletin Board</a>
-							<span className="ml-auto">
-									<button  className="btn btn-default mr-2" id='addBtn' disabled={this.state.addDisabled} onClick={this.add}><i className="fa fa-plus" aria-hidden="true"></i></button>
-									<button className="btn btn-default" id='clearBtn' onClick={this.clearAll}><i className="fa fa-trash-o" aria-hidden="true"></i></button>
-							</span>
-					</nav>
-				</div>
+				<Header add={this.add}
+								addDisabled={this.state.addDisabled}
+								clearAll={this.clearAll}
+								needFunctions={true}
+				/>
 				<div className="fixed-bottom" hidden={!this.state.addDisabled}>
 					<div className="alert alert-danger" >
 						More than {this.NUM_LIMIT} notes are not allowed!
@@ -185,6 +229,12 @@ class Note extends React.Component {
 			})
 	}
 
+	componentDidMount () {
+
+			this.setState({
+				editing:true
+			})
+	}
 	componentDidUpdate() {
 		if (this.state.editing){
 			this.refs.newText.focus();

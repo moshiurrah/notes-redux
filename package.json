@@ -41,7 +41,10 @@
     "passport-facebook": "^2.1.1",
     "passport-github": "^1.0.0",
     "passport-local": "^1.0.0",
-    "react-scroll-to-component": "^1.0.2"
+    "react-redux": "^5.0.6",
+    "react-scroll-to-component": "^1.0.2",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
     "concurrently": "^3.5.1",
