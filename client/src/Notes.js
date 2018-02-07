@@ -48,6 +48,23 @@ const authReducer = (state=defaultAuth, action) => {
 
 const store = createStore(authReducer);
 
+//Connect
+const mapStateToProps = (state) => {
+  return {
+  	isAuth: state
+  }
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+  	loginUser: (userInfo) => {
+  		dispatch(loginUser(userInfo))
+  	},
+  	logoutUser: (userInfo) => {
+  		dispatch(logoutUser(userInfo))
+  	}
+  }
+};
 
 
 //React
@@ -55,7 +72,7 @@ class Board extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isAuth: true,
+			//isAuth: true,
 			userInfo: {},
 			note: [{id:(new Date).getTime(), 
 							note:'Welcome to the Bulletin Board! On desktop, Hover on the note to access the controls.'
@@ -78,6 +95,7 @@ class Board extends React.Component {
 	componentDidMount () {
 	}
 	componentWillUpdate () {
+		//console.log(this.props.isAuth);
 	}
 
 	clearAll() {
@@ -163,12 +181,19 @@ class Board extends React.Component {
 	}
 
 	render () {
-		return (((this.state.isAuth) ? this.renderNotes() : this.renderLoginPage()));
+		console.log(this.props.isAuth.authenticated);
+		return (((this.props.isAuth.authenticated) ? this.renderNotes() : this.renderLoginPage()));
 	}
 
 	renderLoginPage = () => {
 		return (
-			<UserLogin/>
+			<div>
+				<Header
+					isAuth={this.props.isAuth.authenticated}
+					login={this.props.loginUser}
+				/>
+				<UserLogin login={this.props.loginUser}/>
+			</div>
 		)
 	}
 
@@ -179,6 +204,8 @@ class Board extends React.Component {
 				<Header add={this.add}
 								addDisabled={this.state.addDisabled}
 								clearAll={this.clearAll}
+								isAuth={this.props.isAuth.authenticated}
+								logout={this.props.logoutUser}
 								needFunctions={true}
 				/>
 				<div className="fixed-bottom" hidden={!this.state.addDisabled}>
@@ -338,23 +365,6 @@ Note.defaultProps = {
 
 //React-Redux Connections///////////////////////////
 //Connect
-const mapStateToProps = (state) => {
-  return {
-  	isAuth: state
-  }
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-  	loginUser: (userInfo) => {
-  		dispatch(loginUser(userInfo))
-  	},
-  	logoutUser: (userInfo) => {
-  		dispatch(logoutUser(userInfo))
-  	}
-  }
-};
-
 //Notes connected w/ Redux
 const NotesContainer = connect(mapStateToProps, mapDispatchToProps)(Board);
 
