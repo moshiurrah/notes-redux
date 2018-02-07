@@ -16,6 +16,10 @@ import './style.css';
 import UserLogin from './UserLogin';
 import Header from './Header';
 
+
+/*
+import { loginUser, logoutUser, LOGIN, LOGOUT } from '../actions/auth'
+/*
 //Redux
 //simple example with redux managing authentication state
 //LOGIN REDUCER
@@ -29,6 +33,7 @@ const loginUser = () => {
 const logoutUser = () => {
 	return {type:LOGOUT}
 }
+
 
 //auth reducer
 const defaultAuth = {
@@ -45,6 +50,9 @@ const authReducer = (state=defaultAuth, action) => {
 			return state;
 	}
 }
+*/
+import { authReducer } from '../reducers/auth'
+import { loginUser, logoutUser } from '../actions/auth'
 
 const store = createStore(authReducer);
 
