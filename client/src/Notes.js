@@ -48,8 +48,10 @@ const authReducer = (state=defaultAuth, action) => {
 
 const store = createStore(authReducer);
 
+
+
 //React
-class Notes extends React.Component {
+class Board extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -230,10 +232,11 @@ class Note extends React.Component {
 	}
 
 	componentDidMount () {
-
-			this.setState({
-				editing:true
-			})
+		/*
+		this.setState({
+			editing:true
+		})
+		*/
 	}
 	componentDidUpdate() {
 		if (this.state.editing){
@@ -330,5 +333,43 @@ class Note extends React.Component {
 Note.defaultProps = {
 	note: 'New Note'
 }
+
+
+
+//React-Redux Connections///////////////////////////
+//Connect
+const mapStateToProps = (state) => {
+  return {
+  	isAuth: state
+  }
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+  	loginUser: (userInfo) => {
+  		dispatch(loginUser(userInfo))
+  	},
+  	logoutUser: (userInfo) => {
+  		dispatch(logoutUser(userInfo))
+  	}
+  }
+};
+
+//Notes connected w/ Redux
+const NotesContainer = connect(mapStateToProps, mapDispatchToProps)(Board);
+
+//Provider
+//Notes wraped in Provider
+class Notes extends React.Component {
+	// change code below this line
+	render() {
+		return (
+			<Provider store = {store}>
+				<NotesContainer/>
+			</Provider>
+		);
+	}
+	// change code above this line
+};
 
 export default Notes;
