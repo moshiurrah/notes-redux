@@ -16,50 +16,17 @@ import './style.css';
 import UserLogin from './UserLogin';
 import Header from './Header';
 
-
-/*
-import { loginUser, logoutUser, LOGIN, LOGOUT } from '../actions/auth'
-/*
-//Redux
-//simple example with redux managing authentication state
-//LOGIN REDUCER
-const LOGIN="LOGIN";
-const LOGOUT="LOGOUT";
-
-//auth action creators
-const loginUser = () => {
-	return {type:LOGIN}
-}
-const logoutUser = () => {
-	return {type:LOGOUT}
-}
-
-
-//auth reducer
-const defaultAuth = {
-	authenticated: false
-}
-
-const authReducer = (state=defaultAuth, action) => {
-	switch (action.type) {
-		case LOGIN:
-			return {authenticated: true}
-		case LOGOUT:
-			return {authenticated: false}
-		default:
-			return state;
-	}
-}
-*/
-import { authReducer } from '../reducers/auth'
+import  noteRootReducer  from '../reducers/index'
 import { loginUser, logoutUser } from '../actions/auth'
+import { addNote, remNote } from '../actions/modNote'
 
-const store = createStore(authReducer);
+const store = createStore(noteRootReducer);
 
-//Connect
+//Redux Connect
 const mapStateToProps = (state) => {
   return {
-  	isAuth: state
+  	user: state.authReducer,
+  	notes: state.notesReducer
   }
 };
 
@@ -70,6 +37,12 @@ const mapDispatchToProps = (dispatch) => {
   	},
   	logoutUser: (userInfo) => {
   		dispatch(logoutUser(userInfo))
+  	},
+  	addNote : (textContent) => {
+  		dispatch(addNote(textContent))
+  	},
+  	remNote: (id) => {
+  		dispatch(remNote(id))
   	}
   }
 };
@@ -125,11 +98,12 @@ class Board extends React.Component {
 			var notesUpdated = [{id:(new Date).getTime()}].concat(this.state.note);
 			console.log(this.state.note);
 			
+			
+			this.props.addNote("Hi, this is with redux");
 			this.setState({
 				note:notesUpdated,
 				numNotes: this.state.numNotes +=1,
 				addDisabled: this.state.numNotes >= this.NUM_LIMIT
-
 			});
 		}
 
@@ -189,15 +163,16 @@ class Board extends React.Component {
 	}
 
 	render () {
-		console.log(this.props.isAuth.authenticated);
-		return (((this.props.isAuth.authenticated) ? this.renderNotes() : this.renderLoginPage()));
+		console.log(this.props.user);
+		console.log(this.props.notes);
+		return (((this.props.user.authenticated) ? this.renderNotes() : this.renderLoginPage()));
 	}
 
 	renderLoginPage = () => {
 		return (
 			<div>
 				<Header
-					isAuth={this.props.isAuth.authenticated}
+					isAuth={this.props.user.authenticated}
 					login={this.props.loginUser}
 				/>
 				<UserLogin login={this.props.loginUser}/>
@@ -212,7 +187,7 @@ class Board extends React.Component {
 				<Header add={this.add}
 								addDisabled={this.state.addDisabled}
 								clearAll={this.clearAll}
-								isAuth={this.props.isAuth.authenticated}
+								isAuth={this.props.user.authenticated}
 								logout={this.props.logoutUser}
 								needFunctions={true}
 				/>

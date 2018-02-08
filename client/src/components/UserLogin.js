@@ -7,13 +7,10 @@ class UserLogin extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			email:'',
+			username:'',
 			password:'',
 			error:''
 		}
-		this.handleLogIn = this.handleLogIn.bind(this);
-		this.handleChangePass = this.handleChangePass.bind(this);
-		this.handleChangeEmail = this.handleChangeEmail.bind(this);
 	}
 	
 	/*
@@ -22,8 +19,11 @@ class UserLogin extends React.Component {
 	}
 	*/
 	
-	handleLogIn(event) {
+	handleLogIn= (event) => {
 		event.preventDefault();
+		this.props.login({username:this.state.username, password:this.state.password});
+		
+		
 		//console.log(this.state);
 		/*
 		axios({
@@ -49,11 +49,11 @@ class UserLogin extends React.Component {
 	}
 	
 	
-	handleChangePass (event) {
+	handleChangePass = (event) => {
 		this.setState({password: event.target.value});
 	}
-	handleChangeEmail (event) {
-		this.setState({email: event.target.value});
+	handleChangeUser = (event) => {
+		this.setState({username: event.target.value});
 	}
 	
 	render () {
@@ -63,13 +63,13 @@ class UserLogin extends React.Component {
 				<form  className="mt-4" onSubmit={this.handleLogIn}>
 				  <div className="form-group">
 				    <label htmlFor="email">Username</label>
-				    <input value={this.state.email} onChange={this.handleChangeEmail} type="text" className="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter username"></input>
+				    <input required value={this.state.username} onChange={this.handleChangeUser} type="text" className="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter username"></input>
 				  </div>
 				  <div className="form-group">
 				    <label htmlFor="password">Password</label>
-				    <input value={this.state.password} onChange={this.handleChangePass} type="password" className="form-control" name="password" id="password" placeholder="Password"></input>
+				    <input required value={this.state.password} onChange={this.handleChangePass} type="password" className="form-control" name="password" id="password" placeholder="Password"></input>
 				  </div>
-				  <button type="button" onClick={this.props.login} className="btn">Log In</button><br></br>	
+				  <button type="submit" className="btn">Log In</button><br></br>	
 				  <small> New accounts will be signed up automatically. </small>
 				</form>
 				<p className="mt-4">Or log in with one of the below services:</p>

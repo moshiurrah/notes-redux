@@ -2,16 +2,19 @@ import {LOGIN, LOGOUT } from '../actions/auth'
 
 //auth reducer
 const defaultAuth = {
-	authenticated: false
+	authenticated: false,
+	user:{}
 }
 
-export const authReducer = (state=defaultAuth, action) => {
+const authReducer = (state=defaultAuth, action) => {
 	switch (action.type) {
 		case LOGIN:
-			return {authenticated: true}
+			return {authenticated: true, user:action.user}
 		case LOGOUT:
-			return {authenticated: false}
+			return {authenticated: false, user:action.user}
 		default:
 			return state;
 	}
 }
+
+export default authReducer;
