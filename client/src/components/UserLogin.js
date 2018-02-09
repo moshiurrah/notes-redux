@@ -23,7 +23,6 @@ class UserLogin extends React.Component {
 		event.preventDefault();
 		this.props.login({username:this.state.username, password:this.state.password});
 		
-		
 		//console.log(this.state);
 		/*
 		axios({

@@ -16,9 +16,9 @@ import './style.css';
 import UserLogin from './UserLogin';
 import Header from './Header';
 
-import  noteRootReducer  from '../reducers/index'
-import { loginUser, logoutUser } from '../actions/auth'
-import { addNote, remNote } from '../actions/modNote'
+import  noteRootReducer  from '../reducers/index';
+import { loginUser, logoutUser } from '../actions/auth';
+import { addNote, remNote, editNote, remAll } from '../actions/modNote';
 
 const store = createStore(noteRootReducer);
 
@@ -40,6 +40,12 @@ const mapDispatchToProps = (dispatch) => {
   	},
   	addNote : (textContent) => {
   		dispatch(addNote(textContent))
+  	},
+  	editNote : (id,textContent) => {
+  		dispatch(editNote(id,textContent))
+  	},
+  	remAll: (id) => {
+  		dispatch(remAll())
   	},
   	remNote: (id) => {
   		dispatch(remNote(id))
@@ -80,12 +86,15 @@ class Board extends React.Component {
 	}
 
 	clearAll() {
+		this.props.remAll();
+		/*
 		this.setState({
 			note:[],
 			numNotes: 0,
 			addDisabled:false,
 			maxZ:0
 		});
+		*/
 	}
 
 	add () {
@@ -95,16 +104,18 @@ class Board extends React.Component {
 
 		if (this.state.numNotes < this.NUM_LIMIT) {
 			/*var notesUpdated = this.state.note.concat([{id:(new Date).getTime()}]);*/
-			var notesUpdated = [{id:(new Date).getTime()}].concat(this.state.note);
-			console.log(this.state.note);
+			//var notesUpdated = [{id:(new Date).getTime()}].concat(this.state.note);
+			//console.log(this.state.note);
 			
 			
-			this.props.addNote("Hi, this is with redux");
+			this.props.addNote("New Note with Redux");
+			/*
 			this.setState({
 				note:notesUpdated,
 				numNotes: this.state.numNotes +=1,
 				addDisabled: this.state.numNotes >= this.NUM_LIMIT
 			});
+			*/
 		}
 
 	} 
@@ -122,6 +133,9 @@ class Board extends React.Component {
 		console.log(this.state.note);
 	}
 	update (newText,id) {
+		//console.log('updateing' + id + 'with '+newText);
+		this.props.editNote(id,newText);
+		/*
 		console.log(newText+ ' for '+id);
 		var notesUpdated = this.state.note.map(
 			note => (note.id !== id) ?
@@ -134,8 +148,13 @@ class Board extends React.Component {
 		});
 		//console.log(notesUpdated);
 		console.log(this.state.note);
+		*/
 	}
 	remove (id) {
+		
+		this.props.remNote(id);
+		
+		/*
 		var notesUpdated = this.state.note.filter((note) => (note.id !== id));
 		this.setState({
 			note:notesUpdated,
@@ -143,22 +162,18 @@ class Board extends React.Component {
 			addDisabled: this.state.numNotes > this.NUM_LIMIT
 		});
 		console.log ('state is: '+ this.state.addDisabled)
+		*/
 	}
 
 	eachNote(note){
-
-		//console.log(note.id);
-		//console.log(note.note);
+		//console.log(note);
 		return (<Note
 						key={note.id}
 						id={note.id}
-						note={note.note}
+						note={note.content}
 						onChange={this.update}
 						onRemove={this.remove}
-						//color={note.color}
-						onColorChange={this.changeColor}
-						>
-						{/*note.note*/}
+						onColorChange={this.changeColor}>
 						</Note>);
 	}
 
@@ -181,7 +196,6 @@ class Board extends React.Component {
 	}
 
   renderNotes = () =>  {
-    // change code below this line
 		return (
 			<div className="">
 				<Header add={this.add}
@@ -198,7 +212,8 @@ class Board extends React.Component {
 				</div>
 				<div className="noteContainer container">
 					<div className="row ">
-						{this.state.note.map(this.eachNote)}
+						{/*implement redux*/}
+						{this.props.notes.map(this.eachNote)}
 					</div>
 				</div>
 			</div>
@@ -339,11 +354,6 @@ class Note extends React.Component {
 		return (((this.state.editing) ? this.renderForm() : this.renderDisplay()));
   }
 };
-
-Note.defaultProps = {
-	note: 'New Note'
-}
-
 
 
 //React-Redux Connections///////////////////////////

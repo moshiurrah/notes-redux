@@ -15,7 +15,7 @@ class Header extends React.Component {
 	  return (
     	<div className="sticky-top">
     		<nav className="navbar navbar-light bg-light">
-    			<a className="navbar-brand" href="#">Bulletin Board</a>
+    			<a className="navbar-brand" href="#">Notes!</a>
     			{this.props.isAuth && (
     				<span className="ml-auto">
     				  <button className="mr-2 btn btn-primary" onClick={this.props.logout}><i className="fa fa-sign-out" aria-hidden="true"></i></button>
