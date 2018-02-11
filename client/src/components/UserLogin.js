@@ -3,13 +3,19 @@ import './style.css';
 import Header from './Header';
 import axios from 'axios';
 
+import SocialLogin from './SocialLogin';
+import LoginMenu from './LoginMenu';
+
 class UserLogin extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			username:'',
 			password:'',
-			error:''
+			passwordVer:'',
+			error:'',
+			isSocial:false,
+			isLogin:true
 		}
 	}
 	
@@ -19,9 +25,24 @@ class UserLogin extends React.Component {
 	}
 	*/
 	
+	toggleLogin = () => {
+		this.setState ({
+			isLogin:true
+		});
+	}
+	toggleSignup = () => {
+		this.setState ({
+			isLogin:false
+		});
+	} 
+	
 	handleLogIn= (event) => {
 		event.preventDefault();
-		this.props.login({username:this.state.username, password:this.state.password});
+		
+		if (this.state.isLogin){
+			this.props.login({username:this.state.username, password:this.state.password});
+		}
+		
 		
 		//console.log(this.state);
 		/*
@@ -51,14 +72,20 @@ class UserLogin extends React.Component {
 	handleChangePass = (event) => {
 		this.setState({password: event.target.value});
 	}
+	handleChangePassVer = (event) => {
+		this.setState({passwordVer: event.target.value});
+	}
 	handleChangeUser = (event) => {
 		this.setState({username: event.target.value});
 	}
 	
 	render () {
+		
+		
 		return (
 
 			<div className="container">
+				<LoginMenu toggleLogin={this.toggleLogin} toggleSignup={this.toggleSignup}/>
 				<form  className="mt-4" onSubmit={this.handleLogIn}>
 				  <div className="form-group">
 				    <label htmlFor="email">Username</label>
@@ -67,22 +94,18 @@ class UserLogin extends React.Component {
 				  <div className="form-group">
 				    <label htmlFor="password">Password</label>
 				    <input required value={this.state.password} onChange={this.handleChangePass} type="password" className="form-control" name="password" id="password" placeholder="Password"></input>
+				    {!this.state.isLogin &&
+				    (<div>
+				    	<label className="mt-2" htmlFor="passwordVer">Verify Password</label>
+				    	<input required value={this.state.passwordVer} onChange={this.handleChangePassVer} type="password" className="form-control" name="passwordVer" id="passwordVer" placeholder="Verify Password"></input>
+			    	</div>)}
 				  </div>
-				  <button type="submit" className="btn">Log In</button><br></br>	
-				  <small> New accounts will be signed up automatically. </small>
+				  {!this.state.isLogin ?
+				  	(<button type="submit" className="btn">Sign Up!</button>) :
+				  	(<button type="submit" className="btn">Log In!</button>)
+				  }
 				</form>
-				<p className="mt-4">Or log in with one of the below services:</p>
-				<a href={this.props.app_url+"/auth/facebook/"} target="">
-				{/*<a href='#' target="">*/}
-					<button className="btn">
-				  	<i className="fa fa-facebook" aria-hidden="true"></i>
-					</button>
-				</a>
-				<a href={this.props.app_url+"/auth/github/"} target="">
-					<button className="ml-2 btn">
-				  	<i className="fa fa-github" aria-hidden="true"></i>
-					</button>
-				</a>
+				{this.state.isSocial && (<SocialLogin app_url={this.props.app_url}/>)}
 			</div>
 
 		);

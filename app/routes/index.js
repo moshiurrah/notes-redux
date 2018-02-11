@@ -50,6 +50,11 @@ module.exports = function (app, passport) {
 			//res.sendFile(path + '/public/login.html');
 			res.redirect('/');
 		});
+		
+	app.route('/test')
+		.get(function (req, res) {
+			res.send('Hello World!');
+		});
 
 	app.route('/logout')
 		.get(function (req, res) {
@@ -76,6 +81,8 @@ module.exports = function (app, passport) {
 	  })(req, res, next);
 	});
 	
+	
+	/*
 	app.route('/api/:id/changePass')
 		.post(isLoggedIn, function (req, res) {
 			console.log('Changing Password');
@@ -390,5 +397,6 @@ module.exports = function (app, passport) {
 				}	
 			});
 	});
+	*/
 
 };

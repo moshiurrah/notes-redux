@@ -5,7 +5,7 @@ var bcrypt   = require('bcrypt');
 var Schema = mongoose.Schema;
 
 var path = process.cwd();
-var Recipes=require(path + '/app/models/recipes.js');
+var Notes=require(path + '/app/models/notes.js');
 
 var User = new Schema({
   github: {
@@ -26,10 +26,7 @@ var User = new Schema({
     password        :String
     
   },
-  nbrClicks: {
-    clicks: Number
-  },
-  recipes: { type: [Recipes.schema], default: [] }
+  notes: { type: [Notes.schema], default: [] }
 });
 
 //generate a common user display name

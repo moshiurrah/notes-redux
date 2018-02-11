@@ -1,13 +1,13 @@
 {
-  "name": "recipeapp",
+  "name": "notesApp",
   "version": "1.0.1",
   "description": "A recipe catalogue developed for educational purposes",
   "main": "server.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mtanzim/fccwebapps"
+    "url": "git+https://github.com/mtanzim/notesRedux"
   },
-  "homepage": "https://fccwebapps-mtanzim.c9users.io",
+  "homepage": "https://notesapp-mtanzim.c9users.io",
   "bugs": "",
   "keywords": [
     "MongoDB",
@@ -16,6 +16,7 @@
     "Express",
     "Node",
     "javascript",
+    "Redux",
     "boilerplate"
   ],
   "scripts": {
