@@ -1,12 +1,12 @@
 import {FETCHNGNOTES, GOTNOTES,GETFAILED, ADD, DEL, EDIT, DELALL } from '../actions/modNote'
 
 
-const defState = {user:'',fetching:false, notes:[], err:''};
+const defState = {fetching:false, notes:[], err:''};
 
 const notesReducer = (state = defState, action) => {
 	switch (action.type) {
 		case FETCHNGNOTES:
-			return {...state, fetching: true, user:action.user};
+			return {...state, fetching: true};
 		case GOTNOTES:
 			console.log(action.notes);
 			return {...state, fetching: false, notes: state.notes.concat(action.notes)};

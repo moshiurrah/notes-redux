@@ -80,6 +80,7 @@ class Board extends React.Component {
 		this.clearAll = this.clearAll.bind(this);
 		this.changeColor = this.changeColor.bind(this);
 	}
+	/*
 	componentWillMount () {
 		//alert('Board loading');
 		//console.log(this.props.isAuth);
@@ -88,6 +89,7 @@ class Board extends React.Component {
 			this.props.getNotes(this.props.user);
 		}
 	}
+	*/
 	componentDidMount () {
 		
 	}
@@ -186,6 +188,7 @@ class Board extends React.Component {
 						onColorChange={this.changeColor}>
 						</EachNote>);
 	}
+	
 
 	render () {
 		console.log(this.props.user);

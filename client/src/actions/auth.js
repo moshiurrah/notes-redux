@@ -2,7 +2,7 @@
 //simple example with redux managing authentication state
 //LOGIN REDUCER
 import axios from 'axios';
-
+import { getNotesAsync} from './modNote';
 
 //fake async action with timeout
 export const loginUserAsync = (user) => {
@@ -19,6 +19,7 @@ export const loginUserAsync = (user) => {
 		}).then (res => {
 			console.log(res.data.content);
 			dispatch(loggedin(res.data.content));
+			dispatch(getNotesAsync(res.data.content));
 		}).catch (err =>{
 			dispatch(loginFailed({}, err.response.data.error));
 		});

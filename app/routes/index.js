@@ -81,6 +81,23 @@ module.exports = function (app, passport) {
 	});
 	
 	
+	//get user information for specific userID
+	app.route('/api/:id')
+		.get(isLoggedIn, function(req, res) {
+				console.log(req.url);
+				console.log(req.params.id);
+				Users.findById(req.params.id, function (err, user) {
+		    	if (err) {
+		    		res.json({isError:true});
+		    	} else {
+			    	console.log(user.notes);
+		    		//res.json({isError:false, content:user.notes});
+		    		res.json({isError:false, content:[{id:1,content:"Hi"}, {id:2, content:"Hello"}]});
+		    	}
+		    });
+		})
+	
+	
 	/*
 	app.route('/api/:id/changePass')
 		.post(isLoggedIn, function (req, res) {

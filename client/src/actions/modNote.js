@@ -22,8 +22,8 @@ export const editNote = (id,noteContent) => {
 
 //async getNotes
 export const FETCHNGNOTES="FETCHNGNOTES";
-export const fetchingNotes = (user) => {
-	return {type:FETCHNGNOTES, user:user};
+export const fetchingNotes = () => {
+	return {type:FETCHNGNOTES};
 };
 
 export const GOTNOTES="GOTNOTES";
@@ -40,7 +40,7 @@ export const getFailed = (err) => {
 export const getNotesAsync = (user) => {
 	//return {type:LOGIN, user:user};
 	return function (dispatch) {
-		dispatch(fetchingNotes(user));
+		dispatch(fetchingNotes());
 		//axios login
 		axios({
 		  method: 'get',
@@ -48,7 +48,7 @@ export const getNotesAsync = (user) => {
 		}).then (res => {
 			console.log(res.data.content);
 			//dispatch(gotNotes(res.data.content));
-			dispatch(gotNotes(["Hello", "Hi"]));
+			dispatch(gotNotes(res.data.content));
 		}).catch (err =>{
 			dispatch(getFailed(err));
 		});
