@@ -1,13 +1,7 @@
 //Redux
 //simple example with redux managing authentication state
 //LOGIN REDUCER
-
-
-//login successful
-
-
-
-//auth action creators
+import axios from 'axios';
 
 
 //fake async action with timeout
@@ -15,10 +9,25 @@ export const loginUserAsync = (user) => {
 	//return {type:LOGIN, user:user};
 	return function (dispatch) {
 		dispatch(loggingUserIn(user));
+		
+		
+		//axios login
+		axios({
+		  method: 'post',
+		  url: '/signup',
+		  data: user
+		}).then (res => {
+			console.log(res.data.content);
+			dispatch(loggedin(res.data.content));
+		}).catch (err =>{
+			dispatch(loginFailed({}, err.response.data.error));
+		});
+		//fake async login
+		/*
 		setTimeout(function() {
 			dispatch(loggedin(user));
 		}, 3500);
-		
+		*/
 	}
 };
 
@@ -35,8 +44,8 @@ export const loggedin = (user) => {
 }
 
 export const LOGINFAILED="LOGINFAILED";
-export const loginFailed = (user) => {
-	return {type:LOGINFAILED, user:user};
+export const loginFailed = (user, err) => {
+	return {type:LOGINFAILED, user:user, err: err};
 };
 
 export const LOGOUT="LOGOUT";

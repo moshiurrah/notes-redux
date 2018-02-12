@@ -19,7 +19,7 @@ import EachNote from './EachNote';
 
 import  noteRootReducer  from '../reducers/index';
 import { loginUserAsync, logoutUser } from '../actions/auth';
-import { addNote, remNote, editNote, remAll } from '../actions/modNote';
+import { getNotesAsync, addNote, remNote, editNote, remAll } from '../actions/modNote';
 
 const store = createStore(noteRootReducer, applyMiddleware(thunk));
 
@@ -35,6 +35,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
   	loginUser: (userInfo) => {
   		dispatch(loginUserAsync(userInfo))
+  	},
+  	getNotes: (userInfo) => {
+  		dispatch(getNotesAsync(userInfo))
   	},
   	logoutUser: (userInfo) => {
   		dispatch(logoutUser(userInfo))
@@ -79,11 +82,17 @@ class Board extends React.Component {
 	}
 	componentWillMount () {
 		//alert('Board loading');
+		//console.log(this.props.isAuth);
+		if(this.props.user.authenticated) {
+			console.log(this.props.user);
+			this.props.getNotes(this.props.user);
+		}
 	}
 	componentDidMount () {
+		
 	}
 	componentWillUpdate () {
-		//console.log(this.props.isAuth);
+
 	}
 
 	clearAll() {
@@ -191,7 +200,9 @@ class Board extends React.Component {
 					isAuth={this.props.user.authenticated}
 					login={this.props.loginUser}
 				/>
-				<UserLogin login={this.props.loginUser}/>
+				<UserLogin login={this.props.loginUser}
+									 getNotes={this.props.getNotes}
+				/>
 			</div>
 		)
 	}
@@ -214,7 +225,7 @@ class Board extends React.Component {
 				<div className="noteContainer container">
 					<div className="row ">
 						{/*implement redux*/}
-						{this.props.notes.map(this.eachNote)}
+						{this.props.notes.notes.map(this.eachNote)}
 					</div>
 				</div>
 			</div>

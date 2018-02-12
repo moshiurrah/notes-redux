@@ -1,4 +1,4 @@
-import {LOGGINGIN, LOGGEDIN, LOGOUT } from '../actions/auth'
+import {LOGGINGIN, LOGGEDIN, LOGOUT, LOGINFAILED } from '../actions/auth'
 
 //auth reducer
 const defaultAuth = {
@@ -15,6 +15,8 @@ const authReducer = (state=defaultAuth, action) => {
 			return {authenticated: true, fetching:false, user:action.user}
 		case LOGOUT:
 			return {authenticated: false, fetching:false, user:action.user}
+		case LOGINFAILED:
+			return {authenticated: false, fetching:false, user:action.user, err:action.err}
 		default:
 			return state;
 	}

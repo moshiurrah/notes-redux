@@ -69,14 +69,13 @@ module.exports = function (app, passport) {
 	  passport.authenticate('local', function(err, user, info) {
 	    if (err) { return next(err); }
 	    if (!user) { 
-	    	//return res.send('Incorrect password!'); 
 	    	return res.send(403, { error: "Invalid password!" });
 	    }
 	    req.logIn(user, function(err) {
 	      if (err) { return next(err); }
-	      return res.redirect('/');
+	      //return res.redirect('/');
 	      //console.log(req.user);
-	      //res.send(JSON.stringify({isError:false, content:req.user._id}));
+	      res.send(JSON.stringify({isError:false, content:req.user._id}));
 	    });
 	  })(req, res, next);
 	});

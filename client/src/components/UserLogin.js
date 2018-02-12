@@ -14,16 +14,13 @@ class UserLogin extends React.Component {
 			password:'',
 			passwordVer:'',
 			error:'',
+			isLogin:true,
+			//pseudo constants; check if this falls under best practices
 			isSocial:false,
+			needMenu:false,
 			isLogin:true
 		}
 	}
-	
-	/*
-	handleError () {
-		this.props.handleError(this.state.error);
-	}
-	*/
 	
 	toggleLogin = () => {
 		this.setState ({
@@ -40,32 +37,8 @@ class UserLogin extends React.Component {
 		event.preventDefault();
 		
 		if (this.state.isLogin){
-			this.props.login({username:this.state.username, password:this.state.password});
+			this.props.login({email:this.state.username, password:this.state.password});
 		}
-		
-		
-		//console.log(this.state);
-		/*
-		axios({
-		  method: 'post',
-		  url: '/signup',
-		  data: {
-		    email: this.state.email,
-		    password: this.state.password
-		  }
-		}).then (res => {
-			console.log(res.data.content);
-			this.setState({email:'',password:''});
-			//this.setUserID(res.data.content.toString());
-			window.location = '/';
-		  //return res;
-		}).catch (err =>{
-			//console.log(err.response.data);
-			this.setState({password:'', error:err.response.data.error});
-			this.handleError();
-		});
-		*/
-		
 	}
 	
 	
@@ -85,7 +58,7 @@ class UserLogin extends React.Component {
 		return (
 
 			<div className="container">
-				<LoginMenu toggleLogin={this.toggleLogin} toggleSignup={this.toggleSignup}/>
+				{this.state.needMenu && (<LoginMenu toggleLogin={this.toggleLogin} toggleSignup={this.toggleSignup}/>)}
 				<form  className="mt-4" onSubmit={this.handleLogIn}>
 				  <div className="form-group">
 				    <label htmlFor="email">Username</label>
@@ -102,7 +75,10 @@ class UserLogin extends React.Component {
 				  </div>
 				  {!this.state.isLogin ?
 				  	(<button type="submit" className="btn">Sign Up!</button>) :
-				  	(<button type="submit" className="btn">Log In!</button>)
+				  	(<div>
+				  		<button type="submit" className="btn">Log In!</button><br/>
+				  		{!this.state.needMenu && (<small>New Accounts will be signed up automatically.</small>)}
+			  		</div>)
 				  }
 				</form>
 				{this.state.isSocial && (<SocialLogin app_url={this.props.app_url}/>)}
