@@ -1,25 +1,39 @@
 //Redux
 //simple example with redux managing authentication state
 //LOGIN REDUCER
+//SHOWS EXAMPLE OF CHAINED DISPATCHES W/ PROMISES, AS SUGGEST BY MOTHERFUCKING DAN HIMSELF
+//https://github.com/reactjs/redux/issues/1676#issuecomment-216828910
 import axios from 'axios';
 import { getNotesAsync} from './modNote';
+
+
+//SHOWS EXAMPLE OF CHAINED DISPATCHES W/ PROMISES, AS SUGGEST BY MOTHERFUCKING DAN HIMSELF
+//https://github.com/reactjs/redux/issues/1676#issuecomment-216828910
+export const loginAndGetNotes = (user) => {
+	return (dispatch, getState) => {
+		return dispatch(loginUserAsync(user)).then(() => {
+			const fetchedUser=getState().authReducer.user;
+			console.log(fetchedUser);
+			return dispatch(getNotesAsync(fetchedUser));
+		}).catch (err => {
+			console.log(err);
+		})
+	}
+}
 
 //fake async action with timeout
 export const loginUserAsync = (user) => {
 	//return {type:LOGIN, user:user};
-	return function (dispatch) {
+	return  (dispatch) => {
 		dispatch(loggingUserIn(user));
-		
-		
 		//axios login
-		axios({
+		return axios({
 		  method: 'post',
 		  url: '/signup',
 		  data: user
 		}).then (res => {
 			console.log(res.data.content);
 			dispatch(loggedin(res.data.content));
-			dispatch(getNotesAsync(res.data.content));
 		}).catch (err =>{
 			dispatch(loginFailed({}, err.response.data.error));
 		});

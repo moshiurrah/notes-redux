@@ -88,7 +88,8 @@ module.exports = function (app, passport) {
 				console.log(req.params.id);
 				Users.findById(req.params.id, function (err, user) {
 		    	if (err) {
-		    		res.json({isError:true});
+		    		//res.json({isError:true});
+		    		return res.send(403, { error: "Content not found!" });
 		    	} else {
 			    	console.log(user.notes);
 		    		//res.json({isError:false, content:user.notes});

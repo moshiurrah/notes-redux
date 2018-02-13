@@ -18,7 +18,7 @@ import Header from './Header';
 import EachNote from './EachNote';
 
 import  noteRootReducer  from '../reducers/index';
-import { loginUserAsync, logoutUser } from '../actions/auth';
+import { loginUserAsync, logoutUser, loginAndGetNotes } from '../actions/auth';
 import { getNotesAsync, addNote, remNote, editNote, remAll } from '../actions/modNote';
 
 const store = createStore(noteRootReducer, applyMiddleware(thunk));
@@ -34,7 +34,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
   	loginUser: (userInfo) => {
-  		dispatch(loginUserAsync(userInfo))
+  		dispatch(loginAndGetNotes(userInfo))
   	},
   	getNotes: (userInfo) => {
   		dispatch(getNotesAsync(userInfo))
@@ -204,7 +204,7 @@ class Board extends React.Component {
 					login={this.props.loginUser}
 				/>
 				<UserLogin login={this.props.loginUser}
-									 getNotes={this.props.getNotes}
+									 //getNotes={this.props.getNotes}
 				/>
 			</div>
 		)

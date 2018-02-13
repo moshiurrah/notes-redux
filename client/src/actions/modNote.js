@@ -39,18 +39,21 @@ export const getFailed = (err) => {
 
 export const getNotesAsync = (user) => {
 	//return {type:LOGIN, user:user};
-	return function (dispatch) {
-		dispatch(fetchingNotes());
-		//axios login
-		axios({
-		  method: 'get',
-		  url: `/api/${user}`,
-		}).then (res => {
-			console.log(res.data.content);
-			//dispatch(gotNotes(res.data.content));
-			dispatch(gotNotes(res.data.content));
-		}).catch (err =>{
-			dispatch(getFailed(err));
-		});
+	return function (dispatch, getState) {
+		console.log(getState());
+		if (getState().authReducer.authenticated) {
+			dispatch(fetchingNotes());
+			//axios login
+			return axios({
+			  method: 'get',
+			  url: `/api/${user}`,
+			}).then (res => {
+				console.log(res.data.content);
+				//dispatch(gotNotes(res.data.content));
+				dispatch(gotNotes(res.data.content));
+			}).catch (err =>{
+				dispatch(getFailed(err));
+			});
+		}
 	}
 };
