@@ -1,9 +1,7 @@
 'use strict';
 
 var path = process.cwd();
-var ClickHandler = require(path + '/app/controllers/clickHandler.server.js');
 var Users=require(path + '/app/models/users.js');
-//var Recipes=require(path + '/app/models/recipes.js');
 
 module.exports = function (app, passport) {
 
@@ -19,6 +17,7 @@ module.exports = function (app, passport) {
 	}
 	
 	//this needs work :`(
+	/*
 	function parseMongooseErr (errMsg){
 		
 		console.log(errMsg.errors);
@@ -30,6 +29,7 @@ module.exports = function (app, passport) {
 		}
 		return {errors:errToReport};
 	}
+	*/
 
 	app.route('/')
 		.get(function (req, res) {
@@ -44,7 +44,7 @@ module.exports = function (app, passport) {
 		});
 
 
-	
+	/*	
 	app.route('/login')
 		.get(function (req, res) {
 			//res.sendFile(path + '/public/login.html');
@@ -62,8 +62,9 @@ module.exports = function (app, passport) {
 			res.redirect('/');
 			//res.redirect('https://fccwebapps-mtanzim.c9users.io:8081');
 		});
-
-	 //passport docs, local sign up/login
+		*/
+		
+	//passport docs, local sign up/login
 	app.post('/signup', function(req, res, next) {
 		//console.log(req.auth);
 	  passport.authenticate('local', function(err, user, info) {
@@ -93,10 +94,87 @@ module.exports = function (app, passport) {
 		    	} else {
 			    	console.log(user.notes);
 		    		//res.json({isError:false, content:user.notes});
-		    		res.json({isError:false, content:[{id:1,content:"Hi"}, {id:2, content:"Hello"}]});
+		    		res.json({content:user.notes});
 		    	}
 		    });
 		})
+		
+		app.route('/api/:id/add')
+			.post(function (req, res){
+				//console.log(req.url);
+				console.log(req.params.id);
+				console.log(req.body);
+				Users.findById(req.params.id, function (err, user) {
+					console.log(user);
+					if (err){
+						return res.send(403, { error: "User not found!" });
+					} else {
+						user.notes.unshift(req.body);
+						user.save(function(err) {
+							if (err) {
+								return res.send(403, { error: "Add Note Failed!" });
+							} else {
+								console.log('New note added successfully!');
+								res.json({content:user.notes});
+							}
+						});
+					}
+				});
+			})
+			
+			
+	//add new ingredients, edit recipe name, or delete recipe
+	app.route('/api/:id/:noteID')
+		//edit note
+		/*
+		.put (function(req, res){
+			console.log(req.params.recipeID);
+			console.log(req.body);
+			Users.findById(req.params.id, function (err, user) {
+				if (err) {
+					res.json({isError:true, content:parseMongooseErr(err)});
+				} else {
+					var editRecipe= user.recipes.id(req.params.recipeID);
+					editRecipe.title=req.body.title;
+					user.save(function(err) {
+						if (err){
+							res.json({isError:true, content:parseMongooseErr(err)});
+						} else {
+							console.log('Recipe Edited');
+							res.json({isError:false, content:editRecipe});
+						} 
+					});
+				}
+			})
+			//res.json({ message: 'Added ingredient to '+req.params.recipeID});
+		})
+		*/
+		//delete note
+		.delete( function(req,res){
+			Users.findById(req.params.id, function (err, user) {
+				if (err) {
+					return res.send(403, { error: "User not found!" });
+				} else {
+					var editNote= user.notes.id(req.params.noteID);
+					console.log(editNote);
+					editNote.remove({ _id: req.params.noteID }, function(err, note) {
+					 if (err) {
+						return res.send(403, { error: "Remove Failed!" });
+					} else {
+						 user.save(function(err) {
+		 					if (err){
+								return res.send(403, { error: "Note save Failed!" });
+							} else {
+								//res.json(content: 'Recipe ' +req.params.recipeID + ' has been deleted' });
+								res.json({content:user.notes});
+							} 
+						});
+					}
+						 
+				 });
+				}	
+			});
+	});
 	
 	
 	/*

@@ -4,7 +4,7 @@
 //SHOWS EXAMPLE OF CHAINED DISPATCHES W/ PROMISES, AS SUGGEST BY MOTHERFUCKING DAN HIMSELF
 //https://github.com/reactjs/redux/issues/1676#issuecomment-216828910
 import axios from 'axios';
-import { getNotesAsync} from './modNote';
+import { getNotesAsync} from './fetchNotes';
 
 
 //SHOWS EXAMPLE OF CHAINED DISPATCHES W/ PROMISES, AS SUGGEST BY MOTHERFUCKING DAN HIMSELF

@@ -18,8 +18,10 @@ import Header from './Header';
 import EachNote from './EachNote';
 
 import  noteRootReducer  from '../reducers/index';
-import { loginUserAsync, logoutUser, loginAndGetNotes } from '../actions/auth';
-import { getNotesAsync, addNote, remNote, editNote, remAll } from '../actions/modNote';
+import { logoutUser, loginAndGetNotes } from '../actions/auth';
+import { getNotesAsync, remNote, editNote, remAll } from '../actions/fetchNotes';
+import {  addNoteAsync } from '../actions/addNote';
+import {  delNoteAsync } from '../actions/delNote';
 
 const store = createStore(noteRootReducer, applyMiddleware(thunk));
 
@@ -33,7 +35,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-  	loginUser: (userInfo) => {
+  	loginUser: (userInfo) => {	
   		dispatch(loginAndGetNotes(userInfo))
   	},
   	getNotes: (userInfo) => {
@@ -42,8 +44,8 @@ const mapDispatchToProps = (dispatch) => {
   	logoutUser: (userInfo) => {
   		dispatch(logoutUser(userInfo))
   	},
-  	addNote : (textContent) => {
-  		dispatch(addNote(textContent))
+  	addNote : (user, textContent) => {
+  		dispatch(addNoteAsync(user, textContent))
   	},
   	editNote : (id,textContent) => {
   		dispatch(editNote(id,textContent))
@@ -51,8 +53,8 @@ const mapDispatchToProps = (dispatch) => {
   	remAll: (id) => {
   		dispatch(remAll())
   	},
-  	remNote: (id) => {
-  		dispatch(remNote(id))
+  	remNote: (user,id) => {
+  		dispatch(delNoteAsync(user,id))
   	}
   }
 };
@@ -120,7 +122,7 @@ class Board extends React.Component {
 			//console.log(this.state.note);
 			
 			
-			this.props.addNote("New Note with Redux");
+			this.props.addNote(this.props.user.user,"New Note with Redux");
 			/*
 			this.setState({
 				note:notesUpdated,
@@ -164,7 +166,7 @@ class Board extends React.Component {
 	}
 	remove (id) {
 		
-		this.props.remNote(id);
+		this.props.remNote(this.props.user.user,id);
 		
 		/*
 		var notesUpdated = this.state.note.filter((note) => (note.id !== id));
@@ -180,8 +182,8 @@ class Board extends React.Component {
 	eachNote(note){
 		//console.log(note);
 		return (<EachNote
-						key={note.id}
-						id={note.id}
+						key={note._id}
+						id={note._id}
 						note={note.content}
 						onChange={this.update}
 						onRemove={this.remove}
