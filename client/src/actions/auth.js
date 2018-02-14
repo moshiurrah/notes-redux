@@ -4,7 +4,18 @@
 //SHOWS EXAMPLE OF CHAINED DISPATCHES W/ PROMISES, AS SUGGEST BY MOTHERFUCKING DAN HIMSELF
 //https://github.com/reactjs/redux/issues/1676#issuecomment-216828910
 import axios from 'axios';
-import { getNotesAsync} from './fetchNotes';
+import { getNotesAsync, clearNotes} from './fetchNotes';
+
+
+export const logoutAndClearNotes = (user) => {
+	return (dispatch, getState) => {
+		return dispatch(logoutUserAsync(user)).then(() => {
+			return dispatch(clearNotes());
+		}).catch (err => {
+			console.log(err);
+		})
+	}
+}
 
 
 //SHOWS EXAMPLE OF CHAINED DISPATCHES W/ PROMISES, AS SUGGEST BY MOTHERFUCKING DAN HIMSELF
@@ -63,7 +74,34 @@ export const loginFailed = (user, err) => {
 	return {type:LOGINFAILED, user:user, err: err};
 };
 
-export const LOGOUT="LOGOUT";
-export const logoutUser = () => {
-	return {type:LOGOUT, user:{}};
+
+export const LOGGINGOUT="LOGGINGOUT";
+export const loggingUserOut = (user) => {
+	return {type:LOGGINGOUT, user: user};
+};
+
+export const LOGGEDOUT="LOGGEDOUT";
+export const loggedOut = () => {
+	return {type:LOGGEDOUT, user:{}};
+}
+
+export const LOGOUTFAILED="LOGOUTFAILED";
+export const logoutFailed = (user, err) => {
+	return {type:LOGOUTFAILED, user:user, err: err};
+};
+
+
+export const logoutUserAsync = (user) => {
+	return (dispatch) => {
+		dispatch(loggingUserOut(user));
+		return axios({
+			  method: 'get',
+			  url: '/logout',
+			}).then (res => {
+				dispatch(loggedOut());
+				console.log('Session Logged out!');
+			}).catch (err =>{
+				dispatch(logoutFailed(user,err));
+			});
+	}
 };

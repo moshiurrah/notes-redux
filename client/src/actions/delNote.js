@@ -16,14 +16,17 @@ export const deleteFailed = (err) => {
 };
 
 
-export const delNoteAsync = (user, noteID) => {
+export const delNoteAsync = (user, noteID, isdelAll=false) => {
 	return function (dispatch, getState) {
   	console.log(getState());
 		dispatch(delingNotes());
+		
+		var delUrl = `/api/${user}/${noteID}`
+		if (isdelAll) delUrl = `/api/${user}/del`
 		//axios add note
 		axios({
 		  method: 'delete',
-		  url: `/api/${user}/${noteID}`,
+		  url: delUrl
 		}).then (res => {
 			console.log(res.data.content);
 			dispatch(deletedNote(res.data.content));

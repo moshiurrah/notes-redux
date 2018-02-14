@@ -18,10 +18,11 @@ import Header from './Header';
 import EachNote from './EachNote';
 
 import  noteRootReducer  from '../reducers/index';
-import { logoutUser, loginAndGetNotes } from '../actions/auth';
-import { getNotesAsync, remNote, editNote, remAll } from '../actions/fetchNotes';
+import { logoutAndClearNotes, loginAndGetNotes } from '../actions/auth';
+import { getNotesAsync, remNote, remAll } from '../actions/fetchNotes';
 import {  addNoteAsync } from '../actions/addNote';
 import {  delNoteAsync } from '../actions/delNote';
+import {  editNoteAsync } from '../actions/editNote';
 
 const store = createStore(noteRootReducer, applyMiddleware(thunk));
 
@@ -42,19 +43,19 @@ const mapDispatchToProps = (dispatch) => {
   		dispatch(getNotesAsync(userInfo))
   	},
   	logoutUser: (userInfo) => {
-  		dispatch(logoutUser(userInfo))
+  		dispatch(logoutAndClearNotes(userInfo))
   	},
   	addNote : (user, textContent) => {
   		dispatch(addNoteAsync(user, textContent))
   	},
-  	editNote : (id,textContent) => {
-  		dispatch(editNote(id,textContent))
+  	editNote : (user, id,textContent) => {
+  		dispatch(editNoteAsync(user, id,textContent))
   	},
-  	remAll: (id) => {
-  		dispatch(remAll())
+  	remAll: (user) => {
+  		dispatch(delNoteAsync(user,'',true))
   	},
   	remNote: (user,id) => {
-  		dispatch(delNoteAsync(user,id))
+  		dispatch(delNoteAsync(user,id, false))
   	}
   }
 };
@@ -64,6 +65,9 @@ const mapDispatchToProps = (dispatch) => {
 class Board extends React.Component {
 	constructor(props) {
 		super(props);
+		
+		
+		/*
 		this.state = {
 			//isAuth: true,
 			userInfo: {},
@@ -73,6 +77,7 @@ class Board extends React.Component {
 			numNotes:1,
 			addDisabled:false,
 		};
+		*/
 
 		this.NUM_LIMIT=25;
 		this.update = this.update.bind(this);
@@ -82,16 +87,11 @@ class Board extends React.Component {
 		this.clearAll = this.clearAll.bind(this);
 		this.changeColor = this.changeColor.bind(this);
 	}
-	/*
+	
 	componentWillMount () {
-		//alert('Board loading');
-		//console.log(this.props.isAuth);
-		if(this.props.user.authenticated) {
-			console.log(this.props.user);
-			this.props.getNotes(this.props.user);
-		}
+		loginAndGetNotes(this.props.user.user);
 	}
-	*/
+	
 	componentDidMount () {
 		
 	}
@@ -100,7 +100,7 @@ class Board extends React.Component {
 	}
 
 	clearAll() {
-		this.props.remAll();
+		this.props.remAll(this.props.user.user);
 		/*
 		this.setState({
 			note:[],
@@ -114,9 +114,9 @@ class Board extends React.Component {
 	add () {
 		//use time as the id as a hack for now
 		//this will also serve as the default color picker
-		console.log('number of notes: ' + this.state.numNotes);
+		//console.log('number of notes: ' + this.state.numNotes);
 
-		if (this.state.numNotes < this.NUM_LIMIT) {
+		//if (this.state.numNotes < this.NUM_LIMIT) {
 			/*var notesUpdated = this.state.note.concat([{id:(new Date).getTime()}]);*/
 			//var notesUpdated = [{id:(new Date).getTime()}].concat(this.state.note);
 			//console.log(this.state.note);
@@ -130,7 +130,7 @@ class Board extends React.Component {
 				addDisabled: this.state.numNotes >= this.NUM_LIMIT
 			});
 			*/
-		}
+		//}
 
 	} 
 	changeColor (color, id) {
@@ -148,7 +148,7 @@ class Board extends React.Component {
 	}
 	update (newText,id) {
 		//console.log('updateing' + id + 'with '+newText);
-		this.props.editNote(id,newText);
+		this.props.editNote(this.props.user.user,id,newText);
 		/*
 		console.log(newText+ ' for '+id);
 		var notesUpdated = this.state.note.map(
@@ -187,7 +187,8 @@ class Board extends React.Component {
 						note={note.content}
 						onChange={this.update}
 						onRemove={this.remove}
-						onColorChange={this.changeColor}>
+						onColorChange={this.changeColor}
+						fetching={this.props.notes.fetching}>
 						</EachNote>);
 	}
 	
@@ -216,17 +217,13 @@ class Board extends React.Component {
 		return (
 			<div className="">
 				<Header add={this.add}
-								addDisabled={this.state.addDisabled}
+								//addDisabled={this.state.addDisabled}
 								clearAll={this.clearAll}
 								isAuth={this.props.user.authenticated}
 								logout={this.props.logoutUser}
+								user={this.props.user.user}
 								needFunctions={true}
 				/>
-				<div className="fixed-bottom" hidden={!this.state.addDisabled}>
-					<div className="alert alert-danger" >
-						More than {this.NUM_LIMIT} notes are not allowed!
-					</div>
-				</div>
 				<div className="noteContainer container">
 					<div className="row ">
 						{/*implement redux*/}

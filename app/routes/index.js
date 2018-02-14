@@ -9,10 +9,7 @@ module.exports = function (app, passport) {
 		if (req.isAuthenticated()) {
 			return next();
 		} else {
-			console.log(req.url);
-			//res.redirect('/login');
-			//res.json({message:'Not logged in'});
-			res.redirect('/');
+			return res.send(403, { error: "Invalid password!" });
 		}
 	}
 	
@@ -55,14 +52,16 @@ module.exports = function (app, passport) {
 		.get(function (req, res) {
 			res.send('Hello World!');
 		});
-
+	*/
+	
 	app.route('/logout')
 		.get(function (req, res) {
+			console.log(req.url);
 			req.logout();
 			res.redirect('/');
 			//res.redirect('https://fccwebapps-mtanzim.c9users.io:8081');
 		});
-		*/
+		
 		
 	//passport docs, local sign up/login
 	app.post('/signup', function(req, res, next) {
@@ -76,7 +75,7 @@ module.exports = function (app, passport) {
 	      if (err) { return next(err); }
 	      //return res.redirect('/');
 	      //console.log(req.user);
-	      res.send(JSON.stringify({isError:false, content:req.user._id}));
+	      res.json({content:req.user._id});
 	    });
 	  })(req, res, next);
 	});
@@ -90,7 +89,7 @@ module.exports = function (app, passport) {
 				Users.findById(req.params.id, function (err, user) {
 		    	if (err) {
 		    		//res.json({isError:true});
-		    		return res.send(403, { error: "Content not found!" });
+		    		return res.send(403, { error: "User not found!" });
 		    	} else {
 			    	console.log(user.notes);
 		    		//res.json({isError:false, content:user.notes});
@@ -99,82 +98,78 @@ module.exports = function (app, passport) {
 		    });
 		})
 		
-		app.route('/api/:id/add')
-			.post(function (req, res){
-				//console.log(req.url);
-				console.log(req.params.id);
-				console.log(req.body);
-				Users.findById(req.params.id, function (err, user) {
-					console.log(user);
-					if (err){
-						return res.send(403, { error: "User not found!" });
-					} else {
+
+  function changeNote (req,res, action) {
+  	console.log(action);
+		Users.findById(req.params.id, function (err, user) {
+			if (err) {
+				return res.send(403, { error: "User not found!" });
+			} else {
+				var editNote= user.notes.id(req.params.noteID);
+				switch (action) {
+					case 'add':
 						user.notes.unshift(req.body);
-						user.save(function(err) {
-							if (err) {
-								return res.send(403, { error: "Add Note Failed!" });
-							} else {
-								console.log('New note added successfully!');
-								res.json({content:user.notes});
-							}
+						break;
+					case 'edit':
+						editNote.content=req.body.content;
+						break;
+					case 'delete':
+						editNote.remove({ _id: req.params.noteID }, function(err, note) {
+							if (err) return res.send(403, { error: "Remove Failed!" });
 						});
-					}
+						break;
+					case 'deleteall':
+						var noteLen=user.notes.length-1;
+						for (let i=noteLen; i > -1 ; i--){
+							user.notes.id(user.notes[i]._id).remove();
+						}
+						break;
+					default:
+						return res.send(403, { error: "Operation not completed!" });
+				}
+				user.save(function(err) {
+					if (err){
+						console.log(err);
+						return res.send(403, { error: "Changes Failed!" });
+					} else {
+						console.log('Notes Changed');
+						res.json({content:user.notes});
+					} 
 				});
-			})
-			
-			
-	//add new ingredients, edit recipe name, or delete recipe
+			}
+		})
+	}
+	
+			//add note
+	app.route('/api/:id/add')
+		.post(isLoggedIn, function (req, res){
+			//console.log(req.url);
+			console.log(req.params.id);
+			console.log(req.body);
+			return changeNote(req,res,'add');
+		})
+		
+	app.route('/api/:id/del')
+		.delete(isLoggedIn, function (req, res){
+			//console.log(req.url);
+			console.log(req.params.id);
+			console.log(req.body);
+			return changeNote(req,res,'deleteall');
+		})
+
 	app.route('/api/:id/:noteID')
 		//edit note
-		/*
-		.put (function(req, res){
-			console.log(req.params.recipeID);
+		.put (isLoggedIn, function(req, res){
+			console.log(`Edit requested for ${req.params.id} with ${req.body.content} `)
+			console.log(req.params.id)
+			console.log(req.params.noteID);
 			console.log(req.body);
-			Users.findById(req.params.id, function (err, user) {
-				if (err) {
-					res.json({isError:true, content:parseMongooseErr(err)});
-				} else {
-					var editRecipe= user.recipes.id(req.params.recipeID);
-					editRecipe.title=req.body.title;
-					user.save(function(err) {
-						if (err){
-							res.json({isError:true, content:parseMongooseErr(err)});
-						} else {
-							console.log('Recipe Edited');
-							res.json({isError:false, content:editRecipe});
-						} 
-					});
-				}
-			})
-			//res.json({ message: 'Added ingredient to '+req.params.recipeID});
+			return changeNote(req,res,'edit');
 		})
-		*/
 		//delete note
-		.delete( function(req,res){
-			Users.findById(req.params.id, function (err, user) {
-				if (err) {
-					return res.send(403, { error: "User not found!" });
-				} else {
-					var editNote= user.notes.id(req.params.noteID);
-					console.log(editNote);
-					editNote.remove({ _id: req.params.noteID }, function(err, note) {
-					 if (err) {
-						return res.send(403, { error: "Remove Failed!" });
-					} else {
-						 user.save(function(err) {
-		 					if (err){
-								return res.send(403, { error: "Note save Failed!" });
-							} else {
-								//res.json(content: 'Recipe ' +req.params.recipeID + ' has been deleted' });
-								res.json({content:user.notes});
-							} 
-						});
-					}
-						 
-				 });
-				}	
-			});
-	});
+		.delete(isLoggedIn, function(req,res){
+			return changeNote(req,res,'delete');
+		});
 	
 	
 	/*

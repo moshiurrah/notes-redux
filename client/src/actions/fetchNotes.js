@@ -22,6 +22,11 @@ export const fetchingNotes = () => {
 	return {type:FETCHNGNOTES};
 };
 
+export const CLEARNOTES="CLEARNOTES";
+export const clearNotes = () => {
+	return {type:CLEARNOTES};
+};
+
 export const GOTNOTES="GOTNOTES";
 export const gotNotes = (notes) => {
 	return {type:GOTNOTES, notes:notes};

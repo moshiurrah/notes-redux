@@ -9,6 +9,10 @@ class Header extends React.Component {
 	  };
 	}
 	
+	logout = () => {
+	  this.props.logout(this.props.user);
+	}
+	
 	componentDidMount () {
 	}
 	render () {
@@ -18,7 +22,7 @@ class Header extends React.Component {
     			<a className="navbar-brand" href="#">Notes!</a>
     			{this.props.isAuth && (
     				<span className="ml-auto">
-    				  <button className="mr-2 btn btn-primary" onClick={this.props.logout}><i className="fa fa-sign-out" aria-hidden="true"></i></button>
+    				  <button className="mr-2 btn btn-primary" onClick={this.logout}><i className="fa fa-sign-out" aria-hidden="true"></i></button>
   						<button  className="btn btn-success mr-2" id='addBtn' disabled={this.props.addDisabled} onClick={this.props.add}><i className="fa fa-plus" aria-hidden="true"></i></button>
   						<button className="btn btn-danger" id='clearBtn' onClick={this.props.clearAll}><i className="fa fa-trash-o" aria-hidden="true"></i></button>
     				</span>

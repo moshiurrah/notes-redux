@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 
 var path = process.cwd();
 var Notes = new Schema({
-	content: { type: String, maxlength:[250,'Note too long!']},
+	content: { type: String, maxlength:[1000,'Note too long!']},
 });
 
 
