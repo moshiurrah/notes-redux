@@ -48,8 +48,8 @@ const mapDispatchToProps = (dispatch) => {
   	addNote : (user, textContent) => {
   		dispatch(addNoteAsync(user, textContent))
   	},
-  	editNote : (user, id,textContent) => {
-  		dispatch(editNoteAsync(user, id,textContent))
+  	editNote : (user, id,textContent, color) => {
+  		dispatch(editNoteAsync(user, id,textContent, color))
   	},
   	remAll: (user) => {
   		dispatch(delNoteAsync(user,'',true))
@@ -66,30 +66,12 @@ class Board extends React.Component {
 	constructor(props) {
 		super(props);
 		
-		
-		/*
-		this.state = {
-			//isAuth: true,
-			userInfo: {},
-			note: [{id:(new Date).getTime(), 
-							note:'Welcome to the Bulletin Board! On desktop, Hover on the note to access the controls.'
-						}],
-			numNotes:1,
-			addDisabled:false,
-		};
-		*/
-
 		this.NUM_LIMIT=25;
-		this.update = this.update.bind(this);
-		this.remove = this.remove.bind(this);
-		this.eachNote = this.eachNote.bind(this);
-		this.add = this.add.bind(this);
-		this.clearAll = this.clearAll.bind(this);
-		this.changeColor = this.changeColor.bind(this);
+
 	}
 	
 	componentWillMount () {
-		loginAndGetNotes(this.props.user.user);
+		//loginAndGetNotes(this.props.user.user);
 	}
 	
 	componentDidMount () {
@@ -99,41 +81,19 @@ class Board extends React.Component {
 
 	}
 
-	clearAll() {
+	clearAll = () => {
 		this.props.remAll(this.props.user.user);
-		/*
-		this.setState({
-			note:[],
-			numNotes: 0,
-			addDisabled:false,
-			maxZ:0
-		});
-		*/
 	}
 
-	add () {
-		//use time as the id as a hack for now
-		//this will also serve as the default color picker
-		//console.log('number of notes: ' + this.state.numNotes);
-
-		//if (this.state.numNotes < this.NUM_LIMIT) {
-			/*var notesUpdated = this.state.note.concat([{id:(new Date).getTime()}]);*/
-			//var notesUpdated = [{id:(new Date).getTime()}].concat(this.state.note);
-			//console.log(this.state.note);
-			
-			
+	add =  () => {
 			this.props.addNote(this.props.user.user,"New Note with Redux");
-			/*
-			this.setState({
-				note:notesUpdated,
-				numNotes: this.state.numNotes +=1,
-				addDisabled: this.state.numNotes >= this.NUM_LIMIT
-			});
-			*/
-		//}
-
 	} 
-	changeColor (color, id) {
+	/*
+	changeColor = (color, id, curTextVal) => {
+		
+		this.props.editNote (this.props.user.user, id, curTextVal, color );
+		//editNote : (user, id,textContent, color)
+		/*
 		console.log('changing to color: ' + color)
 		var notesUpdated = this.state.note.map(
 			note => (note.id !== id) ?
@@ -145,41 +105,17 @@ class Board extends React.Component {
 			note:notesUpdated
 		});
 		console.log(this.state.note);
-	}
-	update (newText,id) {
-		//console.log('updateing' + id + 'with '+newText);
-		this.props.editNote(this.props.user.user,id,newText);
-		/*
-		console.log(newText+ ' for '+id);
-		var notesUpdated = this.state.note.map(
-			note => (note.id !== id) ?
-				note :
-				{...note,
-					note:newText} 
-			)
-		this.setState({
-			note:notesUpdated
-		});
-		//console.log(notesUpdated);
-		console.log(this.state.note);
 		*/
+	//}
+
+	update = (id, newText, newColor) => {
+		this.props.editNote(this.props.user.user,id,newText, newColor);
 	}
-	remove (id) {
-		
+	remove = (id) => {
 		this.props.remNote(this.props.user.user,id);
-		
-		/*
-		var notesUpdated = this.state.note.filter((note) => (note.id !== id));
-		this.setState({
-			note:notesUpdated,
-			numNotes: this.state.numNotes -=1,
-			addDisabled: this.state.numNotes > this.NUM_LIMIT
-		});	
-		console.log ('state is: '+ this.state.addDisabled)
-		*/
 	}
 
-	eachNote(note){
+	eachNote = (note) => {
 		//console.log(note);
 		return (<EachNote
 						key={note._id}
@@ -187,8 +123,9 @@ class Board extends React.Component {
 						note={note.content}
 						onChange={this.update}
 						onRemove={this.remove}
-						onColorChange={this.changeColor}
-						fetching={this.props.notes.fetching}>
+						//onColorChange={this.changeColor}
+						fetching={this.props.notes.fetching}
+						color={note.color}>
 						</EachNote>);
 	}
 	

@@ -41,14 +41,7 @@ const notesReducer = (state = defState, action) => {
 		case EDITFAILED:
 			return {...state, fetching:false, err:action.err};
 			
-		case DELALL:
-			return {...state, notes: []};
-		case EDIT:
-			return {...state, notes: state.notes.map(
-				note => (note.id !== action.id) ?
-					note :{...note,content:action.newNote} 
-			)}
-			
+		//return to default state
 		case CLEARNOTES:
 			return defState;
 		default:

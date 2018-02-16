@@ -112,6 +112,7 @@ module.exports = function (app, passport) {
 						break;
 					case 'edit':
 						editNote.content=req.body.content;
+						editNote.color=req.body.color;
 						break;
 					case 'delete':
 						editNote.remove({ _id: req.params.noteID }, function(err, note) {

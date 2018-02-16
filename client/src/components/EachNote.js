@@ -4,10 +4,7 @@ import './style.css';
 class EachNote extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			editing: false,
-			textContent:this.props.note
-		};
+
 
 		this.NoteHeight=300;
 		this.NoteWidth=300;
@@ -21,19 +18,29 @@ class EachNote extends React.Component {
 		this.changeRed = this.changeRed.bind(this);
 		this.changeGreen = this.changeGreen.bind(this);
 		this.changeYellow = this.changeYellow.bind(this);
+		
+		this.state = {
+			editing: false,
+			textContent:this.props.note,
+			styleState:{
+        backgroundColor: this.props.color,
+        height: this.NoteHeight+'px',
+			}
+		};
 
 	}
 
 	
 	componentWillMount () {
-
-			this.setState({
-				styleState:{
-          backgroundColor: '#FFEE58',
-          height: this.NoteHeight+'px',
-				}
-				
-			})
+		//console.log(this.props.color);
+		/*
+		this.setState({
+			styleState:{
+        backgroundColor: this.props.color,
+        height: this.NoteHeight+'px',
+			}
+		})
+		*/
 	}
 
 	componentDidMount () {
@@ -63,7 +70,7 @@ class EachNote extends React.Component {
 	save () {
 		//var val = this.refs.newText.value;
 		//alert(val);
-		this.props.onChange(this.refs.newText.value, this.props.id);
+		this.props.onChange(this.props.id, this.refs.newText.value, this.props.color);
 		this.setState ({
 			editing:false 
 		});
@@ -71,9 +78,12 @@ class EachNote extends React.Component {
 		
 	}
 	changeRed () {
+		this.props.onChange(this.props.id, 'this.refs.newText.value', '#FF8A80');
+		/*
 		this.setState ({
 			styleState: {...this.state.styleState, backgroundColor:'#FF8A80'}
 		});
+		*/
 	}
 	changeYellow () {
 		this.setState ({
@@ -89,7 +99,7 @@ class EachNote extends React.Component {
 	renderForm () {
 		return(
 			<div className='col-sm-6 col-md-4 col-lg-3'>
-		    <div className='card note' style={this.state.styleState}>
+		    <div className='card note' style={{backgroundColor: this.props.color,height: this.NoteHeight+'px'}}>
 		    	<div className='card-body'>
 		    		{/**/}
 		    		<textarea style={{'height':this.formHeight+'px'}} ref='newText'>{this.props.note}</textarea>
@@ -109,7 +119,7 @@ class EachNote extends React.Component {
 	renderDisplay () {
     return (
 	    		<div className='col-sm-6 col-md-4 col-lg-3'>
-				    <div className='card note' style={this.state.styleState}>
+				    <div className='card note' style={{backgroundColor: this.props.color,height: this.NoteHeight+'px'}}>
 				    	<div onClick={this.edit} className='card-body'>
 					    	<p>{this.props.note}</p>
 				    	</div>
