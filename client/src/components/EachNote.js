@@ -5,104 +5,70 @@ class EachNote extends React.Component {
 	constructor(props) {
 		super(props);
 
-
+		//style constants
 		this.NoteHeight=300;
 		this.NoteWidth=300;
 		this.formHeight=this.NoteHeight*0.6;
-
-		this.edit = this.edit.bind(this);
-		this.remove = this.remove.bind(this);
-		this.renderDisplay = this.renderDisplay.bind(this);
-		this.renderForm = this.renderForm.bind(this);
-		this.save = this.save.bind(this);
-		this.changeRed = this.changeRed.bind(this);
-		this.changeGreen = this.changeGreen.bind(this);
-		this.changeYellow = this.changeYellow.bind(this);
 		
+		this.RED = '#FF8A80';
+		this.YELLOW = '#FFEE58';
+		this.GREEN = '#00E676';
+
 		this.state = {
 			editing: false,
-			textContent:this.props.note,
-			styleState:{
-        backgroundColor: this.props.color,
-        height: this.NoteHeight+'px',
-			}
+			newTextContent: this.props.note,
 		};
-
 	}
 
 	
 	componentWillMount () {
-		//console.log(this.props.color);
-		/*
-		this.setState({
-			styleState:{
-        backgroundColor: this.props.color,
-        height: this.NoteHeight+'px',
-			}
-		})
-		*/
 	}
-
 	componentDidMount () {
-		/*
-		this.setState({
-			editing:true
-		})
-		*/
 	}
 	componentDidUpdate() {
-		if (this.state.editing){
-			this.refs.newText.focus();
-			this.refs.newText.select();
-		}
 	}
 
-	edit () {
+	edit = () => {
+		//console.log("note prop is:" + this.props.note);
 		this.setState ({
 			editing:true,
-			textContent:''
+			newTextContent: this.props.note
 		});
+		//console.log("state is:" + this.state.newTextContent);
 	}
-	remove() {
-		//alert("Removing Note");
+	remove = () => {
 		this.props.onRemove(this.props.id);
 	}
-	save () {
-		//var val = this.refs.newText.value;
-		//alert(val);
-		this.props.onChange(this.props.id, this.refs.newText.value, this.props.color);
+	save =  () => {
+		this.props.onChange(this.props.id, this.state.newTextContent, this.props.color);
 		this.setState ({
-			editing:false 
-		});
-		
-		
-	}
-	changeRed () {
-		this.props.onChange(this.props.id, 'this.refs.newText.value', '#FF8A80');
-		/*
-		this.setState ({
-			styleState: {...this.state.styleState, backgroundColor:'#FF8A80'}
-		});
-		*/
-	}
-	changeYellow () {
-		this.setState ({
-			styleState: {...this.state.styleState, backgroundColor:'#FFEE58'}
+			editing:false,
 		});
 	}
-	changeGreen () {
-		this.setState ({
-			styleState: {...this.state.styleState, backgroundColor:'#00E676'}
-		});
+	
+	//an inner function can be returned to prevent execution, which will cause infinite loop in react!
+	//see the following link:
+	//https://stackoverflow.com/questions/33412703/how-to-pass-parameters-to-callback-function-without-executing-it
+	
+	changeColor = (colorHex) => {
+		return () => this.props.onChange(this.props.id, this.props.note, colorHex);
+	}
+	
+	handleChangeNoteText = (event) => {
+		this.setState({newTextContent: event.target.value});
+	}
+	
+	handleFocus = (event) => {
+		event.target.select();
 	}
 
-	renderForm () {
+	renderForm = () => {
 		return(
 			<div className='col-sm-6 col-md-4 col-lg-3'>
 		    <div className='card note' style={{backgroundColor: this.props.color,height: this.NoteHeight+'px'}}>
 		    	<div className='card-body'>
 		    		{/**/}
-		    		<textarea style={{'height':this.formHeight+'px'}} ref='newText'>{this.props.note}</textarea>
+		    		<textarea autoFocus onFocus={this.handleFocus} ref='newText' style={{'height':this.formHeight+'px'}} onChange={this.handleChangeNoteText}>{this.state.newTextContent}</textarea>
 	    		</div>
 		    	<div className="card-footer bg-transparent">
 	    			<div className="row">
@@ -114,9 +80,8 @@ class EachNote extends React.Component {
     		</div>
   		</div>
 		);
-
 	}
-	renderDisplay () {
+	renderDisplay = () => {
     return (
 	    		<div className='col-sm-6 col-md-4 col-lg-3'>
 				    <div className='card note' style={{backgroundColor: this.props.color,height: this.NoteHeight+'px'}}>
@@ -126,9 +91,9 @@ class EachNote extends React.Component {
 				    	<span>
 					    	<div className="card-footer ">
 					    		<div id="noteCtrl" className="row">
-						    		<button id="red" className="btn lblBtn" onClick={this.changeRed}></button>
-						    		<button id="yellow" className="btn lblBtn"  onClick={this.changeYellow}></button>
-						    		<button id="green" className="btn lblBtn" onClick={this.changeGreen}></button>
+						    		<button style={{backgroundColor: this.RED}} id="red" className="btn lblBtn" onClick={this.changeColor(this.RED)}></button>
+						    		<button style={{backgroundColor: this.YELLOW}} id="yellow" className="btn lblBtn"  onClick={this.changeColor(this.YELLOW)}></button>
+						    		<button style={{backgroundColor: this.GREEN}} id="green" className="btn lblBtn" onClick={this.changeColor(this.GREEN)}></button>
 						    		<div className="ml-auto">
 							    		<button className="btn btn-success " onClick={this.edit}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></button>
 							    		<button className="btn btn-danger " onClick={this.remove}><i className="fa fa-trash-o" aria-hidden="true"></i></button>

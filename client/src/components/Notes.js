@@ -65,9 +65,7 @@ const mapDispatchToProps = (dispatch) => {
 class Board extends React.Component {
 	constructor(props) {
 		super(props);
-		
 		this.NUM_LIMIT=25;
-
 	}
 	
 	componentWillMount () {
@@ -88,26 +86,6 @@ class Board extends React.Component {
 	add =  () => {
 			this.props.addNote(this.props.user.user,"New Note with Redux");
 	} 
-	/*
-	changeColor = (color, id, curTextVal) => {
-		
-		this.props.editNote (this.props.user.user, id, curTextVal, color );
-		//editNote : (user, id,textContent, color)
-		/*
-		console.log('changing to color: ' + color)
-		var notesUpdated = this.state.note.map(
-			note => (note.id !== id) ?
-				note :
-				{...note,
-					color:color} 
-			)
-		this.setState({
-			note:notesUpdated
-		});
-		console.log(this.state.note);
-		*/
-	//}
-
 	update = (id, newText, newColor) => {
 		this.props.editNote(this.props.user.user,id,newText, newColor);
 	}
@@ -123,7 +101,6 @@ class Board extends React.Component {
 						note={note.content}
 						onChange={this.update}
 						onRemove={this.remove}
-						//onColorChange={this.changeColor}
 						fetching={this.props.notes.fetching}
 						color={note.color}>
 						</EachNote>);
