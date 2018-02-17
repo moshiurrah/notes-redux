@@ -24,6 +24,11 @@ import {  addNoteAsync } from '../actions/addNote';
 import {  delNoteAsync } from '../actions/delNote';
 import {  editNoteAsync } from '../actions/editNote';
 
+//axios progress bar
+import { loadProgressBar } from 'axios-progress-bar';
+import 'axios-progress-bar/dist/nprogress.css'
+loadProgressBar();
+
 const store = createStore(noteRootReducer, applyMiddleware(thunk));
 
 //Redux Connect
@@ -66,6 +71,9 @@ class Board extends React.Component {
 	constructor(props) {
 		super(props);
 		this.NUM_LIMIT=25;
+		this.state = {
+			curNoteID:''
+		}
 	}
 	
 	componentWillMount () {
@@ -84,13 +92,24 @@ class Board extends React.Component {
 	}
 
 	add =  () => {
-			this.props.addNote(this.props.user.user,"New Note with Redux");
+		this.setState ({
+			curNoteID:''
+		});
+		this.props.addNote(this.props.user.user,"New Note with Redux");
 	} 
 	update = (id, newText, newColor) => {
+		
+		console.log("Note id updating is " + id);
+		this.setState ({
+			curNoteID:id
+		});
 		this.props.editNote(this.props.user.user,id,newText, newColor);
 	}
 	remove = (id) => {
 		this.props.remNote(this.props.user.user,id);
+		this.setState ({
+			curNoteID:id
+		});
 	}
 
 	eachNote = (note) => {
@@ -98,10 +117,12 @@ class Board extends React.Component {
 		return (<EachNote
 						key={note._id}
 						id={note._id}
+						curNoteID={this.state.curNoteID}
 						note={note.content}
 						onChange={this.update}
 						onRemove={this.remove}
 						fetching={this.props.notes.fetching}
+						curNoteID={this.state.curNoteID}
 						color={note.color}>
 						</EachNote>);
 	}

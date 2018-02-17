@@ -116,16 +116,7 @@ div.note button {
   cursor: pointer;
 }
 
-/*
-#red {
-  background-color: #FF8A80;
+/*hide the progressbar peg*/
+#nprogress .spinner-icon {
+  display: none;
 }
-
-#yellow {
-  background-color: #FFEE58;
-}
-  
-#green {
-  background-color: #00E676;
-}
-*/

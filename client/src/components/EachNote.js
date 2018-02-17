@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import './style.css';
 
+//import CircularProgressbar from 'react-circular-progressbar';
+//import 'react-circular-progressbar/dist/styles.css';
+
+
 class EachNote extends React.Component {
 	constructor(props) {
 		super(props);
@@ -105,8 +109,34 @@ class EachNote extends React.Component {
 			    </div>
     );
 	}
+	
+	renderLoading = () => {
+    return (
+  		<div style={{opacity:0.3}} className='col-sm-6 col-md-4 col-lg-3'>
+		    <div className='card note' style={{backgroundColor: this.props.color,height: this.NoteHeight+'px'}}>
+		    	<div className='card-body'>
+		    		<p>{this.state.newTextContent}</p>
+		    	</div>
+		    	<span>
+			    	<div className="card-footer ">
+			    		<div id="noteCtrl" className="row">
+				    		<button disabled style={{backgroundColor: this.RED}} id="red" className="btn lblBtn" ></button>
+				    		<button disabled style={{backgroundColor: this.YELLOW}} id="yellow" className="btn lblBtn" ></button>
+				    		<button disabled style={{backgroundColor: this.GREEN}} id="green" className="btn lblBtn"></button>
+				    		<div className="ml-auto">
+					    		<button disabled className="btn btn-success"><i className="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+					    		<button disabled className="btn btn-danger "><i className="fa fa-trash-o" aria-hidden="true"></i></button>
+				    		</div>
+			    		</div>
+		    		</div>
+	    		</span>
+		    </div>
+	    </div>
+    );
+	}
+	
   render() {
-		return (((this.state.editing) ? this.renderForm() : this.renderDisplay()));
+		return (((this.state.editing) ? this.renderForm() : ( this.props.curNoteID === this.props.id && this.props.fetching ? this.renderLoading() : this.renderDisplay() )));
   }
 };
 
