@@ -147,7 +147,6 @@ module.exports = function (app, passport) {
 						return res.send(403, { error: "Changes Failed!" });
 					} else {
 						console.log('Notes Changed');
-						//res.json({content:user.notes});
 						res.json(toReturn);
 					} 
 				});

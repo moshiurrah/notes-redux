@@ -56,10 +56,11 @@ export const undoAsync = (user) => {
   			dispatch(undoFailed(err.response.data.error));
   		});
   		
-  		
+  		/*
   		setTimeout(
   		  function () {dispatch(undone(successfulPast[successfulPast.length-1],desiredIndex))}
   	  ,1000);
+  	  */
   	  console.log(getState());
 		} else {
 		  dispatch(undoFailed('Past Unavailable!'));
