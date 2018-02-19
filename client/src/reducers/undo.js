@@ -12,11 +12,13 @@ const undoEnhancer = (reducer) => {
         future: []
       },
       fetching:false,
+      hasHistory:false,
       err:''
     }
     
      return function (state = initState, action) {
-      const { past, present, future } = state.undoState ;
+      const { past, present, future } = state.undoState;
+      var hasHistory = past.filter(past => past.fetching === false && past.err==='').length>1;
       switch (action.type) {
         case UNDOING:
           return {...state, fetching: true, err:''};
@@ -24,6 +26,7 @@ const undoEnhancer = (reducer) => {
           //undone modified to allow desired time travel
           const previous = action.desiredPast;
           const newPast = past.slice(0,action.desiredPastIndex-1);
+          hasHistory = newPast.filter(past => past.fetching === false && past.err==='').length>1;
           //console.log("NNNNNNNNNNNEEEEEWWWW PAST!!!!!!");
           //console.log(newPast);
            //original UNDONE
@@ -39,12 +42,13 @@ const undoEnhancer = (reducer) => {
                 future: [present, ...future]
               },
               fetching:false,
+              hasHistory:hasHistory,
               err:''
           }
           
         case UNDOFAILED:
           console.log(action.err);
-          return {...state, fetching:false, err:action.err};
+          return {...state, fetching:false, hasHistory:hasHistory, err:action.err};
         case CLEARPAST:
           return initState;
         default:
@@ -60,6 +64,7 @@ const undoEnhancer = (reducer) => {
               future: []
             },
             fetching:false,
+            hasHistory:hasHistory,
             err:''
           }
       }

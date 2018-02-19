@@ -36,7 +36,8 @@ const store = createStore(noteRootReducer, applyMiddleware(thunk));
 const mapStateToProps = (state) => {
   return {
   	user: state.authReducer,
-  	notes: state.notesReducer.undoState.present	
+  	notes: state.notesReducer.undoState.present,
+  	hasHistory:state.notesReducer.hasHistory
   }
 };
 
@@ -92,6 +93,9 @@ class Board extends React.Component {
 	}
 
 	clearAll = () => {
+		this.setState ({
+			curNoteID:''
+		});
 		this.props.remAll(this.props.user.user);
 	}
 
@@ -164,6 +168,7 @@ class Board extends React.Component {
 								user={this.props.user.user}
 								needFunctions={true}
 								undo={this.props.undo}
+								hasHistory={this.props.hasHistory}
 				/>
 				<div className="noteContainer container">
 					<div className="row ">

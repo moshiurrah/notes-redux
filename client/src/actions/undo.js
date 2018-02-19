@@ -27,8 +27,9 @@ export const clearPast = () => {
 export const undoAsync = (user) => {
   return function (dispatch, getState) {
     console.log(getState());
-		dispatch(undoing());
+		
 		const past = getState().notesReducer.undoState.past;
+		const hasHistory = getState().notesReducer.hasHistory;
 		console.log(past);
   	//dispatch(undoing());
 		var desiredIndex=past.length-1;
@@ -37,8 +38,25 @@ export const undoAsync = (user) => {
 		  return past.fetching === false && past.err==='';
 		})
 		
-		if (successfulPast.length > 1) {
+		if (hasHistory) {
+		  dispatch(undoing());
   		console.log(successfulPast[successfulPast.length-1]);
+  		
+  		//axios redo and refresh
+  		axios({
+  		  method: 'post',
+  		  url: `/api/${user}/refresh`,
+  		  data: {content:successfulPast[successfulPast.length-1].notes}
+  		}).then (res => {
+  			console.log(res.data.content);
+  			//NOTE THE POTENTIAL DISCONNECT B/W BACKEND AND FRONTEND
+  			//the above is hopefully fixed by the spread operator replacing the notes component with what the server is seeing
+  			dispatch(undone({...successfulPast[successfulPast.length-1],notes:res.data.content},desiredIndex))
+  		}).catch (err =>{
+  			dispatch(undoFailed(err.response.data.error));
+  		});
+  		
+  		
   		setTimeout(
   		  function () {dispatch(undone(successfulPast[successfulPast.length-1],desiredIndex))}
   	  ,1000);

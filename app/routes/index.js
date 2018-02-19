@@ -108,6 +108,12 @@ module.exports = function (app, passport) {
 			} else {
 				var editNote= user.notes.id(req.params.noteID);
 				switch (action) {
+					case 'refresh':
+						console.log(req.body.content);
+						user.notes=[];
+						user.notes=req.body.content;
+						toReturn= {content:user.notes};
+						break;
 					case 'add':
 						user.notes.unshift(req.body);
 						console.log(user.notes[0]);
@@ -149,7 +155,16 @@ module.exports = function (app, passport) {
 		})
 	}
 	
-			//add note
+	
+	
+	app.route('/api/:id/refresh')
+		.post(isLoggedIn, function (req, res){
+			//console.log(req.url);
+			console.log(req.params.id);
+			console.log(req.body);
+			return changeNote(req,res,'refresh');
+		})
+	//add note
 	app.route('/api/:id/add')
 		.post(isLoggedIn, function (req, res){
 			//console.log(req.url);
