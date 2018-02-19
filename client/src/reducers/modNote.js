@@ -5,8 +5,9 @@ import {EDITING, EDITED, EDITFAILED} from '../actions/editNote'
 
 import undoEnhancer from './undo';
 
-
-const defState = {fetching:false, notes:[], err:''};
+//limit the number of notes
+const NUM_LIMIT=25;
+const defState = {fetching:false, notes:[], err:'', limReached:false};
 
 const notesReducerBase = (state = defState, action) => {
 	switch (action.type) {
@@ -15,7 +16,7 @@ const notesReducerBase = (state = defState, action) => {
 			return {...state, fetching: true, err:''};
 		case GOTNOTES:
 			//console.log(action.notes);
-			return {...state, fetching: false, notes: action.notes , err:''};
+			return {...state, fetching: false, notes: action.notes , err:'', limReached:action.notes.length >= NUM_LIMIT};
 		case GETFAILED:
 			return {...state, fetching:false, err:action.err};
 		
@@ -23,7 +24,7 @@ const notesReducerBase = (state = defState, action) => {
 		case ADDING:
 			return {...state, fetching:true, err:''};
 		case ADDED:
-			return {...state, fetching:false, notes: [action.notes].concat(state.notes), err:''};
+			return {...state, fetching:false, notes: [action.notes].concat(state.notes), err:'', limReached:state.notes.length >= NUM_LIMIT-1};
 		case ADDFAILED:
 			return {...state, fetching:false, err:action.err};
 		
@@ -36,7 +37,7 @@ const notesReducerBase = (state = defState, action) => {
 				console.log(note);
 				return note._id !== action.notes._id;
 			});
-			return {...state, fetching:false, notes: newNotes, err:''};
+			return {...state, fetching:false, notes: newNotes, err:'', limReached:newNotes.length >= NUM_LIMIT};
 		case DELFAILED:
 			return {...state, fetching:false, err:action.err};
 			

@@ -38,6 +38,7 @@ class UserLogin extends React.Component {
 		
 		if (this.state.isLogin){
 			this.props.login({email:this.state.username, password:this.state.password});
+			this.setState({password: ''});
 		}
 	}
 	

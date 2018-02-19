@@ -48,7 +48,7 @@ export const undoAsync = (user) => {
   		  url: `/api/${user}/refresh`,
   		  data: {content:successfulPast[successfulPast.length-1].notes}
   		}).then (res => {
-  			console.log(res.data.content);
+  			//console.log(res.data.content);
   			//NOTE THE POTENTIAL DISCONNECT B/W BACKEND AND FRONTEND
   			//the above is hopefully fixed by the spread operator replacing the notes component with what the server is seeing
   			dispatch(undone({...successfulPast[successfulPast.length-1],notes:res.data.content},desiredIndex))
@@ -61,7 +61,7 @@ export const undoAsync = (user) => {
   		  function () {dispatch(undone(successfulPast[successfulPast.length-1],desiredIndex))}
   	  ,1000);
   	  */
-  	  console.log(getState());
+  	  //console.log(getState());
 		} else {
 		  dispatch(undoFailed('Past Unavailable!'));
 		}

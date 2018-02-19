@@ -19,17 +19,22 @@ export const addFailed = (err) => {
 export const addNoteAsync = (user, noteContent) => {
 	return function (dispatch, getState) {
   	console.log(getState());
-		dispatch(addingNotes());
-		//axios add note
-		axios({
-		  method: 'post',
-		  url: `/api/${user}/add`,
-		  data: {content:noteContent}
-		}).then (res => {
-			console.log(res.data.content);
-			dispatch(addedNote(res.data.content));
-		}).catch (err =>{
-			dispatch(addFailed(err.response.data.error));
-		});
+  	
+  	if (getState().notesReducer.undoState.present.limReached) {
+  	  console.log("Limit reached!")
+  	} else {
+  		dispatch(addingNotes());
+  		//axios add note
+  		axios({
+  		  method: 'post',
+  		  url: `/api/${user}/add`,
+  		  data: {content:noteContent}
+  		}).then (res => {
+  			console.log(res.data.content);
+  			dispatch(addedNote(res.data.content));
+  		}).catch (err =>{
+  			dispatch(addFailed(err.response.data.error));
+  		});
+  	}
 	}
 };

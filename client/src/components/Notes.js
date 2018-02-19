@@ -16,6 +16,7 @@ import './style.css';
 import UserLogin from './UserLogin';
 import Header from './Header';
 import EachNote from './EachNote';
+import ErrorFooter from './ErrorFooter';
 
 import  noteRootReducer  from '../reducers/index';
 import { logoutAndClearNotesAndClearPast, loginAndGetNotes } from '../actions/auth';
@@ -37,7 +38,8 @@ const mapStateToProps = (state) => {
   return {
   	user: state.authReducer,
   	notes: state.notesReducer.undoState.present,
-  	hasHistory:state.notesReducer.hasHistory
+  	hasHistory:state.notesReducer.hasHistory,
+  	limReached:state.notesReducer.undoState.present.limReached
   }
 };
 
@@ -75,7 +77,6 @@ const mapDispatchToProps = (dispatch) => {
 class Board extends React.Component {
 	constructor(props) {
 		super(props);
-		this.NUM_LIMIT=25;
 		this.state = {
 			curNoteID:''
 		}
@@ -153,6 +154,7 @@ class Board extends React.Component {
 				<UserLogin login={this.props.loginUser}
 									 //getNotes={this.props.getNotes}
 				/>
+				<ErrorFooter errMsg={this.props.user.err}/>
 			</div>
 		)
 	}
@@ -169,6 +171,7 @@ class Board extends React.Component {
 								needFunctions={true}
 								undo={this.props.undo}
 								hasHistory={this.props.hasHistory}
+								limReached={this.props.limReached}
 				/>
 				<div className="noteContainer container">
 					<div className="row ">
@@ -176,6 +179,7 @@ class Board extends React.Component {
 						{this.props.notes.notes.map(this.eachNote)}
 					</div>
 				</div>
+				<ErrorFooter errMsg={this.props.notes.err}/>
 			</div>
 		);
   }
