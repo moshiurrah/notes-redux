@@ -5,6 +5,18 @@
 //https://github.com/reactjs/redux/issues/1676#issuecomment-216828910
 import axios from 'axios';
 import { getNotesAsync, clearNotes} from './fetchNotes';
+import {clearPast} from './undo';
+
+
+export const logoutAndClearNotesAndClearPast = (user) => {
+	return (dispatch, getState) => {
+		return dispatch(logoutAndClearNotes(user)).then(() => {
+			return dispatch(clearPast());
+		}).catch (err => {
+			console.log(err);
+		})
+	}
+}
 
 
 export const logoutAndClearNotes = (user) => {

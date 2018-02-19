@@ -130,7 +130,7 @@ module.exports = function (app, passport) {
 							user.notes.id(user.notes[i]._id).remove();
 						}
 						//do a non mutating action here instead
-						toReturn = {content:user.notes};
+						toReturn = {};
 						break;
 					default:
 						return res.send(403, { error: "Operation not completed!" });

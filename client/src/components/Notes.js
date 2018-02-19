@@ -18,11 +18,12 @@ import Header from './Header';
 import EachNote from './EachNote';
 
 import  noteRootReducer  from '../reducers/index';
-import { logoutAndClearNotes, loginAndGetNotes } from '../actions/auth';
-import { getNotesAsync, remNote, remAll } from '../actions/fetchNotes';
+import { logoutAndClearNotesAndClearPast, loginAndGetNotes } from '../actions/auth';
+import { getNotesAsync } from '../actions/fetchNotes';
 import {  addNoteAsync } from '../actions/addNote';
 import {  delNoteAsync } from '../actions/delNote';
 import {  editNoteAsync } from '../actions/editNote';
+import {  undoAsync } from '../actions/undo';
 
 //axios progress bar
 import { loadProgressBar } from 'axios-progress-bar';
@@ -35,7 +36,7 @@ const store = createStore(noteRootReducer, applyMiddleware(thunk));
 const mapStateToProps = (state) => {
   return {
   	user: state.authReducer,
-  	notes: state.notesReducer
+  	notes: state.notesReducer.undoState.present	
   }
 };
 
@@ -48,7 +49,7 @@ const mapDispatchToProps = (dispatch) => {
   		dispatch(getNotesAsync(userInfo))
   	},
   	logoutUser: (userInfo) => {
-  		dispatch(logoutAndClearNotes(userInfo))
+  		dispatch(logoutAndClearNotesAndClearPast(userInfo))
   	},
   	addNote : (user, textContent) => {
   		dispatch(addNoteAsync(user, textContent))
@@ -61,6 +62,9 @@ const mapDispatchToProps = (dispatch) => {
   	},
   	remNote: (user,id) => {
   		dispatch(delNoteAsync(user,id, false))
+  	},
+  	undo: (user) => {
+  		dispatch(undoAsync(user))
   	}
   }
 };
@@ -140,6 +144,7 @@ class Board extends React.Component {
 				<Header
 					isAuth={this.props.user.authenticated}
 					login={this.props.loginUser}
+					
 				/>
 				<UserLogin login={this.props.loginUser}
 									 //getNotes={this.props.getNotes}
@@ -158,6 +163,7 @@ class Board extends React.Component {
 								logout={this.props.logoutUser}
 								user={this.props.user.user}
 								needFunctions={true}
+								undo={this.props.undo}
 				/>
 				<div className="noteContainer container">
 					<div className="row ">

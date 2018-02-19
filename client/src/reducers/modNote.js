@@ -3,10 +3,12 @@ import {ADDING, ADDED, ADDFAILED} from '../actions/addNote'
 import {DELING, DELETED, DELFAILED} from '../actions/delNote'
 import {EDITING, EDITED, EDITFAILED} from '../actions/editNote'
 
+import undoEnhancer from './undo';
+
 
 const defState = {fetching:false, notes:[], err:''};
 
-const notesReducer = (state = defState, action) => {
+const notesReducerBase = (state = defState, action) => {
 	switch (action.type) {
 		//initial note fetch
 		case FETCHNGNOTES:
@@ -63,5 +65,5 @@ const notesReducer = (state = defState, action) => {
 			return state;
 	}
 }
-
+const notesReducer = undoEnhancer(notesReducerBase);
 export default notesReducer;

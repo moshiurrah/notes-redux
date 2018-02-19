@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { clearNotes } from '../actions/fetchNotes';
 
 export const DELING="DELING";
 export const delingNotes = () => {
@@ -16,6 +16,8 @@ export const deleteFailed = (err) => {
 };
 
 
+
+
 export const delNoteAsync = (user, noteID, isdelAll=false) => {
 	return function (dispatch, getState) {
   	console.log(getState());
@@ -29,7 +31,11 @@ export const delNoteAsync = (user, noteID, isdelAll=false) => {
 		  url: delUrl
 		}).then (res => {
 			console.log(res.data.content);
-			dispatch(deletedNote(res.data.content));
+			if (isdelAll) {
+				dispatch(clearNotes());
+			} else {
+				dispatch(deletedNote(res.data.content));
+			}
 		}).catch (err =>{
 			dispatch(deleteFailed(err.response.data.error));
 		});
