@@ -25,6 +25,7 @@ import {  addNoteAsync } from '../actions/addNote';
 import {  delNoteAsync } from '../actions/delNote';
 import {  editNoteAsync } from '../actions/editNote';
 import {  undoAsync } from '../actions/undo';
+import {  setColorFilter } from '../actions/changeColor';
 
 //axios progress bar
 import { loadProgressBar } from 'axios-progress-bar';
@@ -39,7 +40,8 @@ const mapStateToProps = (state) => {
   	user: state.authReducer,
   	notes: state.notesReducer.undoState.present,
   	hasHistory:state.notesReducer.hasHistory,
-  	limReached:state.notesReducer.undoState.present.limReached
+  	limReached:state.notesReducer.undoState.present.limReached,
+  	colorFilter: state.colorReducer
   }
 };
 
@@ -68,6 +70,9 @@ const mapDispatchToProps = (dispatch) => {
   	},
   	undo: (user) => {
   		dispatch(undoAsync(user))
+  	},
+  	setColorFilter: (colorHex) => {
+  		dispatch(setColorFilter(colorHex));
   	}
   }
 };
@@ -132,7 +137,8 @@ class Board extends React.Component {
 						onRemove={this.remove}
 						fetching={this.props.notes.fetching}
 						curNoteID={this.state.curNoteID}
-						color={note.color}>
+						color={note.color}
+						colorFilter={this.props.colorFilter}>
 						</EachNote>);
 	}
 	
@@ -140,6 +146,7 @@ class Board extends React.Component {
 	render () {
 		console.log(this.props.user);
 		console.log(this.props.notes);
+		console.log(this.props.colorFilter);
 		return (((this.props.user.authenticated) ? this.renderNotes() : this.renderLoginPage()));
 	}
 
@@ -172,11 +179,15 @@ class Board extends React.Component {
 								undo={this.props.undo}
 								hasHistory={this.props.hasHistory}
 								limReached={this.props.limReached}
+								setColorFilter={this.props.setColorFilter}
 				/>
 				<div className="noteContainer container">
 					<div className="row ">
 						{/*implement redux*/}
-						{this.props.notes.notes.map(this.eachNote)}
+						{this.props.colorFilter !== '' ?
+							(this.props.notes.notes.filter(note => note.color === this.props.colorFilter).map(this.eachNote)) :
+							(this.props.notes.notes.map(this.eachNote))
+						}
 					</div>
 				</div>
 				<ErrorFooter errMsg={this.props.notes.err}/>
