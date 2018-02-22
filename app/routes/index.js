@@ -71,11 +71,16 @@ module.exports = function (app, passport) {
 	    if (!user) { 
 	    	return res.send(403, { error: "Invalid password!" });
 	    }
+	    //possibile optimization: don't even get the notes from the server?
 	    req.logIn(user, function(err) {
 	      if (err) { return next(err); }
 	      //return res.redirect('/');
 	      //console.log(req.user);
-	      res.json({content:req.user._id});
+	      //res.json({content:req.user});
+	      var fullUser = Object.assign({}, user.toJSON({ virtuals: true })); 
+	      //var fullUser = user.toJSON({ virtuals: true });
+	      delete fullUser['notes'];
+	     res.json({content:fullUser});
 	    });
 	  })(req, res, next);
 	});

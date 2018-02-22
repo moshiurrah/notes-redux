@@ -88,7 +88,7 @@ class Board extends React.Component {
 	}
 	
 	componentWillMount () {
-		//loginAndGetNotes(this.props.user.user);
+		//loginAndGetNotes(this.props.user.user._id);
 	}
 	
 	componentDidMount () {
@@ -102,14 +102,14 @@ class Board extends React.Component {
 		this.setState ({
 			curNoteID:''
 		});
-		this.props.remAll(this.props.user.user);
+		this.props.remAll(this.props.user.user._id);
 	}
 
 	add =  () => {
 		this.setState ({
 			curNoteID:''
 		});
-		this.props.addNote(this.props.user.user,"New Note with Redux");
+		this.props.addNote(this.props.user.user._id,"New Note with Redux");
 	} 
 	update = (id, newText, newColor) => {
 		
@@ -117,10 +117,10 @@ class Board extends React.Component {
 		this.setState ({
 			curNoteID:id
 		});
-		this.props.editNote(this.props.user.user,id,newText, newColor);
+		this.props.editNote(this.props.user.user._id,id,newText, newColor);
 	}
 	remove = (id) => {
-		this.props.remNote(this.props.user.user,id);
+		this.props.remNote(this.props.user.user._id,id);
 		this.setState ({
 			curNoteID:id
 		});
@@ -174,13 +174,13 @@ class Board extends React.Component {
 								clearAll={this.clearAll}
 								isAuth={this.props.user.authenticated}
 								logout={this.props.logoutUser}
-								user={this.props.user.user}
+								user={this.props.user.user._id}
+								displayName={this.props.user.user.displayName.name}
 								needFunctions={true}
 								undo={this.props.undo}
 								hasHistory={this.props.hasHistory}
 								limReached={this.props.limReached}
-								setColorFilter={this.props.setColorFilter}
-				/>
+								setColorFilter={this.props.setColorFilter}/>
 				<div className="noteContainer container">
 					<div className="row ">
 						{/*implement redux*/}
@@ -190,7 +190,9 @@ class Board extends React.Component {
 						}
 					</div>
 				</div>
+				{/*
 				<ErrorFooter errMsg={this.props.notes.err}/>
+				*/}
 			</div>
 		);
   }

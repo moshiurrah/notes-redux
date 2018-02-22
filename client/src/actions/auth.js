@@ -35,7 +35,7 @@ export const logoutAndClearNotes = (user) => {
 export const loginAndGetNotes = (user) => {
 	return (dispatch, getState) => {
 		return dispatch(loginUserAsync(user)).then(() => {
-			const fetchedUser=getState().authReducer.user;
+			const fetchedUser=getState().authReducer.user._id;
 			console.log(fetchedUser);
 			return dispatch(getNotesAsync(fetchedUser));
 		}).catch (err => {
