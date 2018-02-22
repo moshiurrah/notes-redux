@@ -17,6 +17,7 @@ import UserLogin from './UserLogin';
 import Header from './Header';
 import EachNote from './EachNote';
 import ErrorFooter from './ErrorFooter';
+import ControlFooter from './ControlFooter';
 
 import  noteRootReducer  from '../reducers/index';
 import { logoutAndClearNotesAndClearPast, loginAndGetNotes } from '../actions/auth';
@@ -136,7 +137,6 @@ class Board extends React.Component {
 						onChange={this.update}
 						onRemove={this.remove}
 						fetching={this.props.notes.fetching}
-						curNoteID={this.state.curNoteID}
 						color={note.color}
 						colorFilter={this.props.colorFilter}>
 						</EachNote>);
@@ -169,6 +169,15 @@ class Board extends React.Component {
   renderNotes = () =>  {
 		return (
 			<div className="">
+				<ControlFooter add={this.add}
+								//addDisabled={this.state.addDisabled}
+								user={this.props.user.user._id}
+								clearAll={this.clearAll}
+								isAuth={this.props.user.authenticated}
+								logout={this.props.logoutUser}
+								undo={this.props.undo}
+								hasHistory={this.props.hasHistory}
+								limReached={this.props.limReached}/>
 				<Header add={this.add}
 								//addDisabled={this.state.addDisabled}
 								clearAll={this.clearAll}
@@ -190,9 +199,7 @@ class Board extends React.Component {
 						}
 					</div>
 				</div>
-				{/*
 				<ErrorFooter errMsg={this.props.notes.err}/>
-				*/}
 			</div>
 		);
   }

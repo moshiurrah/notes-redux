@@ -120,3 +120,7 @@ div.note button {
 #nprogress .spinner-icon {
   display: none;
 }
+
+.dropdown-menu {
+  min-width: 0px;
+}
