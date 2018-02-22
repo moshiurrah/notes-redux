@@ -16,6 +16,7 @@ import './style.css';
 import UserLogin from './UserLogin';
 import Header from './Header';
 import EachNote from './EachNote';
+import NewNote from './NewNote';
 import ErrorFooter from './ErrorFooter';
 import ControlFooter from './ControlFooter';
 
@@ -57,8 +58,9 @@ const mapDispatchToProps = (dispatch) => {
   	logoutUser: (userInfo) => {
   		dispatch(logoutAndClearNotesAndClearPast(userInfo))
   	},
-  	addNote : (user, textContent) => {
-  		dispatch(addNoteAsync(user, textContent))
+  	//is this under best practices, or am I too smart :|
+  	addNote : (user, textContent, color, toggleAdd) => {
+  		dispatch(addNoteAsync(user, textContent, color, toggleAdd))
   	},
   	editNote : (user, id,textContent, color) => {
   		dispatch(editNoteAsync(user, id,textContent, color))
@@ -84,7 +86,9 @@ class Board extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			curNoteID:''
+			curNoteID:'',
+			needFocus:false,
+			adding:false
 		}
 	}
 	
@@ -96,7 +100,7 @@ class Board extends React.Component {
 		
 	}
 	componentWillUpdate () {
-
+		
 	}
 
 	clearAll = () => {
@@ -105,18 +109,29 @@ class Board extends React.Component {
 		});
 		this.props.remAll(this.props.user.user._id);
 	}
+	
+	toggleAdd = () => {
+		this.setState({
+			adding:!this.state.adding
+		})
+	}
 
-	add =  () => {
+	add =  (text, color) => {
 		this.setState ({
-			curNoteID:''
+			curNoteID:'',
+			needFocus:true
 		});
-		this.props.addNote(this.props.user.user._id,"New Note with Redux");
+		//clear filter when adding!
+		this.props.setColorFilter('');
+		this.props.addNote(this.props.user.user._id,text, color, this.toggleAdd);
+		//this.toggleAdd();
 	} 
 	update = (id, newText, newColor) => {
 		
 		console.log("Note id updating is " + id);
 		this.setState ({
-			curNoteID:id
+			curNoteID:id,
+			needFocus:false
 		});
 		this.props.editNote(this.props.user.user._id,id,newText, newColor);
 	}
@@ -133,6 +148,8 @@ class Board extends React.Component {
 						key={note._id}
 						id={note._id}
 						curNoteID={this.state.curNoteID}
+						lastNoteID={this.props.notes.lastNoteID}
+						needFocus={this.state.needFocus}
 						note={note.content}
 						onChange={this.update}
 						onRemove={this.remove}
@@ -169,7 +186,7 @@ class Board extends React.Component {
   renderNotes = () =>  {
 		return (
 			<div className="">
-				<ControlFooter add={this.add}
+				<ControlFooter add={this.toggleAdd}
 								//addDisabled={this.state.addDisabled}
 								user={this.props.user.user._id}
 								clearAll={this.clearAll}
@@ -178,7 +195,7 @@ class Board extends React.Component {
 								undo={this.props.undo}
 								hasHistory={this.props.hasHistory}
 								limReached={this.props.limReached}/>
-				<Header add={this.add}
+				<Header 
 								//addDisabled={this.state.addDisabled}
 								clearAll={this.clearAll}
 								isAuth={this.props.user.authenticated}
@@ -189,10 +206,13 @@ class Board extends React.Component {
 								undo={this.props.undo}
 								hasHistory={this.props.hasHistory}
 								limReached={this.props.limReached}
-								setColorFilter={this.props.setColorFilter}/>
+								setColorFilter={this.props.setColorFilter}
+								filterColor={this.props.colorFilter}/>
 				<div className="noteContainer container">
 					<div className="row ">
-						{/*implement redux*/}
+						{this.state.adding && (<NewNote fetching={this.props.notes.fetching}
+																						add={this.add}
+																						toggleAdd={this.toggleAdd}/>)}
 						{this.props.colorFilter !== '' ?
 							(this.props.notes.notes.filter(note => note.color === this.props.colorFilter).map(this.eachNote)) :
 							(this.props.notes.notes.map(this.eachNote))

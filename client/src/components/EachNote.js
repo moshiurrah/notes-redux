@@ -17,6 +17,8 @@ class EachNote extends React.Component {
 		this.RED = '#FF8A80';
 		this.YELLOW = '#FFEE58';
 		this.GREEN = '#00E676';
+		
+		this.SIZECLASS='col-sm-6 col-md-6 col-lg-4';
 
 		this.state = {
 			editing: false,
@@ -28,6 +30,11 @@ class EachNote extends React.Component {
 	componentWillMount () {
 	}
 	componentDidMount () {
+		/*
+		if (this.props.id === this.props.lastNoteID && this.props.needFocus){
+			this.setState({editing:true})
+		}
+		*/
 	}
 	componentDidUpdate() {
 	}
@@ -45,6 +52,11 @@ class EachNote extends React.Component {
 	}
 	save =  () => {
 		this.props.onChange(this.props.id, this.state.newTextContent, this.props.color);
+		this.setState ({
+			editing:false,
+		});
+	}
+	cancel =  () => {
 		this.setState ({
 			editing:false,
 		});
@@ -68,7 +80,7 @@ class EachNote extends React.Component {
 
 	renderForm = () => {
 		return(
-			<div className='col-sm-6 col-md-4 col-lg-3'>
+			<div className={this.SIZECLASS}>
 		    <div className='card note' style={{backgroundColor: this.props.color,height: this.NoteHeight+'px'}}>
 		    	<div className='card-body'>
 		    		{/**/}
@@ -77,6 +89,7 @@ class EachNote extends React.Component {
 		    	<div className="card-footer bg-transparent">
 	    			<div className="row">
 			    		<div className="ml-auto">
+			    			<button className="btn btn-danger " onClick={this.cancel}><i className="fa fa-times" aria-hidden="true"></i></button>
 								<button className='btn btn-success' onClick={this.save}><i className="fa fa-floppy-o" aria-hidden="true"></i></button>
 			    		</div>
 		    		</div>
@@ -87,49 +100,36 @@ class EachNote extends React.Component {
 	}
 	renderDisplay = () => {
     return (
-	    		<div className='col-sm-6 col-md-4 col-lg-3'>
-				    <div className='card note' style={{backgroundColor: this.props.color,height: this.NoteHeight+'px'}}>
-				    	<div onClick={this.edit} className='card-body'>
-					    	<p>{this.props.note}</p>
-				    	</div>
-				    	<span>
-					    	<div className="card-footer ">
-					    		<div id="noteCtrl" className="row">
-						    		<button style={{backgroundColor: this.RED}} id="red" className="btn lblBtn" onClick={this.changeColor(this.RED)}></button>
-						    		<button style={{backgroundColor: this.YELLOW}} id="yellow" className="btn lblBtn"  onClick={this.changeColor(this.YELLOW)}></button>
-						    		<button style={{backgroundColor: this.GREEN}} id="green" className="btn lblBtn" onClick={this.changeColor(this.GREEN)}></button>
-						    		<div className="ml-auto">
-							    		<button className="btn btn-success " onClick={this.edit}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-							    		<button className="btn btn-danger " onClick={this.remove}><i className="fa fa-trash-o" aria-hidden="true"></i></button>
-						    		</div>
-					    		</div>
+  		<div className={this.SIZECLASS}>
+		    <div className='card note' style={{backgroundColor: this.props.color,height: this.NoteHeight+'px'}}>
+		    	<div onClick={this.edit} className='card-body'>
+			    	<p>{this.props.note}</p>
+		    	</div>
+		    	<span>
+			    	<div className="card-footer ">
+			    		<div id="noteCtrl" className="row">
+				    		<button style={{backgroundColor: this.RED}} id="red" className="btn lblBtn" onClick={this.changeColor(this.RED)}></button>
+				    		<button style={{backgroundColor: this.YELLOW}} id="yellow" className="btn lblBtn"  onClick={this.changeColor(this.YELLOW)}></button>
+				    		<button style={{backgroundColor: this.GREEN}} id="green" className="btn lblBtn" onClick={this.changeColor(this.GREEN)}></button>
+				    		<div className="ml-auto">
+					    		<button className="btn btn-success " onClick={this.edit}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+					    		<button className="btn btn-danger " onClick={this.remove}><i className="fa fa-trash-o" aria-hidden="true"></i></button>
 				    		</div>
-			    		</span>
-				    </div>
-			    </div>
+			    		</div>
+		    		</div>
+	    		</span>
+		    </div>
+	    </div>
     );
 	}
 	
 	renderLoading = () => {
     return (
-  		<div style={{opacity:0.3}} className='col-sm-6 col-md-4 col-lg-3'>
+  		<div style={{opacity:0.3}} className={this.SIZECLASS}>
 		    <div className='card note' style={{backgroundColor: this.props.color,height: this.NoteHeight+'px'}}>
 		    	<div className='card-body'>
 		    		<p>{this.state.newTextContent}</p>
 		    	</div>
-		    	<span>
-			    	<div className="card-footer ">
-			    		<div id="noteCtrl" className="row">
-				    		<button disabled style={{backgroundColor: this.RED}} id="red" className="btn lblBtn" ></button>
-				    		<button disabled style={{backgroundColor: this.YELLOW}} id="yellow" className="btn lblBtn" ></button>
-				    		<button disabled style={{backgroundColor: this.GREEN}} id="green" className="btn lblBtn"></button>
-				    		<div className="ml-auto">
-					    		<button disabled className="btn btn-success"><i className="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-					    		<button disabled className="btn btn-danger "><i className="fa fa-trash-o" aria-hidden="true"></i></button>
-				    		</div>
-			    		</div>
-		    		</div>
-	    		</span>
 		    </div>
 	    </div>
     );

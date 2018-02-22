@@ -16,7 +16,7 @@ export const addFailed = (err) => {
 };
 
 
-export const addNoteAsync = (user, noteContent) => {
+export const addNoteAsync = (user, noteContent, color, toggleAdd) => {
 	return function (dispatch, getState) {
   	console.log(getState());
   	
@@ -28,10 +28,11 @@ export const addNoteAsync = (user, noteContent) => {
   		axios({
   		  method: 'post',
   		  url: `/api/${user}/add`,
-  		  data: {content:noteContent}
+  		  data: {content:noteContent, color:color}
   		}).then (res => {
   			console.log(res.data.content);
   			dispatch(addedNote(res.data.content));
+  			toggleAdd();
   		}).catch (err =>{
   			dispatch(addFailed(err.response.data.error));
   		});

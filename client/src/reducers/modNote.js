@@ -7,7 +7,7 @@ import undoEnhancer from './undo';
 
 //limit the number of notes
 const NUM_LIMIT=25;
-const defState = {fetching:false, notes:[], err:'', limReached:false};
+const defState = {fetching:false, notes:[], err:'', limReached:false, lastNoteID:''};
 
 const notesReducerBase = (state = defState, action) => {
 	switch (action.type) {
@@ -24,7 +24,7 @@ const notesReducerBase = (state = defState, action) => {
 		case ADDING:
 			return {...state, fetching:true, err:''};
 		case ADDED:
-			return {...state, fetching:false, notes: [action.notes].concat(state.notes), err:'', limReached:state.notes.length >= NUM_LIMIT-1};
+			return {...state, fetching:false, notes: [action.notes].concat(state.notes), err:'', limReached:state.notes.length >= NUM_LIMIT-1, lastNoteID:action.notes._id};
 		case ADDFAILED:
 			return {...state, fetching:false, err:action.err};
 		
