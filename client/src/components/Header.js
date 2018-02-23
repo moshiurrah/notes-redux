@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import ColorPalette from './ColorPalette';
+import {COLORS} from './constants.js'
 import './style.css';
 
 class Header extends React.Component {
@@ -7,10 +9,7 @@ class Header extends React.Component {
 		this.state = {
 		  filterColor:''
 	  };
-	  
-		this.RED = '#FF8A80';
-		this.YELLOW = '#FFEE58';
-		this.GREEN = '#00E676';
+
 
 		
 	}
@@ -50,12 +49,12 @@ class Header extends React.Component {
                       <i className="fa fa-filter"></i>
                     </button>
                     <div className="dropdown-menu"  aria-labelledby="btnGroupDrop1">
-                      <a className="dropdown-item" >
-                        <button style={{backgroundColor: this.RED}}  onClick={this.changeColor(this.RED)} className='btn lblBtn mr-2'>&nbsp;&nbsp;&nbsp;</button>
-                        <button style={{backgroundColor: this.YELLOW}}  onClick={this.changeColor(this.YELLOW)} className='btn lblBtn mr-2'>&nbsp;&nbsp;&nbsp;</button>
-                        <button style={{backgroundColor: this.GREEN}}  onClick={this.changeColor(this.GREEN)} className='btn lblBtn mr-2'>&nbsp;&nbsp;&nbsp;</button>
+                      <div className="dropdown-item" >
+                        {COLORS.map((color, index) => {
+                          return (<ColorPalette color={color} key={index} onClick={this.changeColor}/>)
+                        })}
                         <button onClick={this.changeColor('')} className='btn'><i className="fa fa-times"></i></button>
-                      </a>
+                      </div>
                     </div>
                   </div>
                 </div>

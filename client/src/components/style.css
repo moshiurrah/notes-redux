@@ -106,10 +106,9 @@ div.note button {
 }
 
 .lblBtn {
-  border-radius: 100%;
-  border: solid gray 1px;
-  width: 35px;
-  height: 35px;
+  border-radius: 0%;
+  width: 30px;
+  height: 30px;
 }
 
 .btn {

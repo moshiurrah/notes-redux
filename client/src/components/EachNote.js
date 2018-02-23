@@ -3,7 +3,8 @@ import './style.css';
 
 //import CircularProgressbar from 'react-circular-progressbar';
 //import 'react-circular-progressbar/dist/styles.css';
-
+import {COLORS, NOTEHEIGHT, NOTEWIDTH, FORMHEIGHT, SIZECLASS} from './constants.js';
+import ColorPalette from './ColorPalette';
 
 class EachNote extends React.Component {
 	constructor(props) {
@@ -14,9 +15,11 @@ class EachNote extends React.Component {
 		this.NoteWidth=300;
 		this.formHeight=this.NoteHeight*0.6;
 		
+		/*
 		this.RED = '#FF8A80';
 		this.YELLOW = '#FFEE58';
 		this.GREEN = '#00E676';
+		*/
 		
 		this.SIZECLASS='col-sm-6 col-md-6 col-lg-4';
 
@@ -108,9 +111,14 @@ class EachNote extends React.Component {
 		    	<span>
 			    	<div className="card-footer ">
 			    		<div id="noteCtrl" className="row">
+								{COLORS.map((color, index) => {
+                	return (<ColorPalette color={color} key={index} onClick={this.changeColor}/>);
+            		})}
+            		{/*
 				    		<button style={{backgroundColor: this.RED}} id="red" className="btn lblBtn" onClick={this.changeColor(this.RED)}></button>
 				    		<button style={{backgroundColor: this.YELLOW}} id="yellow" className="btn lblBtn"  onClick={this.changeColor(this.YELLOW)}></button>
 				    		<button style={{backgroundColor: this.GREEN}} id="green" className="btn lblBtn" onClick={this.changeColor(this.GREEN)}></button>
+				    		*/}
 				    		<div className="ml-auto">
 					    		<button className="btn btn-success " onClick={this.edit}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></button>
 					    		<button className="btn btn-danger " onClick={this.remove}><i className="fa fa-trash-o" aria-hidden="true"></i></button>

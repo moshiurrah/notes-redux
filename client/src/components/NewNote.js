@@ -1,15 +1,17 @@
-import React, { Component } from 'react';
+import React, { Component}  from 'react';
 import './style.css';
 
 //import CircularProgressbar from 'react-circular-progressbar';
 //import 'react-circular-progressbar/dist/styles.css';
-
+import {COLORS, NOTEHEIGHT, NOTEWIDTH, FORMHEIGHT, SIZECLASS} from './constants.js';
+import ColorPalette from './ColorPalette';
 
 class NewNote extends React.Component {
 	constructor(props) {
 		super(props);
 
 		//style constants
+		/*
 		this.NoteHeight=300;
 		this.NoteWidth=300;
 		this.formHeight=this.NoteHeight*0.6;
@@ -19,9 +21,10 @@ class NewNote extends React.Component {
 		this.GREEN = '#00E676';
 		
 		this.SIZECLASS='col-sm-6 col-md-6 col-lg-4';
+		*/
 
 		this.state = {
-			color: this.YELLOW,
+			color: COLORS[0],
 			newTextContent: ''
 		};
 	}
@@ -43,7 +46,7 @@ class NewNote extends React.Component {
 	
 	cancel = () => {
 		this.setState ({
-			color: this.YELLOW,
+			color: COLORS[0],
 			newTextContent: ''
 		})
 		this.props.toggleAdd();
@@ -69,17 +72,17 @@ class NewNote extends React.Component {
 
 	renderForm = () => {
 		return(
-			<div className={this.SIZECLASS}>
-		    <div className='card note' style={{backgroundColor: this.state.color,height: this.NoteHeight+'px'}}>
+			<div className={SIZECLASS}>
+		    <div className='card note' style={{backgroundColor: this.state.color,height: NOTEHEIGHT+'px'}}>
 		    	<div className='card-body'>
 		    		{/**/}
-		    		<textarea autoFocus onFocus={this.handleFocus} style={{'height':this.formHeight+'px'}} onChange={this.handleChangeNoteText}>{this.state.newTextContent}</textarea>
+		    		<textarea autoFocus onFocus={this.handleFocus} style={{'height':FORMHEIGHT+'px'}} onChange={this.handleChangeNoteText}>{this.state.newTextContent}</textarea>
 	    		</div>
 		    	<div className="card-footer bg-transparent">
 		    		<div id="noteCtrl" className="row">
-			    		<button style={{backgroundColor: this.RED}} id="red" className="btn lblBtn" onClick={this.changeColor(this.RED)}></button>
-			    		<button style={{backgroundColor: this.YELLOW}} id="yellow" className="btn lblBtn"  onClick={this.changeColor(this.YELLOW)}></button>
-			    		<button style={{backgroundColor: this.GREEN}} id="green" className="btn lblBtn" onClick={this.changeColor(this.GREEN)}></button>
+							{COLORS.map((color, index) => {
+                return (<ColorPalette color={color} key={index} onClick={this.changeColor}/>);
+              })}
 			    		<div className="ml-auto">
 			    			<button className="btn btn-danger " onClick={this.cancel}><i className="fa fa-times" aria-hidden="true"></i></button>
 				    		<button className="btn btn-success " onClick={this.save}><i className="fa fa-floppy-o" aria-hidden="true"></i></button>
@@ -94,11 +97,11 @@ class NewNote extends React.Component {
 	
 	renderLoading = () => {
 		return(
-			<div style={{opacity:0.3}} className={this.SIZECLASS}>
-		    <div className='card note' style={{backgroundColor: this.state.color,height: this.NoteHeight+'px'}}>
+			<div style={{opacity:0.3}} className={SIZECLASS}>
+		    <div className='card note' style={{backgroundColor: this.state.color,height: NOTEHEIGHT+'px'}}>
 		    	<div className='card-body'>
 		    		{/**/}
-		    		<textarea style={{'height':this.formHeight+'px'}} >{this.state.newTextContent}</textarea>
+		    		<textarea style={{'height':FORMHEIGHT+'px'}} >{this.state.newTextContent}</textarea>
 	    		</div>
     		</div>
   		</div>
