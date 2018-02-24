@@ -13,7 +13,8 @@ import logo from './logo.svg';
 import './style.css';
 
 //components
-import UserLogin from './UserLogin';
+import LoginPage from './LoginPage';
+//import UserLogin from './UserLogin';
 import Header from './Header';
 import EachNote from './EachNote';
 import NewNote from './NewNote';
@@ -34,7 +35,7 @@ import { loadProgressBar } from 'axios-progress-bar';
 import 'axios-progress-bar/dist/nprogress.css'
 loadProgressBar();
 
-const store = createStore(noteRootReducer, applyMiddleware(thunk));
+//const store = createStore(noteRootReducer, applyMiddleware(thunk));
 
 //Redux Connect
 const mapStateToProps = (state) => {
@@ -168,6 +169,9 @@ class Board extends React.Component {
 	}
 
 	renderLoginPage = () => {
+		return (<LoginPage/>);
+		
+		/*
 		return (
 			<div>
 				<Header
@@ -181,6 +185,7 @@ class Board extends React.Component {
 				<ErrorFooter errMsg={this.props.user.err}/>
 			</div>
 		)
+		*/
 	}
 
   renderNotes = () =>  {
@@ -230,9 +235,10 @@ class Board extends React.Component {
 //React-Redux Connections///////////////////////////
 //Connect
 //Notes connected w/ Redux
-const NotesContainer = connect(mapStateToProps, mapDispatchToProps)(Board);
+const Notes = connect(mapStateToProps, mapDispatchToProps)(Board);
 //Provider
 //Notes wraped in Provider
+/*
 class Notes extends React.Component {
 	// change code below this line
 	render() {
@@ -243,5 +249,6 @@ class Notes extends React.Component {
 		);
 	}
 };
+*/
 
 export default Notes;

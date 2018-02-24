@@ -10,19 +10,6 @@ class NewNote extends React.Component {
 	constructor(props) {
 		super(props);
 
-		//style constants
-		/*
-		this.NoteHeight=300;
-		this.NoteWidth=300;
-		this.formHeight=this.NoteHeight*0.6;
-		
-		this.RED = '#FF8A80';
-		this.YELLOW = '#FFEE58';
-		this.GREEN = '#00E676';
-		
-		this.SIZECLASS='col-sm-6 col-md-6 col-lg-4';
-		*/
-
 		this.state = {
 			color: COLORS[0],
 			newTextContent: ''

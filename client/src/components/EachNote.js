@@ -10,19 +10,6 @@ class EachNote extends React.Component {
 	constructor(props) {
 		super(props);
 
-		//style constants
-		this.NoteHeight=300;
-		this.NoteWidth=300;
-		this.formHeight=this.NoteHeight*0.6;
-		
-		/*
-		this.RED = '#FF8A80';
-		this.YELLOW = '#FFEE58';
-		this.GREEN = '#00E676';
-		*/
-		
-		this.SIZECLASS='col-sm-6 col-md-6 col-lg-4';
-
 		this.state = {
 			editing: false,
 			newTextContent: this.props.note,
@@ -83,11 +70,11 @@ class EachNote extends React.Component {
 
 	renderForm = () => {
 		return(
-			<div className={this.SIZECLASS}>
-		    <div className='card note' style={{backgroundColor: this.props.color,height: this.NoteHeight+'px'}}>
+			<div className={SIZECLASS}>
+		    <div className='card note' style={{backgroundColor: this.props.color,height: NOTEHEIGHT+'px'}}>
 		    	<div className='card-body'>
 		    		{/**/}
-		    		<textarea autoFocus onFocus={this.handleFocus} ref='newText' style={{'height':this.formHeight+'px'}} onChange={this.handleChangeNoteText}>{this.state.newTextContent}</textarea>
+		    		<textarea autoFocus onFocus={this.handleFocus} ref='newText' style={{'height':FORMHEIGHT+'px'}} onChange={this.handleChangeNoteText}>{this.state.newTextContent}</textarea>
 	    		</div>
 		    	<div className="card-footer bg-transparent">
 	    			<div className="row">
@@ -103,8 +90,8 @@ class EachNote extends React.Component {
 	}
 	renderDisplay = () => {
     return (
-  		<div className={this.SIZECLASS}>
-		    <div className='card note' style={{backgroundColor: this.props.color,height: this.NoteHeight+'px'}}>
+  		<div className={SIZECLASS}>
+		    <div className='card note' style={{backgroundColor: this.props.color,height: NOTEHEIGHT+'px'}}>
 		    	<div onClick={this.edit} className='card-body'>
 			    	<p>{this.props.note}</p>
 		    	</div>
@@ -133,8 +120,8 @@ class EachNote extends React.Component {
 	
 	renderLoading = () => {
     return (
-  		<div style={{opacity:0.3}} className={this.SIZECLASS}>
-		    <div className='card note' style={{backgroundColor: this.props.color,height: this.NoteHeight+'px'}}>
+  		<div style={{opacity:0.3}} className={SIZECLASS}>
+		    <div className='card note' style={{backgroundColor: this.props.color,height: NOTEHEIGHT+'px'}}>
 		    	<div className='card-body'>
 		    		<p>{this.state.newTextContent}</p>
 		    	</div>
