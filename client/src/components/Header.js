@@ -3,7 +3,8 @@ import ColorPalette from './ColorPalette';
 import {COLORS} from './constants.js'
 import './style.css';
 
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
+//import { Redirect } from 'react-router-dom'
 
 class Header extends React.Component {
 	constructor(props) {
@@ -37,9 +38,13 @@ class Header extends React.Component {
 	}
 	render () {
 	  return (
-      <div className="sticky-top">
+      <div className="sticky-top mb-2">
     		<nav className="navbar navbar-light bg-light">
     			<div className="navbar-brand">Notes!
+    			  {this.props.isBackReq &&(
+            	<Link to='/'>
+            		<button type="button" className="btn ml-4"><i className="fa fa-arrow-left" aria-hidden="true"></i></button>
+          		</Link>)}
             {this.props.isAuth && (
       				<span className="ml-4">
 
