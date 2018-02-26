@@ -3,15 +3,16 @@ import ColorPalette from './ColorPalette';
 import {COLORS} from './constants.js'
 import './style.css';
 
+import { Link } from 'react-router-dom'
+
 class Header extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
+		const defState = {
 		  filterColor:''
-	  };
+		}
+		this.state = defState;
 
-
-		
 	}
 	
 	logout = () => {
@@ -38,7 +39,7 @@ class Header extends React.Component {
 	  return (
       <div className="sticky-top">
     		<nav className="navbar navbar-light bg-light">
-    			<a className="navbar-brand">Notes!
+    			<div className="navbar-brand">Notes!
             {this.props.isAuth && (
       				<span className="ml-4">
 
@@ -67,7 +68,9 @@ class Header extends React.Component {
                     </button>
                     <div  className="dropdown-menu">
                       <form className="">
-                        <p className='ml-2 mr-2'>{this.props.displayName}</p>
+                        <Link to='/user'>
+                          <p className='ml-2 mr-2'>{this.props.displayName}</p>
+                        </Link>
                         <button className="ml-2 mr-2 btn btn-primary" onClick={this.logout}><i className="fa fa-sign-out" aria-hidden="true"></i></button>
                       </form>
                     </div>
@@ -76,7 +79,7 @@ class Header extends React.Component {
       				</span>
   				  )}
     			
-    			</a>
+    			</div>
     			
     		</nav>
 	    </div>

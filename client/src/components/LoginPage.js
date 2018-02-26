@@ -15,6 +15,7 @@ const mapStateToProps = (state) => {
   }
 };
 
+/*
 const mapDispatchToProps = (dispatch) => {
   return {
   	loginUser: (userInfo) => {	
@@ -22,6 +23,7 @@ const mapDispatchToProps = (dispatch) => {
   	}
   }
 };
+*/
 
 
 const LoginBase = ({user, loginUser}) => {
@@ -30,7 +32,8 @@ const LoginBase = ({user, loginUser}) => {
 			<Header
 				isAuth={user.authenticated}
 			/>
-			<UserLogin login={loginUser}
+			<UserLogin 
+									//login={loginUser}
 								 //getNotes={this.props.getNotes}
 			/>
 			<ErrorFooter errMsg={user.err}/>
@@ -38,5 +41,6 @@ const LoginBase = ({user, loginUser}) => {
   )
 }
 
-const LoginPage = connect(mapStateToProps, mapDispatchToProps)(LoginBase);
+//const LoginPage = connect(mapStateToProps, mapDispatchToProps)(LoginBase);
+const LoginPage = connect(mapStateToProps, null)(LoginBase);
 export default LoginPage;

@@ -1,12 +1,31 @@
 import React, {Component} from 'react';
+//import { Link } from 'react-router-dom'
+
 import './style.css';
-import Header from './Header';
-import axios from 'axios';
 
 import SocialLogin from './SocialLogin';
 import LoginMenu from './LoginMenu';
 
-class UserLogin extends React.Component {
+import {  connect } from 'react-redux'
+import './style.css';
+
+import { Redirect } from 'react-router-dom'
+
+//redirecting w/ react router lessons here
+//https://stackoverflow.com/questions/43230194/how-to-use-redirect-in-the-new-react-router-dom-of-reactjs
+
+import {loginUserAsync } from '../actions/auth';
+
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+  	loginUser: (userInfo) => {	
+  		 return dispatch(loginUserAsync(userInfo))
+  	}
+  }
+};
+
+class UserLoginBase extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -18,7 +37,8 @@ class UserLogin extends React.Component {
 			//pseudo constants; check if this falls under best practices
 			isSocial:false,
 			needMenu:false,
-			isLogin:true
+			isLogin:true,
+			isRedirect: false
 		}
 	}
 	
@@ -37,7 +57,8 @@ class UserLogin extends React.Component {
 		event.preventDefault();
 		
 		if (this.state.isLogin){
-			this.props.login({email:this.state.username, password:this.state.password});
+			this.props.loginUser({email:this.state.username, password:this.state.password})
+			.then (() => this.setState({ isRedirect: true }));
 			this.setState({password: ''});
 		}
 	}
@@ -55,9 +76,11 @@ class UserLogin extends React.Component {
 	
 	render () {
 		
+		if (this.state.isRedirect) {
+			return <Redirect to='/'/>;
+		}
 		
 		return (
-
 			<div className="container">
 				{this.state.needMenu && (<LoginMenu toggleLogin={this.toggleLogin} toggleSignup={this.toggleSignup}/>)}
 				<form  className="mt-4" onSubmit={this.handleLogIn}>
@@ -77,7 +100,9 @@ class UserLogin extends React.Component {
 				  {!this.state.isLogin ?
 				  	(<button type="submit" className="btn">Sign Up!</button>) :
 				  	(<div>
-				  		<button type="submit" className="btn">Log In!</button><br/>
+				  		
+				  			<button type="submit" className="btn">Log In!</button><br/>
+			  			
 				  		{!this.state.needMenu && (<small>New Accounts will be signed up automatically.</small>)}
 			  		</div>)
 				  }
@@ -91,5 +116,6 @@ class UserLogin extends React.Component {
 	
 }
 
+const UserLogin = connect(null, mapDispatchToProps)(UserLoginBase);
 
 export default UserLogin;

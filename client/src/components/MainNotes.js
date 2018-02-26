@@ -26,7 +26,8 @@ const MainNotesContainer = () => (
 
 
 const store = createStore(noteRootReducer, applyMiddleware(thunk));
-
+//Provider
+//Notes wraped in Provider
 class MainNotes extends React.Component {
 	// change code below this line
 	render() {

@@ -4,9 +4,12 @@ Feb 2018
 */
 import React, { Component } from 'react';
 //import Redux from 'redux';
-import { Provider, connect } from 'react-redux'
-import { createStore, combineReducers, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
+//import { Provider, connect } from 'react-redux'
+import { connect } from 'react-redux'
+import { Link, Redirect } from 'react-router-dom'
+//import { Redirect } from 'react-router-dom'
+//import { createStore, combineReducers, applyMiddleware } from 'redux'
+//import thunk from 'redux-thunk'
 
 
 import logo from './logo.svg';
@@ -21,7 +24,7 @@ import NewNote from './NewNote';
 import ErrorFooter from './ErrorFooter';
 import ControlFooter from './ControlFooter';
 
-import  noteRootReducer  from '../reducers/index';
+//import  noteRootReducer  from '../reducers/index';
 import { logoutAndClearNotesAndClearPast, loginAndGetNotes } from '../actions/auth';
 import { getNotesAsync } from '../actions/fetchNotes';
 import {  addNoteAsync } from '../actions/addNote';
@@ -94,7 +97,7 @@ class Board extends React.Component {
 	}
 	
 	componentWillMount () {
-		//loginAndGetNotes(this.props.user.user._id);
+		this.props.getNotes(this.props.user.user._id);
 	}
 	
 	componentDidMount () {
@@ -165,27 +168,14 @@ class Board extends React.Component {
 		console.log(this.props.user);
 		console.log(this.props.notes);
 		console.log(this.props.colorFilter);
+		//return (((this.props.user.authenticated) ? this.renderNotes() : this.renderLoginPage()));
 		return (((this.props.user.authenticated) ? this.renderNotes() : this.renderLoginPage()));
 	}
 
 	renderLoginPage = () => {
-		return (<LoginPage/>);
-		
-		/*
-		return (
-			<div>
-				<Header
-					isAuth={this.props.user.authenticated}
-					login={this.props.loginUser}
-					
-				/>
-				<UserLogin login={this.props.loginUser}
-									 //getNotes={this.props.getNotes}
-				/>
-				<ErrorFooter errMsg={this.props.user.err}/>
-			</div>
-		)
-		*/
+		//return (<LoginPage/>)
+		//return (<Link to='/login'><p>Please log in to continue.</p></Link>)
+		return <Redirect to='/login'/>;
 	}
 
   renderNotes = () =>  {
@@ -231,7 +221,7 @@ class Board extends React.Component {
 }
 
 
-
+	
 //React-Redux Connections///////////////////////////
 //Connect
 //Notes connected w/ Redux

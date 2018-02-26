@@ -56,7 +56,7 @@ class UserProfile extends React.Component {
             </div>
             <div className="card-block">
               <p className="card-text ml-3 mt-2">Total Recipes: {this.props.numRecipes}</p>
-              {this.props.loginType==='local' && (<button className="btn ml-3 mb-2" onClick={this.showPassForm}>Change Password</button>)}
+              <button className="btn ml-3 mb-2" onClick={this.showPassForm}>Change Password</button>
               {this.state.changePassToggle && (<PasswordForm
                                                         showPassForm={this.showPassForm}
                                                         handleError={this.props.handleError}

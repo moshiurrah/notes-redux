@@ -6,11 +6,15 @@
 import axios from 'axios';
 import { getNotesAsync, clearNotes} from './fetchNotes';
 import {clearPast} from './undo';
+import {setColorFilter} from './changeColor';
 
 
 export const logoutAndClearNotesAndClearPast = (user) => {
+	console.log('clearing user');
 	return (dispatch, getState) => {
+		console.log('clearing notes');
 		return dispatch(logoutAndClearNotes(user)).then(() => {
+			console.log('clearing history');
 			return dispatch(clearPast());
 		}).catch (err => {
 			console.log(err);
@@ -110,6 +114,7 @@ export const logoutUserAsync = (user) => {
 			  method: 'get',
 			  url: '/logout',
 			}).then (res => {
+				dispatch(setColorFilter(''));
 				dispatch(loggedOut());
 				console.log('Session Logged out!');
 			}).catch (err =>{

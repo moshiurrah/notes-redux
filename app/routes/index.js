@@ -58,7 +58,8 @@ module.exports = function (app, passport) {
 		.get(function (req, res) {
 			console.log(req.url);
 			req.logout();
-			res.redirect('/');
+			//res.redirect('/');
+			res.json({content:'Successfully logged out!'});
 			//res.redirect('https://fccwebapps-mtanzim.c9users.io:8081');
 		});
 		
@@ -80,7 +81,7 @@ module.exports = function (app, passport) {
 	      var fullUser = Object.assign({}, user.toJSON({ virtuals: true })); 
 	      //var fullUser = user.toJSON({ virtuals: true });
 	      delete fullUser['notes'];
-	     res.json({content:fullUser});
+	    	res.json({content:fullUser});
 	    });
 	  })(req, res, next);
 	});
