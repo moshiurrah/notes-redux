@@ -1,4 +1,5 @@
 import {LOGGINGIN, LOGGEDIN, LOGINFAILED, LOGGINGOUT, LOGGEDOUT, LOGOUTFAILED } from '../actions/auth'
+import {CHANGINGPASS, CHANGEDPASS, CHANGEPASSFAILED} from '../actions/changePass'
 
 //auth reducer
 const defaultAuth = {
@@ -22,7 +23,13 @@ const authReducer = (state=defaultAuth, action) => {
 			return {authenticated: false, fetching:false, user:action.user}
 		case LOGOUTFAILED:
 			return {authenticated: true, fetching:false, user:action.user, err:action.err}
-		default:
+		case CHANGINGPASS:
+			return {...state, fetching:true}
+		case CHANGEDPASS:
+			return {...state, fetching:false, err:action.message}
+		case CHANGEPASSFAILED:
+			return {...state, fetching:false, err:action.err}
+		default:	
 			return state;
 	}
 }

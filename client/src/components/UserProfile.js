@@ -7,6 +7,7 @@ import './style.css';
 import axios from 'axios';
 import PasswordForm from './PasswordForm';
 import Header from './Header';
+import ErrorFooter from './ErrorFooter';
 
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom'
@@ -99,6 +100,7 @@ class UserProfileBase extends React.Component {
 		        </div>
 		      </div>
 	      </div>
+	      <ErrorFooter errMsg={this.props.user.err}/>
       </div>
 		)
 	}

@@ -201,7 +201,7 @@ module.exports = function (app, passport) {
 		});
 	
 	
-	/*
+
 	app.route('/api/:id/changePass')
 		.post(isLoggedIn, function (req, res) {
 			console.log('Changing Password');
@@ -211,30 +211,23 @@ module.exports = function (app, passport) {
 			//not using the params id yet, makes more sense to use the user of the session
 			Users.findById(req.user.id, function (err, user) {
 	    	if (err) {
-	    		res.json({isError:true});
+	    		return res.send(403, { error: "User not found!" });
 	    	} else {
 		    	console.log(user);
 		    	if (!user.validPassword(req.body.curPass)) {
-						//res.status(200).json({isError:true, content:"Password check current password!"});
 						return res.send(403, { error: "Invalid password!" });
 		    	} else {
-		    		//user.setPassword(req.body.newPass, function(){
-            //user.save();
+
             user.changePassword(req.body.newPass);
             user.save(function(err) {
 							if (err) {
-								res.json({isError:true, content:parseMongooseErr(err)});
+								//res.json({isError:true, content:err});
+								return res.send(403, { error: "User save failed!" });
 							} else {
-							//res.json({ message: 'All recipes deleted'});
 								res.json({isError:false, content:"Password Changed!"});
 							}
 						});
-            
-            //res.status(200).json({message: 'password reset successful'});
-        	//});
 		    	}
-		    	
-	    		//res.json({isError:false, content:user.toJSON({ virtuals: true })});
 	    	}
 	    });
 			
@@ -261,7 +254,8 @@ module.exports = function (app, passport) {
 	    	}
 	    });
 		});
-
+	
+		/*
 	//connected accounts
 	app.route('/auth/github')
 		.get(passport.authenticate('github'));

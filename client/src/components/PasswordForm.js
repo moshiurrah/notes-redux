@@ -4,16 +4,36 @@ Nov 2017
 */
 import React, {Component} from 'react';
 import './style.css';
-import axios from 'axios';
+//import axios from 'axios';
 
+import { connect } from 'react-redux';
 
-class PasswordForm extends React.Component {
+import { changePassAsync } from '../actions/changePass';
+
+import ErrorFooter from './ErrorFooter';
+
+const mapStateToProps = (state) => {
+  return {
+  	user: state.authReducer
+  }
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+  	changePass: (user,oldPass,newPass) => {
+  		dispatch(changePassAsync(user,oldPass,newPass));
+  	}
+  }
+};
+
+class PasswordFormBase extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 		  curPass:'',
 		  newPass:'',
-		  newPassVerify:''
+		  newPassVerify:'',
+		  localErr:''
 		}
 	}
 	
@@ -27,6 +47,16 @@ class PasswordForm extends React.Component {
 		this.setState({newPassVerify: event.target.value});
 	}	
 	
+	handleSavePass = (event) => {
+	  event.preventDefault();
+	  if (this.state.newPass !== this.state.newPassVerify) {
+	    this.setState({localErr:"New passwords don't match!!"});
+	  } else {
+	  	this.props.changePass(this.props.user.user._id,this.state.curPass, this.state.newPass);
+	  }
+	}
+	
+	/*
 	handleSavePass = (event) => {
 	  event.preventDefault();
 	  //console.log(this.state);
@@ -55,27 +85,30 @@ class PasswordForm extends React.Component {
 		});
 
 	  }
-	  
 	}
+	*/
 	render () {
 		return (
-			<form className="ml-3 mr-3" onSubmit={this.handleSavePass}>
-			  <div className="form-group">
-			    <label htmlFor="curPass">Current Password</label>
-			    <input required value={this.state.curPass} onChange={this.handleChangeCurPass} type="password" className="form-control" name="curPass" id="curPass" placeholder="Enter Current Password"></input>
-			  </div>
-			  <div className="form-group">
-			    <label htmlFor="newPass">New Password</label>
-			    <input required value={this.state.newPass} onChange={this.handleChangeNewPass} type="password" className="form-control" name="newPass" id="newPass" placeholder="Enter New Password"></input>
-			  </div>
-			  <div className="form-group">
-			    <label htmlFor="newPassVerify">Confirm New Password</label>
-			    <input required value={this.state.newPassVerify} onChange={this.handleChangeNewPassVerify} type="password" className="form-control" name="newPassVerify" id="newPassVerify" placeholder="Enter New Password Again"></input>
-			  </div>
-			  <button type="submit" className="btn mb-2">Save</button><br></br>	
-			</form>
+			<div>
+				<form className="ml-3 mr-3" onSubmit={this.handleSavePass}>
+				  <div className="form-group">
+				    <label htmlFor="curPass">Current Password</label>
+				    <input required value={this.state.curPass} onChange={this.handleChangeCurPass} type="password" className="form-control" name="curPass" id="curPass" placeholder="Enter Current Password"></input>
+				  </div>
+				  <div className="form-group">
+				    <label htmlFor="newPass">New Password</label>
+				    <input required value={this.state.newPass} onChange={this.handleChangeNewPass} type="password" className="form-control" name="newPass" id="newPass" placeholder="Enter New Password"></input>
+				  </div>
+				  <div className="form-group">
+				    <label htmlFor="newPassVerify">Confirm New Password</label>
+				    <input required value={this.state.newPassVerify} onChange={this.handleChangeNewPassVerify} type="password" className="form-control" name="newPassVerify" id="newPassVerify" placeholder="Enter New Password Again"></input>
+				  </div>
+				  <button type="submit" className="btn mb-2">Save</button><br></br>	
+				</form>
+				<ErrorFooter errMsg={this.state.localErr}/>
+			</div>
 		)
 	}
 }
-
+const PasswordForm = connect(mapStateToProps, mapDispatchToProps)(PasswordFormBase);
 export default PasswordForm;
