@@ -3,20 +3,14 @@ mtanzim@gmail.com
 Feb 2018
 */
 import React, { Component } from 'react';
-//import Redux from 'redux';
-//import { Provider, connect } from 'react-redux'
 import { connect } from 'react-redux'
-import { Link, Redirect } from 'react-router-dom'
-//import { Redirect } from 'react-router-dom'
-//import { createStore, combineReducers, applyMiddleware } from 'redux'
-//import thunk from 'redux-thunk'
+import { Redirect } from 'react-router-dom'
 
 
 import logo from './logo.svg';
 import './style.css';
 
 //components
-import LoginPage from './LoginPage';
 //import UserLogin from './UserLogin';
 import Header from './Header';
 import EachNote from './EachNote';
@@ -168,13 +162,10 @@ class Board extends React.Component {
 		console.log(this.props.user);
 		console.log(this.props.notes);
 		console.log(this.props.colorFilter);
-		//return (((this.props.user.authenticated) ? this.renderNotes() : this.renderLoginPage()));
 		return (((this.props.user.authenticated) ? this.renderNotes() : this.renderLoginPage()));
 	}
 
 	renderLoginPage = () => {
-		//return (<LoginPage/>)
-		//return (<Link to='/login'><p>Please log in to continue.</p></Link>)
 		return <Redirect to='/login'/>;
 	}
 
@@ -190,19 +181,7 @@ class Board extends React.Component {
 								undo={this.props.undo}
 								hasHistory={this.props.hasHistory}
 								limReached={this.props.limReached}/>
-				<Header 
-								//addDisabled={this.state.addDisabled}
-								clearAll={this.clearAll}
-								isAuth={this.props.user.authenticated}
-								logout={this.props.logoutUser}
-								user={this.props.user.user._id}
-								displayName={this.props.user.user.displayName.name}
-								needFunctions={true}
-								undo={this.props.undo}
-								hasHistory={this.props.hasHistory}
-								limReached={this.props.limReached}
-								setColorFilter={this.props.setColorFilter}
-								filterColor={this.props.colorFilter}/>
+				<Header isControlReq={true}/>
 				<div className="noteContainer container">
 					<div className="row ">
 						{this.state.adding && (<NewNote fetching={this.props.notes.fetching}
@@ -220,25 +199,6 @@ class Board extends React.Component {
   }
 }
 
-
-	
-//React-Redux Connections///////////////////////////
-//Connect
 //Notes connected w/ Redux
 const Notes = connect(mapStateToProps, mapDispatchToProps)(Board);
-//Provider
-//Notes wraped in Provider
-/*
-class Notes extends React.Component {
-	// change code below this line
-	render() {
-		return (
-			<Provider store = {store}>
-				<NotesContainer/>
-			</Provider>
-		);
-	}
-};
-*/
-
 export default Notes;

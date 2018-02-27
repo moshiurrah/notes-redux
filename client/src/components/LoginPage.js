@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
-import { Provider, connect } from 'react-redux'
+import { connect } from 'react-redux'
 import './style.css';
 
-
-import {loginAndGetNotes } from '../actions/auth';
 
 import UserLogin from './UserLogin';
 import Header from './Header';
@@ -15,27 +13,13 @@ const mapStateToProps = (state) => {
   }
 };
 
-/*
-const mapDispatchToProps = (dispatch) => {
-  return {
-  	loginUser: (userInfo) => {	
-  		dispatch(loginAndGetNotes(userInfo))
-  	}
-  }
-};
-*/
-
-
 const LoginBase = ({user, loginUser}) => {
   return (
 			<div>
 			<Header
-				isAuth={user.authenticated}
+				isControlReq={false}
 			/>
-			<UserLogin 
-									//login={loginUser}
-								 //getNotes={this.props.getNotes}
-			/>
+			<UserLogin/>
 			<ErrorFooter errMsg={user.err}/>
 		</div>
   )

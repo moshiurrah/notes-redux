@@ -3,10 +3,32 @@ import ColorPalette from './ColorPalette';
 import {COLORS} from './constants.js'
 import './style.css';
 
-import { Link, Redirect } from 'react-router-dom'
-//import { Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 
-class Header extends React.Component {
+import { logoutAndClearNotesAndClearPast } from '../actions/auth';
+import {  setColorFilter } from '../actions/changeColor';
+
+//Redux Connect
+const mapStateToProps = (state) => {
+  return {
+  	user: state.authReducer,
+  	colorFilter: state.colorReducer
+  }
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+  	logoutUser: (userInfo) => {
+  		dispatch(logoutAndClearNotesAndClearPast(userInfo))
+  	},
+  	setColorFilter: (colorHex) => {
+  		dispatch(setColorFilter(colorHex));
+  	}
+  }
+};
+
+class HeaderBase extends React.Component {
 	constructor(props) {
 		super(props);
 		const defState = {
@@ -15,15 +37,10 @@ class Header extends React.Component {
 		this.state = defState;
 
 	}
-	
 	logout = () => {
-	  this.props.logout(this.props.user);
+	  //this.props.logout(this.props.user);
+	  this.props.logoutUser(this.props.user.user._id);
 	}
-	
-	undo = () => {
-	  this.props.undo(this.props.user);
-	}
-	
 	changeColor = (color) => {
 	  
 	  return () => {
@@ -33,9 +50,7 @@ class Header extends React.Component {
 	    })
 	  }
 	}
-	
-	componentDidMount () {
-	}
+
 	render () {
 	  return (
       <div className="sticky-top mb-2">
@@ -45,13 +60,13 @@ class Header extends React.Component {
             	<Link to='/'>
             		<button type="button" className="btn ml-4"><i className="fa fa-arrow-left" aria-hidden="true"></i></button>
           		</Link>)}
-            {this.props.isAuth && (
+            {this.props.isControlReq && (
       				<span className="ml-4">
 
       				  {/*Buttons for filter color controls*/}
                 <div  className="btn-group  ml-2" role="group" aria-label="Button group with nested dropdown">
                   <div className="btn-group" role="group">
-                    <button id="btnGroupDrop1" style={{backgroundColor: this.props.filterColor}} type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button id="btnGroupDrop1" style={{backgroundColor: this.props.colorFilter}} type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <i className="fa fa-filter"></i>
                     </button>
                     <div className="dropdown-menu"  aria-labelledby="btnGroupDrop1">
@@ -74,7 +89,7 @@ class Header extends React.Component {
                     <div  className="dropdown-menu">
                       <form className="">
                         <Link to='/user'>
-                          <p className='ml-2 mr-2'>{this.props.displayName}</p>
+                          <p className='ml-2 mr-2'>{this.props.user.user.displayName.name}</p>
                         </Link>
                         <button className="ml-2 mr-2 btn btn-primary" onClick={this.logout}><i className="fa fa-sign-out" aria-hidden="true"></i></button>
                       </form>
@@ -92,7 +107,5 @@ class Header extends React.Component {
 }
 
 
-
-
-
+const Header = connect(mapStateToProps, mapDispatchToProps)(HeaderBase);
 export default Header;

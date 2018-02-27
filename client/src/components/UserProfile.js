@@ -9,7 +9,7 @@ import PasswordForm from './PasswordForm';
 import Header from './Header';
 
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 
 const mapStateToProps = (state) => {
   return {
