@@ -1,5 +1,6 @@
 import {LOGGINGIN, LOGGEDIN, LOGINFAILED, LOGGINGOUT, LOGGEDOUT, LOGOUTFAILED } from '../actions/auth'
 import {CHANGINGPASS, CHANGEDPASS, CHANGEPASSFAILED} from '../actions/changePass'
+import {DELINGACCT, DELETEDACCT, DELETEFAILED, CLEARSTATUS} from '../actions/delAccount'
 
 //auth reducer
 const defaultAuth = {
@@ -29,6 +30,14 @@ const authReducer = (state=defaultAuth, action) => {
 			return {...state, fetching:false, err:action.message}
 		case CHANGEPASSFAILED:
 			return {...state, fetching:false, err:action.err}
+		case DELINGACCT:
+			return {...state, fetching:true}
+		case DELETEDACCT:
+			return {...state, fetching:false, err:action.message}
+		case DELETEFAILED:
+			return {...state, fetching:false, err:action.err}
+		case CLEARSTATUS:
+			return defaultAuth;
 		default:	
 			return state;
 	}

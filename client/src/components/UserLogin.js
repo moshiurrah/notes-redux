@@ -33,7 +33,6 @@ class UserLoginBase extends React.Component {
 			password:'',
 			passwordVer:'',
 			error:'',
-			isLogin:true,
 			//pseudo constants; check if this falls under best practices
 			isSocial:false,
 			needMenu:false,
@@ -58,7 +57,10 @@ class UserLoginBase extends React.Component {
 		
 		if (this.state.isLogin){
 			this.props.loginUser({email:this.state.username, password:this.state.password})
-			.then (() => this.setState({ isRedirect: true }));
+			.then (() => this.setState({ isRedirect: true }))
+			.catch ( (err) => {
+				console.log(err);
+			});
 			this.setState({password: ''});
 		}
 	}
@@ -100,9 +102,7 @@ class UserLoginBase extends React.Component {
 				  {!this.state.isLogin ?
 				  	(<button type="submit" className="btn">Sign Up!</button>) :
 				  	(<div>
-				  		
 				  			<button type="submit" className="btn">Log In!</button><br/>
-			  			
 				  		{!this.state.needMenu && (<small>New Accounts will be signed up automatically.</small>)}
 			  		</div>)
 				  }

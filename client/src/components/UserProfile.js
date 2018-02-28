@@ -12,10 +12,29 @@ import ErrorFooter from './ErrorFooter';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom'
 
+import { deleteAccountAsync } from '../actions/delAccount';
+import { clearPast } from '../actions/undo';
+//clearAuthStat
+import { clearAuthStat } from '../actions/delAccount';
+
 const mapStateToProps = (state) => {
   return {
   	user: state.authReducer,
   	notes: state.notesReducer.undoState.present
+  }
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+  	deleteAccount: (user,oldPass,newPass) => {
+  		return dispatch(deleteAccountAsync(user,oldPass,newPass));
+  	},
+  	clearHistory: () => {
+  		dispatch(clearPast());
+  	},
+  	clearStatus: () => {
+  		dispatch(clearAuthStat());
+  	}
   }
 };
 
@@ -24,7 +43,8 @@ class UserProfileBase extends React.Component {
 		super(props);
 		this.state = {
 		  changePassToggle:false,
-		  changeDeleteToggle: false
+		  changeDeleteToggle: false,
+		  accountDeleted: false
 		}
 	}
 	componentDidMount () {
@@ -42,19 +62,17 @@ class UserProfileBase extends React.Component {
 	}
 	//needs to be updated w/ redux actions
 	deleteAccount = () => {
-    console.log("OK :'(");
-		axios({
-		  method: 'post',
-		  url: `/api/${this.props.userID}/deleteAccount`,
-		  data: {
-		  }
-		}).then (res => {
-			//console.log(res.data);
-			this.props.handleError("Account Deleted, logging out!");
-			window.location = '/';
-		}).catch (err =>{
-			//console.log(err.response.data);
-			this.props.handleError(err.response.data.error);
+		this.props.deleteAccount(this.props.user.user._id)
+		.then ( () => {
+			this.props.clearHistory();
+			//for redirect to login
+			setTimeout ( () => {
+				this.props.clearStatus();
+				//this.setState({accountDeleted:true});
+			}, 1500);
+		})
+		.catch ( (err) => {
+			console.log(err);
 		});
 	}
 	render () {
@@ -64,6 +82,12 @@ class UserProfileBase extends React.Component {
 	  if (!this.props.user.authenticated) {
 			return <Redirect to='/'/>;
 		}
+		
+		/*
+		if (this.state.accountDeleted) {
+			return <Redirect to='/login'/>;
+		}
+		*/
 	  
 		return (
 			<div>
@@ -84,14 +108,14 @@ class UserProfileBase extends React.Component {
 		                                                        showPassForm={this.showPassForm}
 		                                                        handleError={this.props.handleError}
 		                                                        userID={this.props.user._id}/>)}
-		              {!this.state.changeDeleteToggle &&
+		              {!this.state.changeDeleteToggle && !this.state.changePassToggle &&
 		                (<p><button className="btn btn-danger ml-3" onClick={this.showDelTog}>Delete Account</button></p>
 		              )}
-		              {this.state.changeDeleteToggle &&
+		              {this.state.changeDeleteToggle && !this.state.changePassToggle &&
 		              (<p>
 		                <button className="btn btn-success ml-3 mb-2" onClick={this.showDelTog}>Keep Account</button>
 		              </p>)}
-		              {this.state.changeDeleteToggle &&
+		              {this.state.changeDeleteToggle && !this.state.changePassToggle &&
 		              (<p>
 		                <button className="btn btn-danger ml-3" onClick={this.deleteAccount}>Confirm Delete!</button>
 		              </p>)}
@@ -106,7 +130,7 @@ class UserProfileBase extends React.Component {
 	}
 }
 
-const UserProfile = connect(mapStateToProps, null)(UserProfileBase);
+const UserProfile = connect(mapStateToProps, mapDispatchToProps)(UserProfileBase);
 
 export default UserProfile;
 

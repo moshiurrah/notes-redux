@@ -1,5 +1,6 @@
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 import './style.css';
 
 
@@ -13,7 +14,7 @@ const mapStateToProps = (state) => {
   }
 };
 
-const LoginBase = ({user, loginUser}) => {
+const LoginBase = ({user}) => {
   return (
 			<div>
 			<Header
@@ -25,6 +26,5 @@ const LoginBase = ({user, loginUser}) => {
   )
 }
 
-//const LoginPage = connect(mapStateToProps, mapDispatchToProps)(LoginBase);
 const LoginPage = connect(mapStateToProps, null)(LoginBase);
 export default LoginPage;

@@ -9,6 +9,7 @@ import './style.css';
 import { connect } from 'react-redux';
 
 import { changePassAsync } from '../actions/changePass';
+import {logoutAndClearNotesAndClearPast} from '../actions/auth';
 
 import ErrorFooter from './ErrorFooter';
 
@@ -21,7 +22,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
   	changePass: (user,oldPass,newPass) => {
-  		dispatch(changePassAsync(user,oldPass,newPass));
+  		return dispatch(changePassAsync(user,oldPass,newPass));
+  	},
+  	logout: (user) => {
+  		dispatch (logoutAndClearNotesAndClearPast(user));
   	}
   }
 };
@@ -33,7 +37,9 @@ class PasswordFormBase extends React.Component {
 		  curPass:'',
 		  newPass:'',
 		  newPassVerify:'',
-		  localErr:''
+		  localErr:'',
+		  isDisabled:false,
+		  opacity:1
 		}
 	}
 	
@@ -52,44 +58,23 @@ class PasswordFormBase extends React.Component {
 	  if (this.state.newPass !== this.state.newPassVerify) {
 	    this.setState({localErr:"New passwords don't match!!"});
 	  } else {
-	  	this.props.changePass(this.props.user.user._id,this.state.curPass, this.state.newPass);
+	  	this.setState ({isDisabled:true, opacity:0.3});
+	  	this.props.changePass(this.props.user.user._id,this.state.curPass, this.state.newPass)
+  		.then(()=>{
+  			setTimeout( () => {
+  				return this.props.logout(this.props.user.user._id);
+  			}, 1500);
+  		})
+  		.catch( (err) => {
+  			console.log (err);
+  			this.setState ({isDisabled:false, opacity:1});
+  		});	
 	  }
 	}
 	
-	/*
-	handleSavePass = (event) => {
-	  event.preventDefault();
-	  //console.log(this.state);
-	  if (this.state.newPass !== this.state.newPassVerify) {
-	    this.props.handleError("New passwords don't match!!");
-	  } else {
-	     
-		axios({
-		  method: 'post',
-		  url: `/api/${this.props.userID}/changePass`,
-		  data: {
-		    curPass: this.state.curPass,
-		    newPass: this.state.newPass
-		  }
-		}).then (res => {
-			//console.log(res.data);
-			this.setState({curPass:'',newPass:'',newPassVerify:''});
-			this.props.showPassForm();
-			this.props.handleError("Password Changed!");
-		    //window.location = '/';
-		  //return res;
-		}).catch (err =>{
-			//console.log(err.response.data);
-			this.setState({curPass:'',newPass:'',newPassVerify:''});
-			this.props.handleError(err.response.data.error);
-		});
-
-	  }
-	}
-	*/
 	render () {
 		return (
-			<div>
+			<div style={{opacity:this.state.opacity}}>
 				<form className="ml-3 mr-3" onSubmit={this.handleSavePass}>
 				  <div className="form-group">
 				    <label htmlFor="curPass">Current Password</label>
@@ -103,7 +88,7 @@ class PasswordFormBase extends React.Component {
 				    <label htmlFor="newPassVerify">Confirm New Password</label>
 				    <input required value={this.state.newPassVerify} onChange={this.handleChangeNewPassVerify} type="password" className="form-control" name="newPassVerify" id="newPassVerify" placeholder="Enter New Password Again"></input>
 				  </div>
-				  <button type="submit" className="btn mb-2">Save</button><br></br>	
+				  <button disabled={this.state.isDisabled} type="submit" className="btn mb-2">Save</button><br></br>	
 				</form>
 				<ErrorFooter errMsg={this.state.localErr}/>
 			</div>

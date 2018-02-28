@@ -33,6 +33,21 @@ export const logoutAndClearNotes = (user) => {
 	}
 }
 
+export const logoutUserAsync = (user) => {
+	return (dispatch) => {
+		dispatch(loggingUserOut(user));
+		return axios({
+			  method: 'get',
+			  url: '/logout',
+			}).then (res => {
+				dispatch(setColorFilter(''));
+				dispatch(loggedOut());
+				console.log('Session Logged out!');
+			}).catch (err =>{
+				dispatch(logoutFailed(user,err));
+			});
+	}
+};
 
 //SHOWS EXAMPLE OF CHAINED DISPATCHES W/ PROMISES, AS SUGGEST BY MOTHERFUCKING DAN HIMSELF
 //https://github.com/reactjs/redux/issues/1676#issuecomment-216828910
@@ -107,18 +122,3 @@ export const logoutFailed = (user, err) => {
 };
 
 
-export const logoutUserAsync = (user) => {
-	return (dispatch) => {
-		dispatch(loggingUserOut(user));
-		return axios({
-			  method: 'get',
-			  url: '/logout',
-			}).then (res => {
-				dispatch(setColorFilter(''));
-				dispatch(loggedOut());
-				console.log('Session Logged out!');
-			}).catch (err =>{
-				dispatch(logoutFailed(user,err));
-			});
-	}
-};

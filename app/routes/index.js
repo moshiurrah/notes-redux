@@ -224,7 +224,7 @@ module.exports = function (app, passport) {
 								//res.json({isError:true, content:err});
 								return res.send(403, { error: "User save failed!" });
 							} else {
-								res.json({isError:false, content:"Password Changed!"});
+								res.json({content:"Password Changed! Please log back in. Logging out..."});
 							}
 						});
 		    	}
@@ -242,12 +242,14 @@ module.exports = function (app, passport) {
 		    	console.log(user);
 					user.remove(function (err, user) {
 					  if (err){
+					  	console.log(err);
 					  	return res.send(403, { error: "User not removed!" });
 					  } else {
 					  	Users.findById(user._id, function (err, user) {
 					    	console.log(user) // null
+					    	console.log(err);
 					  	});
-							res.redirect('/logout');
+							res.json({content:"Account deleted! Goodbye forver :`("});
 				  	}
 				})
 	    		

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {logoutAndClearNotesAndClearPast} from './auth';
+//import {logoutAndClearNotesAndClearPast} from './auth';
 
 
 export const CHANGINGPASS="CHANGINGPASS";
@@ -17,6 +17,7 @@ export const changePassFailed = (err) => {
 
 
 
+
 /*
 export const changePassAndLogOut = (user, curPass, newPass) => {
 	return (dispatch, getState) => {
@@ -24,20 +25,21 @@ export const changePassAndLogOut = (user, curPass, newPass) => {
 			const fetchedUser=getState().authReducer.user._id;
 			console.log(fetchedUser);
 			//wait 2 seconds and log out
-			setTimeout(()=>{return dispatch(logoutAndClearNotesAndClearPast(fetchedUser))}, 2000);
-			return dispatch(logoutAndClearNotesAndClearPast(fetchedUser));
+			setTimeout(()=>{return dispatch(logoutAndClearNotesAndClearPast(fetchedUser))}, 3000);
+			//return dispatch(logoutAndClearNotesAndClearPast(fetchedUser));
 		}).catch (err => {
-			dispatch(changePassFailed(err.response.data.error));
-			//console.log(err);
+			//return dispatch(changePassFailed(err.response.data.error));
+			console.log(err);
 		})
 	}
 }
 */
 
+
 export const changePassAsync = (user, curPass, newPass) => {
 	return function (dispatch) {
   		dispatch(changingPass());
-  		axios({
+  		return axios({
   		  method: 'post',
   		  url: `/api/${user}/changePass`,
   		  data: {curPass:curPass, newPass:newPass}
@@ -46,6 +48,7 @@ export const changePassAsync = (user, curPass, newPass) => {
   			dispatch(changedPass(res.data.content));
   		}).catch (err =>{
   			dispatch(changePassFailed(err.response.data.error));
+  			throw err;
   		});
   	
 	}

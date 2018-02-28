@@ -1,4 +1,4 @@
-import {CLEARNOTES, FETCHNGNOTES, GOTNOTES,GETFAILED, EDIT, DELALL } from '../actions/fetchNotes'
+import {CLEARNOTES, FETCHNGNOTES, GOTNOTES,GETFAILED } from '../actions/fetchNotes'
 import {ADDING, ADDED, ADDFAILED} from '../actions/addNote'
 import {DELING, DELETED, DELFAILED} from '../actions/delNote'
 import {EDITING, EDITED, EDITFAILED} from '../actions/editNote'
@@ -33,11 +33,11 @@ const notesReducerBase = (state = defState, action) => {
 			return {...state, fetching:true, err:''};
 		case DELETED:
 			//console.log(action.notes);
-			var newNotes = state.notes.filter(note => {
+			var delNotes = state.notes.filter(note => {
 				console.log(note);
 				return note._id !== action.notes._id;
 			});
-			return {...state, fetching:false, notes: newNotes, err:'', limReached:newNotes.length >= NUM_LIMIT};
+			return {...state, fetching:false, notes: delNotes, err:'', limReached:delNotes.length >= NUM_LIMIT};
 		case DELFAILED:
 			return {...state, fetching:false, err:action.err};
 			
