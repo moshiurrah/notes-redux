@@ -4,7 +4,6 @@ Nov 2017
 */
 import React, {Component} from 'react';
 import './style.css';
-import axios from 'axios';
 import PasswordForm from './PasswordForm';
 import Header from './Header';
 import ErrorFooter from './ErrorFooter';
@@ -91,7 +90,7 @@ class UserProfileBase extends React.Component {
 	  
 		return (
 			<div>
-				<Header isBackReq={true} isAuth={false}/>
+				<Header isBackReq={true} isUserReq={true}/>
 				<div className="container-fluid">
 					
 				  <div className="row">

@@ -4,9 +4,9 @@ import Notes from './Notes'
 import LoginPage from './LoginPage'
 import UserProfile from './UserProfile'
 
-import { Provider, connect } from 'react-redux'
+import { Provider } from 'react-redux'
 import  noteRootReducer  from '../reducers/index';
-import { createStore, combineReducers, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 
 // The Main component renders one of the three provided

@@ -3,7 +3,7 @@ import './style.css';
 
 //import CircularProgressbar from 'react-circular-progressbar';
 //import 'react-circular-progressbar/dist/styles.css';
-import {COLORS, NOTEHEIGHT, NOTEWIDTH, FORMHEIGHT, SIZECLASS} from './constants.js';
+import {COLORS, NOTEHEIGHT, FORMHEIGHT, SIZECLASS} from './constants.js';
 import ColorPalette from './ColorPalette';
 
 class EachNote extends React.Component {

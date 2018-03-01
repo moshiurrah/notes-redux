@@ -5,6 +5,7 @@ import './style.css';
 
 import SocialLogin from './SocialLogin';
 import LoginMenu from './LoginMenu';
+import ErrorFooter from './ErrorFooter';
 
 import {  connect } from 'react-redux'
 import './style.css';
@@ -14,13 +15,19 @@ import { Redirect } from 'react-router-dom'
 //redirecting w/ react router lessons here
 //https://stackoverflow.com/questions/43230194/how-to-use-redirect-in-the-new-react-router-dom-of-reactjs
 
-import {loginUserAsync } from '../actions/auth';
+import {loginAndGetNotes } from '../actions/auth';
+//import { getNotesAsync } from '../actions/fetchNotes';
 
+const mapStateToProps = (state) => {
+  return {
+  	curUser: state.authReducer
+  }
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
-  	loginUser: (userInfo) => {	
-  		 return dispatch(loginUserAsync(userInfo))
+  	loginUser: (userInfo, isLogin) => {	
+  		 return dispatch(loginAndGetNotes(userInfo, isLogin))
   	}
   }
 };
@@ -29,15 +36,15 @@ class UserLoginBase extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			username:'',
+			username:this.props.curUser.user.email || '',
 			password:'',
 			passwordVer:'',
-			error:'',
+			errMsg:'',
+			isRedirect: false,
 			//pseudo constants; check if this falls under best practices
 			isSocial:false,
-			needMenu:false,
-			isLogin:true,
-			isRedirect: false
+			needMenu:true,
+			isLogin:this.props.curUser.isLogin //toggles between signup and login
 		}
 	}
 	
@@ -52,16 +59,37 @@ class UserLoginBase extends React.Component {
 		});
 	} 
 	
+	
+	completeLogin = () => {
+		this.props.loginUser({email:this.state.username, password:this.state.password}, this.state.isLogin)
+		.then (() => this.setState({ isRedirect: true }))
+		.catch ( (err) => {
+			console.log(err);
+		});
+		this.setState({password: ''});
+	}
+	
 	handleLogIn= (event) => {
 		event.preventDefault();
 		
 		if (this.state.isLogin){
-			this.props.loginUser({email:this.state.username, password:this.state.password})
+			this.completeLogin();
+			/*
+			this.props.loginUser({email:this.state.username, password:this.state.password}, this.state.isLogin)
 			.then (() => this.setState({ isRedirect: true }))
 			.catch ( (err) => {
 				console.log(err);
 			});
 			this.setState({password: ''});
+			*/
+		} else {
+			if (this.state.password !== this.state.passwordVer) {
+				this.setState({errMsg:"Passwords don't match!"});
+			} else {
+				this.setState({errMsg:""});
+				console.log('Signing up!!!');
+				this.completeLogin();
+			}
 		}
 	}
 	
@@ -77,6 +105,9 @@ class UserLoginBase extends React.Component {
 	}
 	
 	render () {
+		
+		//console.log(this.state.isLogin);
+		//console.log(this.props.curUser);
 		
 		if (this.state.isRedirect) {
 			return <Redirect to='/'/>;
@@ -108,6 +139,7 @@ class UserLoginBase extends React.Component {
 				  }
 				</form>
 				{this.state.isSocial && (<SocialLogin app_url={this.props.app_url}/>)}
+				<ErrorFooter errMsg={this.state.errMsg}/>
 			</div>
 
 		);
@@ -116,6 +148,6 @@ class UserLoginBase extends React.Component {
 	
 }
 
-const UserLogin = connect(null, mapDispatchToProps)(UserLoginBase);
+const UserLogin = connect(mapStateToProps, mapDispatchToProps)(UserLoginBase);
 
 export default UserLogin;

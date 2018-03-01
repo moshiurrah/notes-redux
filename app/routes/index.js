@@ -58,28 +58,41 @@ module.exports = function (app, passport) {
 		.get(function (req, res) {
 			console.log(req.url);
 			req.logout();
-			//res.redirect('/');
 			res.json({content:'Successfully logged out!'});
-			//res.redirect('https://fccwebapps-mtanzim.c9users.io:8081');
 		});
 		
 		
 	//passport docs, local sign up/login
-	app.post('/signup', function(req, res, next) {
+	app.post('/signupuser', function(req, res, next) {
 		//console.log(req.auth);
-	  passport.authenticate('local', function(err, user, info) {
+	  passport.authenticate('local-signup', function(err, user, info) {
 	    if (err) { return next(err); }
 	    if (!user) { 
-	    	return res.send(403, { error: "Invalid password!" });
+	    	console.log(info);
+	    	return res.send(403, { error: info.message });
 	    }
 	    //possibile optimization: don't even get the notes from the server?
 	    req.logIn(user, function(err) {
 	      if (err) { return next(err); }
-	      //return res.redirect('/');
-	      //console.log(req.user);
-	      //res.json({content:req.user});
 	      var fullUser = Object.assign({}, user.toJSON({ virtuals: true })); 
-	      //var fullUser = user.toJSON({ virtuals: true });
+	      delete fullUser['notes'];
+	    	res.json({content:fullUser});
+	    });
+	  })(req, res, next);
+	});
+	
+	app.post('/loginuser', function(req, res, next) {
+		//console.log(req.auth);
+	  passport.authenticate('local-login', function(err, user, info) {
+	    if (err) { return next(err); }
+	    if (!user) { 
+	    	console.log(info);
+	    	return res.send(403, { error: info.message });
+	    }
+	    //possibile optimization: don't even get the notes from the server?
+	    req.logIn(user, function(err) {
+	      if (err) { return next(err); }
+	      var fullUser = Object.assign({}, user.toJSON({ virtuals: true })); 
 	      delete fullUser['notes'];
 	    	res.json({content:fullUser});
 	    });

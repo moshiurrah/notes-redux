@@ -51,9 +51,9 @@ export const logoutUserAsync = (user) => {
 
 //SHOWS EXAMPLE OF CHAINED DISPATCHES W/ PROMISES, AS SUGGEST BY MOTHERFUCKING DAN HIMSELF
 //https://github.com/reactjs/redux/issues/1676#issuecomment-216828910
-export const loginAndGetNotes = (user) => {
+export const loginAndGetNotes = (user, isLogin) => {
 	return (dispatch, getState) => {
-		return dispatch(loginUserAsync(user)).then(() => {
+		return dispatch(loginUserAsync(user, isLogin)).then(() => {
 			const fetchedUser=getState().authReducer.user._id;
 			console.log(fetchedUser);
 			return dispatch(getNotesAsync(fetchedUser));
@@ -64,20 +64,26 @@ export const loginAndGetNotes = (user) => {
 }
 
 //fake async action with timeout
-export const loginUserAsync = (user) => {
+export const loginUserAsync = (user, isLogin) => {
 	//return {type:LOGIN, user:user};
+	console.log('auth action says isLogin is ' + isLogin);
+	var authRoute='/loginuser';
+	if (!isLogin) {
+		authRoute='/signupuser';
+	}
+	console.log(authRoute);
 	return  (dispatch) => {
 		dispatch(loggingUserIn(user));
 		//axios login
 		return axios({
 		  method: 'post',
-		  url: '/signup',
+		  url: authRoute,
 		  data: user
 		}).then (res => {
 			console.log(res.data.content);
 			dispatch(loggedin(res.data.content));
 		}).catch (err =>{
-			dispatch(loginFailed({}, err.response.data.error));
+			dispatch(loginFailed(user, err.response.data.error, isLogin));
 		});
 		//fake async login
 		/*
@@ -101,8 +107,8 @@ export const loggedin = (user) => {
 }
 
 export const LOGINFAILED="LOGINFAILED";
-export const loginFailed = (user, err) => {
-	return {type:LOGINFAILED, user:user, err: err};
+export const loginFailed = (user, err, isLogin) => {
+	return {type:LOGINFAILED, user:user, err: err, isLogin:isLogin};
 };
 
 

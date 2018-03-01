@@ -7,6 +7,7 @@ const defaultAuth = {
 	authenticated: false,
 	fetching:false,
 	user:{},
+	isLogin:true,
 	err: ''
 }
 
@@ -17,7 +18,7 @@ const authReducer = (state=defaultAuth, action) => {
 		case LOGGEDIN:
 			return {authenticated: true, fetching:false, user:action.user}
 		case LOGINFAILED:
-			return {authenticated: false, fetching:false, user:action.user, err:action.err}
+			return {authenticated: false, fetching:false, user:action.user, err:action.err, isLogin:action.isLogin}
 		case LOGGINGOUT:
 			return {authenticated: false, fetching:true, user:action.user}
 		case LOGGEDOUT:

@@ -91,7 +91,7 @@ class Board extends React.Component {
 	}
 	
 	componentWillMount () {
-		this.props.getNotes(this.props.user.user._id);
+		//this.props.getNotes(this.props.user.user._id);
 	}
 	
 	componentDidMount () {
@@ -181,7 +181,7 @@ class Board extends React.Component {
 								undo={this.props.undo}
 								hasHistory={this.props.hasHistory}
 								limReached={this.props.limReached}/>
-				<Header isControlReq={true}/>
+				<Header isFilterReq={true} isUserReq={true}/>
 				<div className="noteContainer container">
 					<div className="row ">
 						{this.state.adding && (<NewNote fetching={this.props.notes.fetching}
