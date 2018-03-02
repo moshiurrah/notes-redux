@@ -43,7 +43,7 @@ export const undoAsync = (user) => {
   		console.log(successfulPast[successfulPast.length-1]);
   		
   		//axios redo and refresh
-  		axios({
+  		return axios({
   		  method: 'post',
   		  url: `/api/${user}/refresh`,
   		  data: {content:successfulPast[successfulPast.length-1].notes}

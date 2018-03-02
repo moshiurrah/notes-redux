@@ -15,13 +15,7 @@ class ControlFooter extends React.Component {
 		
 	}
 	
-
-	undo = () => {
-	  this.props.undo(this.props.user);
-	}
-	
 	changeColor = (color) => {
-	  
 	  return () => {
 	    this.props.setColorFilter(color);
 	    this.setState ({
@@ -37,7 +31,7 @@ class ControlFooter extends React.Component {
     			</a>
     				<span className="ml-auto">
 	  					<button  className="btn btn-success mr-2" id='addBtn' disabled={this.props.limReached} onClick={this.props.add}><i className="fa fa-plus" aria-hidden="true"></i></button>
-    				  <button className="mr-2 btn" id='undoBtn' disabled={!this.props.hasHistory} onClick={this.undo}><i className="fa fa-undo" aria-hidden="true"></i></button>
+    				  <button className="mr-2 btn" id='undoBtn' disabled={!this.props.hasHistory} onClick={this.props.undo}><i className="fa fa-undo" aria-hidden="true"></i></button>
   						<button className="btn btn-danger mr-2" id='clearBtn' onClick={this.props.clearAll}><i className="fa fa-trash-o" aria-hidden="true"></i></button>
     				</span>
     		</nav>

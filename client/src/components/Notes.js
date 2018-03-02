@@ -27,6 +27,8 @@ import {  editNoteAsync } from '../actions/editNote';
 import {  undoAsync } from '../actions/undo';
 import {  setColorFilter } from '../actions/changeColor';
 
+import {LOADINGOPACITY} from './constants.js';
+
 //axios progress bar
 import { loadProgressBar } from 'axios-progress-bar';
 import 'axios-progress-bar/dist/nprogress.css'
@@ -64,13 +66,13 @@ const mapDispatchToProps = (dispatch) => {
   		dispatch(editNoteAsync(user, id,textContent, color))
   	},
   	remAll: (user) => {
-  		dispatch(delNoteAsync(user,'',true))
+  		return dispatch(delNoteAsync(user,'',true));
   	},
   	remNote: (user,id) => {
   		dispatch(delNoteAsync(user,id, false))
   	},
   	undo: (user) => {
-  		dispatch(undoAsync(user))
+  		return dispatch(undoAsync(user));
   	},
   	setColorFilter: (colorHex) => {
   		dispatch(setColorFilter(colorHex));
@@ -85,6 +87,8 @@ class Board extends React.Component {
 		super(props);
 		this.state = {
 			curNoteID:'',
+			fadeAll: false,
+			boardOpacity: 1,
 			needFocus:false,
 			adding:false
 		}
@@ -100,12 +104,37 @@ class Board extends React.Component {
 	componentWillUpdate () {
 		
 	}
+	
+	toggleFade = () => {
+		if (this.state.fadeAll) {
+			this.setState ({
+				boardOpacity:LOADINGOPACITY
+			})
+		} else {
+			this.setState ({
+				boardOpacity:1
+			})
+		}
+		this.setState ({
+			fadeAll:!this.state.fadeAll
+		});
+	}
 
 	clearAll = () => {
+		this.toggleFade();
 		this.setState ({
 			curNoteID:''
 		});
-		this.props.remAll(this.props.user.user._id);
+		this.props.remAll(this.props.user.user._id)
+		.then(()=>this.toggleFade());
+	}
+	undo = () => {
+		this.toggleFade();
+		this.setState ({
+			curNoteID:''
+		});
+		this.props.undo(this.props.user.user._id)
+		.then( () => this.toggleFade());
 	}
 	
 	toggleAdd = () => {
@@ -152,6 +181,7 @@ class Board extends React.Component {
 						onChange={this.update}
 						onRemove={this.remove}
 						fetching={this.props.notes.fetching}
+						fadeAll={this.state.fadeAll}
 						color={note.color}
 						colorFilter={this.props.colorFilter}>
 						</EachNote>);
@@ -162,11 +192,26 @@ class Board extends React.Component {
 		console.log(this.props.user);
 		console.log(this.props.notes);
 		console.log(this.props.colorFilter);
+		console.log(this.state.fadeAll);
 		return (((this.props.user.authenticated) ? this.renderNotes() : this.renderLoginPage()));
 	}
 
 	renderLoginPage = () => {
 		return <Redirect to='/login'/>;
+	}
+	
+	renderNoteContainer = () => {
+		return (
+			<div className="row ">
+				{this.state.adding && (<NewNote fetching={this.props.notes.fetching}
+																				add={this.add}
+																				toggleAdd={this.toggleAdd}/>)}
+				{this.props.colorFilter !== '' ?
+				(this.props.notes.notes.filter(note => note.color === this.props.colorFilter).map(this.eachNote)) :
+				(this.props.notes.notes.map(this.eachNote))
+			}
+			</div>
+		)
 	}
 
   renderNotes = () =>  {
@@ -178,21 +223,21 @@ class Board extends React.Component {
 								clearAll={this.clearAll}
 								isAuth={this.props.user.authenticated}
 								logout={this.props.logoutUser}
-								undo={this.props.undo}
+								undo={this.undo}
 								hasHistory={this.props.hasHistory}
 								limReached={this.props.limReached}/>
-				<Header isFilterReq={true} isUserReq={true}/>
+				<Header isFilterReq={true} isUserReq={true}/>)
 				<div className="noteContainer container">
-					<div className="row ">
-						{this.state.adding && (<NewNote fetching={this.props.notes.fetching}
-																						add={this.add}
-																						toggleAdd={this.toggleAdd}/>)}
-						{this.props.colorFilter !== '' ?
-							(this.props.notes.notes.filter(note => note.color === this.props.colorFilter).map(this.eachNote)) :
-							(this.props.notes.notes.map(this.eachNote))
-						}
-					</div>
+					{this.renderNoteContainer()}
 				</div>
+				{/*this.state.fadeAll ?
+					(<div style={{opacity:LOADINGOPACITY}} className="noteContainer container">
+						{this.renderNoteContainer()}
+					</div>):
+					(<div className="noteContainer container">
+						{this.renderNoteContainer()}
+					</div>)
+				*/}
 				<ErrorFooter errMsg={this.props.notes.err}/>
 			</div>
 		);

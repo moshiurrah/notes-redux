@@ -3,7 +3,7 @@ import './style.css';
 
 //import CircularProgressbar from 'react-circular-progressbar';
 //import 'react-circular-progressbar/dist/styles.css';
-import {COLORS, NOTEHEIGHT,  FORMHEIGHT, SIZECLASS} from './constants.js';
+import {COLORS, NOTEHEIGHT,  FORMHEIGHT, SIZECLASS, LOADINGOPACITY} from './constants.js';
 import ColorPalette from './ColorPalette';
 
 class NewNote extends React.Component {
@@ -84,7 +84,7 @@ class NewNote extends React.Component {
 	
 	renderLoading = () => {
 		return(
-			<div style={{opacity:0.3}} className={SIZECLASS}>
+			<div style={{opacity:LOADINGOPACITY}} className={SIZECLASS}>
 		    <div className='card note' style={{backgroundColor: this.state.color,height: NOTEHEIGHT+'px'}}>
 		    	<div className='card-body'>
 		    		{/**/}

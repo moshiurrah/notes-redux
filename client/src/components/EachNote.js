@@ -3,7 +3,7 @@ import './style.css';
 
 //import CircularProgressbar from 'react-circular-progressbar';
 //import 'react-circular-progressbar/dist/styles.css';
-import {COLORS, NOTEHEIGHT, FORMHEIGHT, SIZECLASS} from './constants.js';
+import {COLORS, NOTEHEIGHT, FORMHEIGHT, SIZECLASS, LOADINGOPACITY} from './constants.js';
 import ColorPalette from './ColorPalette';
 
 class EachNote extends React.Component {
@@ -120,7 +120,7 @@ class EachNote extends React.Component {
 	
 	renderLoading = () => {
     return (
-  		<div style={{opacity:0.3}} className={SIZECLASS}>
+  		<div style={{opacity:LOADINGOPACITY}} className={SIZECLASS}>
 		    <div className='card note' style={{backgroundColor: this.props.color,height: NOTEHEIGHT+'px'}}>
 		    	<div className='card-body'>
 		    		<p>{this.state.newTextContent}</p>
@@ -131,7 +131,7 @@ class EachNote extends React.Component {
 	}
 	
   render() {
-		return (((this.state.editing) ? this.renderForm() : ( this.props.curNoteID === this.props.id && this.props.fetching ? this.renderLoading() : this.renderDisplay() )));
+		return (((this.state.editing) ? this.renderForm() : ( (this.props.curNoteID === this.props.id && this.props.fetching) || this.props.fadeAll	? this.renderLoading() : this.renderDisplay() )));
   }
 };
 

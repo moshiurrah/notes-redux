@@ -26,7 +26,7 @@ export const delNoteAsync = (user, noteID, isdelAll=false) => {
 		var delUrl = `/api/${user}/${noteID}`
 		if (isdelAll) delUrl = `/api/${user}/del`
 		//axios add note
-		axios({
+		return axios({
 		  method: 'delete',
 		  url: delUrl
 		}).then (res => {

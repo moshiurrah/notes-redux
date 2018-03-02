@@ -9,7 +9,7 @@ module.exports = function (app, passport) {
 		if (req.isAuthenticated()) {
 			return next();
 		} else {
-			return res.send(403, { error: "Invalid password!" });
+			return res.send(403, { error: "Please log in!" });
 		}
 	}
 	
