@@ -3,7 +3,7 @@ import './style.css';
 
 const ColorPalette = ({color,onClick}) => {
   return (
-    <button style={{backgroundColor: color}}  onClick={onClick(color)} className='btn lblBtn mr-2'></button>
+    <button style={{backgroundColor: color}}  onClick={onClick(color)} className='btn lblBtn colorBtn mr-2'></button>
   )
 }
 

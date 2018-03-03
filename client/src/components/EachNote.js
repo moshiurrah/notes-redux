@@ -3,7 +3,7 @@ import './style.css';
 
 //import CircularProgressbar from 'react-circular-progressbar';
 //import 'react-circular-progressbar/dist/styles.css';
-import {COLORS, NOTEHEIGHT, FORMHEIGHT, SIZECLASS, LOADINGOPACITY} from './constants.js';
+import {COLORS, SIZECLASS, LOADINGOPACITY} from './constants.js';
 import ColorPalette from './ColorPalette';
 
 class EachNote extends React.Component {
@@ -71,10 +71,10 @@ class EachNote extends React.Component {
 	renderForm = () => {
 		return(
 			<div className={SIZECLASS}>
-		    <div className='card note' style={{backgroundColor: this.props.color,height: NOTEHEIGHT+'px'}}>
+		    <div className='card note' style={{backgroundColor: this.props.color}}>
 		    	<div className='card-body'>
 		    		{/**/}
-		    		<textarea autoFocus onFocus={this.handleFocus} ref='newText' style={{'height':FORMHEIGHT+'px'}} onChange={this.handleChangeNoteText}>{this.state.newTextContent}</textarea>
+		    		<textarea autoFocus onFocus={this.handleFocus} ref='newText' onChange={this.handleChangeNoteText}>{this.state.newTextContent}</textarea>
 	    		</div>
 		    	<div className="card-footer bg-transparent">
 	    			<div className="row">
@@ -91,8 +91,8 @@ class EachNote extends React.Component {
 	renderDisplay = () => {
     return (
   		<div className={SIZECLASS}>
-		    <div className='card note' style={{backgroundColor: this.props.color,height: NOTEHEIGHT+'px'}}>
-		    	<div onClick={this.edit} className='card-body'>
+		    <div className='card note' style={{backgroundColor: this.props.color}}>
+		    	<div className='card-body' onClick={this.edit}>
 			    	<p>{this.props.note}</p>
 		    	</div>
 		    	<span>
@@ -101,11 +101,6 @@ class EachNote extends React.Component {
 								{COLORS.map((color, index) => {
                 	return (<ColorPalette color={color} key={index} onClick={this.changeColor}/>);
             		})}
-            		{/*
-				    		<button style={{backgroundColor: this.RED}} id="red" className="btn lblBtn" onClick={this.changeColor(this.RED)}></button>
-				    		<button style={{backgroundColor: this.YELLOW}} id="yellow" className="btn lblBtn"  onClick={this.changeColor(this.YELLOW)}></button>
-				    		<button style={{backgroundColor: this.GREEN}} id="green" className="btn lblBtn" onClick={this.changeColor(this.GREEN)}></button>
-				    		*/}
 				    		<div className="ml-auto">
 					    		<button className="btn btn-success " onClick={this.edit}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></button>
 					    		<button className="btn btn-danger " onClick={this.remove}><i className="fa fa-trash-o" aria-hidden="true"></i></button>
@@ -121,10 +116,17 @@ class EachNote extends React.Component {
 	renderLoading = () => {
     return (
   		<div style={{opacity:LOADINGOPACITY}} className={SIZECLASS}>
-		    <div className='card note' style={{backgroundColor: this.props.color,height: NOTEHEIGHT+'px'}}>
+		    <div className='card note' style={{backgroundColor: this.props.color}}>
 		    	<div className='card-body'>
 		    		<p>{this.state.newTextContent}</p>
 		    	</div>
+		    	<span>
+			    	<div className="card-footer ">
+			    		<div id="noteCtrl" className="row">
+			    			<p></p>
+			    		</div>
+		    		</div>
+	    		</span>
 		    </div>
 	    </div>
     );

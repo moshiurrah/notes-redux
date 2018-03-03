@@ -202,7 +202,7 @@ class Board extends React.Component {
 	
 	renderNoteContainer = () => {
 		return (
-			<div className="row ">
+			<div className="row">
 				{this.state.adding && (<NewNote fetching={this.props.notes.fetching}
 																				add={this.add}
 																				toggleAdd={this.toggleAdd}/>)}
@@ -217,6 +217,7 @@ class Board extends React.Component {
   renderNotes = () =>  {
 		return (
 			<div className="">
+				<Header isFilterReq={true} isUserReq={true}/>
 				<ControlFooter add={this.toggleAdd}
 								//addDisabled={this.state.addDisabled}
 								user={this.props.user.user._id}
@@ -226,19 +227,12 @@ class Board extends React.Component {
 								undo={this.undo}
 								hasHistory={this.props.hasHistory}
 								limReached={this.props.limReached}/>
-				<Header isFilterReq={true} isUserReq={true}/>)
+				<ErrorFooter errMsg={this.props.notes.err}/>
+				
 				<div className="noteContainer container">
 					{this.renderNoteContainer()}
 				</div>
-				{/*this.state.fadeAll ?
-					(<div style={{opacity:LOADINGOPACITY}} className="noteContainer container">
-						{this.renderNoteContainer()}
-					</div>):
-					(<div className="noteContainer container">
-						{this.renderNoteContainer()}
-					</div>)
-				*/}
-				<ErrorFooter errMsg={this.props.notes.err}/>
+				
 			</div>
 		);
   }

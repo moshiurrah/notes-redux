@@ -3,7 +3,7 @@ import './style.css';
 
 //import CircularProgressbar from 'react-circular-progressbar';
 //import 'react-circular-progressbar/dist/styles.css';
-import {COLORS, NOTEHEIGHT,  FORMHEIGHT, SIZECLASS, LOADINGOPACITY} from './constants.js';
+import {COLORS, SIZECLASS, LOADINGOPACITY} from './constants.js';
 import ColorPalette from './ColorPalette';
 
 class NewNote extends React.Component {
@@ -60,10 +60,10 @@ class NewNote extends React.Component {
 	renderForm = () => {
 		return(
 			<div className={SIZECLASS}>
-		    <div className='card note' style={{backgroundColor: this.state.color,height: NOTEHEIGHT+'px'}}>
+		    <div className='card note' style={{backgroundColor: this.state.color}}>
 		    	<div className='card-body'>
 		    		{/**/}
-		    		<textarea autoFocus onFocus={this.handleFocus} style={{'height':FORMHEIGHT+'px'}} onChange={this.handleChangeNoteText}>{this.state.newTextContent}</textarea>
+		    		<textarea autoFocus onFocus={this.handleFocus}  onChange={this.handleChangeNoteText}>{this.state.newTextContent}</textarea>
 	    		</div>
 		    	<div className="card-footer bg-transparent">
 		    		<div id="noteCtrl" className="row">
@@ -85,10 +85,10 @@ class NewNote extends React.Component {
 	renderLoading = () => {
 		return(
 			<div style={{opacity:LOADINGOPACITY}} className={SIZECLASS}>
-		    <div className='card note' style={{backgroundColor: this.state.color,height: NOTEHEIGHT+'px'}}>
+		    <div className='card note' style={{backgroundColor: this.state.color}}>
 		    	<div className='card-body'>
 		    		{/**/}
-		    		<textarea style={{'height':FORMHEIGHT+'px'}} >{this.state.newTextContent}</textarea>
+		    		<textarea>{this.state.newTextContent}</textarea>
 	    		</div>
     		</div>
   		</div>

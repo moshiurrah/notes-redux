@@ -65,11 +65,15 @@ class HeaderBase extends React.Component {
             <i className="fa fa-filter"></i>
           </button>
           <div className="dropdown-menu"  aria-labelledby="btnGroupDrop1">
-            <div className="dropdown-item" >
               {COLORS.map((color, index) => {
-                return (<ColorPalette color={color} key={index} onClick={this.changeColor}/>)
+                return (
+                  <div className="dropdown-item" >
+                    <ColorPalette color={color} key={index} onClick={this.changeColor}/>
+                  </div>
+                )
               })}
-              <button onClick={this.changeColor('')} className='btn'><i className="fa fa-times"></i></button>
+            <div className="dropdown-item" >
+              <a onClick={this.changeColor('')}>Clear</a>
             </div>
           </div>
         </div>
@@ -86,7 +90,7 @@ class HeaderBase extends React.Component {
           <div  className="dropdown-menu">
             <form className="">
               <Link to='/user'>
-                <p className='ml-2 mr-2'>{this.props.user.user.displayName.name}</p>
+                <div className='ml-2 mr-2 userName'><p>{this.props.user.user.displayName.name}</p></div>
               </Link>
               <button className="ml-2 mr-2 btn btn-primary" onClick={this.logout}><i className="fa fa-sign-out" aria-hidden="true"></i></button>
             </form>

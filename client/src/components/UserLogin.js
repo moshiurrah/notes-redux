@@ -131,9 +131,9 @@ class UserLoginBase extends React.Component {
 			    	</div>)}
 				  </div>
 				  {!this.state.isLogin ?
-				  	(<button type="submit" className="btn">Sign Up!</button>) :
+				  	(<button type="submit" className="btn btn-primary">Sign Up!</button>) :
 				  	(<div>
-				  			<button type="submit" className="btn">Log In!</button><br/>
+				  			<button type="submit" className="btn btn-success">Log In!</button><br/>
 				  		{!this.state.needMenu && (<small>New Accounts will be signed up automatically.</small>)}
 			  		</div>)
 				  }

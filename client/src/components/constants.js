@@ -7,8 +7,8 @@ export const COLORS = [YELLOW,RED,GREEN,CYAN];
 export const LOADINGOPACITY = 0.3;
 
 //style constants
-export const NOTEHEIGHT=300;
+export const NOTEHEIGHT='300px';
 export const NOTEWIDTH=300;
 export const FORMHEIGHT=NOTEHEIGHT*0.6;
 
-export const SIZECLASS='col-sm-6 col-md-6 col-lg-4'
+export const SIZECLASS='col-sm-12 col-md-6 col-lg-4'
