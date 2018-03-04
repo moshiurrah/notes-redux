@@ -1,6 +1,6 @@
 //developed with the guidlines from here:
 //https://github.com/reactjs/redux/blob/master/docs/recipes/ImplementingUndoHistory.md
-import {UNDOING, UNDONE, UNDOFAILED, CLEARPAST} from '../actions/undo'
+import {UNDOING, UNDONE, REDONE, UNDOFAILED, CLEARPAST} from '../actions/undo'
 
 
 const undoEnhancer = (reducer) => {
@@ -13,20 +13,43 @@ const undoEnhancer = (reducer) => {
       },
       fetching:false,
       hasHistory:false,
+      hasFuture: false,
       err:''
     }
     
      return function (state = initState, action) {
       const { past, present, future } = state.undoState;
       var hasHistory = past.filter(past => past.fetching === false && past.err==='').length>1;
+      var hasFuture = future.length > 0;
       switch (action.type) {
         case UNDOING:
           return {...state, fetching: true, err:''};
+        case REDONE:
+                    //undone modified to allow desired time travel
+          const next = action.desiredFuture;
+          const newFuture = past.slice(action.desiredFutureIndex, future.length);
+          hasHistory = newPast.filter(past => past.fetching === false && past.err==='').length>1;
+          hasFuture = newFuture.filter(future => future.fetching === false && future.err==='').length>0;
+  
+          
+          return {
+              undoState: {
+                past: [...past, present],
+                present: next,
+                future: newFuture
+              },
+              fetching:false,
+              hasHistory:hasHistory,
+              hasFuture: hasFuture,
+              err:''
+          }
+          
         case UNDONE:
           //undone modified to allow desired time travel
           const previous = action.desiredPast;
           const newPast = past.slice(0,action.desiredPastIndex-1);
           hasHistory = newPast.filter(past => past.fetching === false && past.err==='').length>1;
+          
           //console.log("NNNNNNNNNNNEEEEEWWWW PAST!!!!!!");
           //console.log(newPast);
            //original UNDONE
@@ -43,6 +66,7 @@ const undoEnhancer = (reducer) => {
               },
               fetching:false,
               hasHistory:hasHistory,
+              hasFuture: hasFuture,
               err:''
           }
           

@@ -24,7 +24,7 @@ import { getNotesAsync } from '../actions/fetchNotes';
 import {  addNoteAsync } from '../actions/addNote';
 import {  delNoteAsync } from '../actions/delNote';
 import {  editNoteAsync } from '../actions/editNote';
-import {  undoAsync } from '../actions/undo';
+import {  undoAsync, redoAsync } from '../actions/undo';
 import {  setColorFilter } from '../actions/changeColor';
 
 import {LOADINGOPACITY} from './constants.js';
@@ -42,6 +42,7 @@ const mapStateToProps = (state) => {
   	user: state.authReducer,
   	notes: state.notesReducer.undoState.present,
   	hasHistory:state.notesReducer.hasHistory,
+  	hasFuture:state.notesReducer.hasFuture,
   	limReached:state.notesReducer.undoState.present.limReached,
   	colorFilter: state.colorReducer
   }
@@ -73,6 +74,9 @@ const mapDispatchToProps = (dispatch) => {
   	},
   	undo: (user) => {
   		return dispatch(undoAsync(user));
+  	},
+  	redo: (user) => {
+  		return dispatch(redoAsync(user));
   	},
   	setColorFilter: (colorHex) => {
   		dispatch(setColorFilter(colorHex));
@@ -137,6 +141,15 @@ class Board extends React.Component {
 		.then( () => this.toggleFade());
 	}
 	
+	redo = () => {
+		this.toggleFade();
+		this.setState ({
+			curNoteID:''
+		});
+		this.props.redo(this.props.user.user._id)
+		.then( () => this.toggleFade());
+	}
+	
 	toggleAdd = () => {
 		this.setState({
 			adding:!this.state.adding
@@ -189,10 +202,10 @@ class Board extends React.Component {
 	
 
 	render () {
-		console.log(this.props.user);
-		console.log(this.props.notes);
-		console.log(this.props.colorFilter);
-		console.log(this.state.fadeAll);
+		//console.log(this.props.user);
+		//console.log(this.props.notes);
+		//console.log(this.props.colorFilter);
+		//console.log(this.state.fadeAll);
 		return (((this.props.user.authenticated) ? this.renderNotes() : this.renderLoginPage()));
 	}
 
@@ -225,7 +238,9 @@ class Board extends React.Component {
 								isAuth={this.props.user.authenticated}
 								logout={this.props.logoutUser}
 								undo={this.undo}
+								redo={this.redo}
 								hasHistory={this.props.hasHistory}
+								hasFuture={this.props.hasFuture}
 								limReached={this.props.limReached}/>
 				<ErrorFooter errMsg={this.props.notes.err}/>
 				
