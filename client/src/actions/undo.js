@@ -75,17 +75,19 @@ export const undoAsync = (user) => {
 
 export const redoAsync = (user) => {
   return function (dispatch, getState) {
+  	console.log('in redo')
     console.log(getState());
 		
 		/*undo action*/
 		const future = getState().notesReducer.undoState.future;
-		const hasFuture = getState().notesReducer.hasHistory;
+		const hasFuture = getState().notesReducer.hasFuture;
 		console.log(future);
 		var desiredIndex=future.length-1;
 		const successfulFuture = future.filter( (future, index) => {
 		  desiredIndex=index;
 		  return future.fetching === false && future.err==='';
 		})
+		console.log(successfulFuture);
 		
 
 		if (hasFuture) {

@@ -41,6 +41,8 @@ const mapStateToProps = (state) => {
   return {
   	user: state.authReducer,
   	notes: state.notesReducer.undoState.present,
+  	notesFuture: state.notesReducer.undoState.future,
+  	notesPast: state.notesReducer.undoState.past,
   	hasHistory:state.notesReducer.hasHistory,
   	hasFuture:state.notesReducer.hasFuture,
   	limReached:state.notesReducer.undoState.present.limReached,
@@ -203,7 +205,9 @@ class Board extends React.Component {
 
 	render () {
 		//console.log(this.props.user);
-		//console.log(this.props.notes);
+		console.log(this.props.notesPast);
+		console.log(this.props.notes);
+		console.log(this.props.notesFuture);
 		//console.log(this.props.colorFilter);
 		//console.log(this.state.fadeAll);
 		return (((this.props.user.authenticated) ? this.renderNotes() : this.renderLoginPage()));

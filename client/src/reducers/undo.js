@@ -20,16 +20,16 @@ const undoEnhancer = (reducer) => {
      return function (state = initState, action) {
       const { past, present, future } = state.undoState;
       var hasHistory = past.filter(past => past.fetching === false && past.err==='').length>1;
-      var hasFuture = future.length > 0;
+      var hasFuture =  future.filter(future => future.fetching === false && future.err==='').length>0;
       switch (action.type) {
         case UNDOING:
           return {...state, fetching: true, err:''};
         case REDONE:
                     //undone modified to allow desired time travel
           const next = action.desiredFuture;
-          const newFuture = past.slice(action.desiredFutureIndex, future.length);
-          hasHistory = newPast.filter(past => past.fetching === false && past.err==='').length>1;
-          hasFuture = newFuture.filter(future => future.fetching === false && future.err==='').length>0;
+          const newFuture = future.slice(action.desiredFutureIndex, future.length-1);
+          hasHistory = true;
+          hasFuture = newFuture.filter(future => future.fetching === false && future.err==='').length>1;
   
           
           return {
@@ -39,7 +39,7 @@ const undoEnhancer = (reducer) => {
                 future: newFuture
               },
               fetching:false,
-              hasHistory:hasHistory,
+              hasHistory: hasHistory,
               hasFuture: hasFuture,
               err:''
           }
@@ -49,6 +49,7 @@ const undoEnhancer = (reducer) => {
           const previous = action.desiredPast;
           const newPast = past.slice(0,action.desiredPastIndex-1);
           hasHistory = newPast.filter(past => past.fetching === false && past.err==='').length>1;
+          hasFuture = true;
           
           //console.log("NNNNNNNNNNNEEEEEWWWW PAST!!!!!!");
           //console.log(newPast);
