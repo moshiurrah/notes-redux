@@ -89,6 +89,7 @@ const undoEnhancer = (reducer) => {
             },
             fetching:false,
             hasHistory:hasHistory,
+            hasFuture: hasFuture,
             err:''
           }
       }
