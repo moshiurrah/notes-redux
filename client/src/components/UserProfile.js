@@ -47,7 +47,7 @@ class UserProfileBase extends React.Component {
 		}
 	}
 	componentDidMount () {
-	  //console.log(this.props.userInfo);
+	  ////console.log(this.props.userInfo);
 	}
 	showPassForm = () => {
 	  this.setState ({
@@ -75,8 +75,8 @@ class UserProfileBase extends React.Component {
 		});
 	}
 	render () {
-	  console.log(this.props.user);
-	  console.log(this.props.notes);
+	  //console.log(this.props.user);
+	  //console.log(this.props.notes);
 	  
 	  if (!this.props.user.authenticated) {
 			return <Redirect to='/'/>;

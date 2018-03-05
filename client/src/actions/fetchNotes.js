@@ -29,7 +29,7 @@ export const getFailed = (err) => {
 export const getNotesAsync = (user) => {
 	//return {type:LOGIN, user:user};
 	return function (dispatch, getState) {
-		console.log(getState());
+		//console.log(getState());
 		if (getState().authReducer.authenticated) {
 			dispatch(fetchingNotes());
 			//axios login
@@ -37,7 +37,7 @@ export const getNotesAsync = (user) => {
 			  method: 'get',
 			  url: `/api/${user}`,
 			}).then (res => {
-				console.log(res.data.content);
+				//console.log(res.data.content);
 				//dispatch(gotNotes(res.data.content));
 				dispatch(gotNotes(res.data.content));
 			}).catch (err =>{

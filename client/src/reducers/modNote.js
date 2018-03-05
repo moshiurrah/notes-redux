@@ -15,7 +15,7 @@ const notesReducerBase = (state = defState, action) => {
 		case FETCHNGNOTES:
 			return {...state, fetching: true, err:''};
 		case GOTNOTES:
-			//console.log(action.notes);
+			////console.log(action.notes);
 			return {...state, fetching: false, notes: action.notes , err:'', limReached:action.notes.length >= NUM_LIMIT};
 		case GETFAILED:
 			return {...state, fetching:false, err:action.err};
@@ -32,9 +32,9 @@ const notesReducerBase = (state = defState, action) => {
 		case DELING:
 			return {...state, fetching:true, err:''};
 		case DELETED:
-			//console.log(action.notes);
+			////console.log(action.notes);
 			var delNotes = state.notes.filter(note => {
-				console.log(note);
+				//console.log(note);
 				return note._id !== action.notes._id;
 			});
 			return {...state, fetching:false, notes: delNotes, err:'', limReached:delNotes.length >= NUM_LIMIT};
@@ -45,16 +45,16 @@ const notesReducerBase = (state = defState, action) => {
 		case EDITING:
 			return {...state, fetching:true, err:''};
 		case EDITED:
-			//console.log(action.notes);
+			////console.log(action.notes);
 			var newNotes = state.notes.map (note => {
-				console.log(note);
+				//console.log(note);
 				if (note._id === action.notes._id) {
 					return action.notes;
 				} else {
 					return note;
 				}
 			});
-			console.log(newNotes);
+			//console.log(newNotes);
 			return {...state, fetching:false, notes: newNotes, err:''};
 		case EDITFAILED:
 			return {...state, fetching:false, err:action.err};

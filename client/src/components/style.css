@@ -44,7 +44,7 @@ div .card-body > textarea {
 
 div.note {
   height: 350px;
-  max-width: 300px;
+  /*max-width: 300px;*/
   margin-bottom: 30px;
   box-shadow: 5px 5px 15px 0 rgba(0, 0, 0, .3); 
 

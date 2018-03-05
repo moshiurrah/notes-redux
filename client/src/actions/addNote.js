@@ -7,7 +7,7 @@ export const addingNotes = () => {
 };
 export const ADDED="ADDED";
 export const addedNote = (noteContent) => {
-  console.log(noteContent);
+  //console.log(noteContent);
 	return {type:ADDED, notes:noteContent};
 };
 export const ADDFAILED="ADDFAILED";
@@ -18,10 +18,10 @@ export const addFailed = (err) => {
 
 export const addNoteAsync = (user, noteContent, color, toggleAdd) => {
 	return function (dispatch, getState) {
-  	console.log(getState());
+  	//console.log(getState());
   	
   	if (getState().notesReducer.undoState.present.limReached) {
-  	  console.log("Limit reached!")
+  	  //console.log("Limit reached!")
   	} else {
   		dispatch(addingNotes());
   		//axios add note
@@ -30,7 +30,7 @@ export const addNoteAsync = (user, noteContent, color, toggleAdd) => {
   		  url: `/api/${user}/add`,
   		  data: {content:noteContent, color:color}
   		}).then (res => {
-  			console.log(res.data.content);
+  			//console.log(res.data.content);
   			dispatch(addedNote(res.data.content));
   			toggleAdd();
   		}).catch (err =>{

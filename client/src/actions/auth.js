@@ -10,11 +10,11 @@ import {setColorFilter} from './changeColor';
 
 
 export const logoutAndClearNotesAndClearPast = (user) => {
-	console.log('clearing user');
+	//console.log('clearing user');
 	return (dispatch, getState) => {
-		console.log('clearing notes');
+		//console.log('clearing notes');
 		return dispatch(logoutAndClearNotes(user)).then(() => {
-			console.log('clearing history');
+			//console.log('clearing history');
 			return dispatch(clearPast());
 		}).catch (err => {
 			console.log(err);
@@ -42,7 +42,7 @@ export const logoutUserAsync = (user) => {
 			}).then (res => {
 				dispatch(setColorFilter(''));
 				dispatch(loggedOut());
-				console.log('Session Logged out!');
+				//console.log('Session Logged out!');
 			}).catch (err =>{
 				dispatch(logoutFailed(user,err));
 			});
@@ -55,7 +55,7 @@ export const loginAndGetNotes = (user, isLogin) => {
 	return (dispatch, getState) => {
 		return dispatch(loginUserAsync(user, isLogin)).then(() => {
 			const fetchedUser=getState().authReducer.user._id;
-			console.log(fetchedUser);
+			//console.log(fetchedUser);
 			return dispatch(getNotesAsync(fetchedUser));
 		}).catch (err => {
 			console.log(err);
@@ -66,12 +66,12 @@ export const loginAndGetNotes = (user, isLogin) => {
 //fake async action with timeout
 export const loginUserAsync = (user, isLogin) => {
 	//return {type:LOGIN, user:user};
-	console.log('auth action says isLogin is ' + isLogin);
+	//console.log('auth action says isLogin is ' + isLogin);
 	var authRoute='/loginuser';
 	if (!isLogin) {
 		authRoute='/signupuser';
 	}
-	console.log(authRoute);
+	//console.log(authRoute);
 	return  (dispatch) => {
 		dispatch(loggingUserIn(user));
 		//axios login
@@ -80,7 +80,7 @@ export const loginUserAsync = (user, isLogin) => {
 		  url: authRoute,
 		  data: user
 		}).then (res => {
-			console.log(res.data.content);
+			//console.log(res.data.content);
 			dispatch(loggedin(res.data.content));
 		}).catch (err =>{
 			dispatch(loginFailed(user, err.response.data.error, isLogin));

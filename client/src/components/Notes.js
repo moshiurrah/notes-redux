@@ -170,7 +170,7 @@ class Board extends React.Component {
 	} 
 	update = (id, newText, newColor) => {
 		
-		console.log("Note id updating is " + id);
+		//console.log("Note id updating is " + id);
 		this.setState ({
 			curNoteID:id,
 			needFocus:false
@@ -205,9 +205,9 @@ class Board extends React.Component {
 
 	render () {
 		//console.log(this.props.user);
-		console.log(this.props.notesPast);
-		console.log(this.props.notes);
-		console.log(this.props.notesFuture);
+		//console.log(this.props.notesPast);
+		//console.log(this.props.notes);
+		//console.log(this.props.notesFuture);
 		//console.log(this.props.colorFilter);
 		//console.log(this.state.fadeAll);
 		return (((this.props.user.authenticated) ? this.renderNotes() : this.renderLoginPage()));

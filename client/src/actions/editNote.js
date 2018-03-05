@@ -7,7 +7,7 @@ export const editingNotes = (newNote, newColor) => {
 };
 export const EDITED="EDITED";
 export const editedNote = (noteContent) => {
-  console.log(noteContent);
+  //console.log(noteContent);
 	return {type:EDITED, notes:noteContent};
 };
 export const EDITFAILED="EDITFAILED";
@@ -18,7 +18,7 @@ export const editFailed = (err) => {
 
 export const editNoteAsync = (user, noteID, newNote, noteColor) => {
 	return function (dispatch, getState) {
-  	console.log(getState());
+  	//console.log(getState());
 		dispatch(editingNotes());
 		//axios add note
 		axios({
@@ -29,8 +29,8 @@ export const editNoteAsync = (user, noteID, newNote, noteColor) => {
 		  	color: noteColor
 		  }
 		}).then (res => {
-			console.log(res.data.content);
-			//console.log(res.data.color);
+			//console.log(res.data.content);
+			////console.log(res.data.color);
 			dispatch(editedNote(res.data.content));
 		}).catch (err =>{
 			dispatch(editFailed(err.response.data.error));

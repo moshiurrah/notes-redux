@@ -29,12 +29,12 @@ const undoEnhancer = (reducer) => {
           const next = action.desiredFuture;
           const newFuture = future.slice(action.desiredFutureIndex+1, future.length);
           const newPastRedone = [...past, present]; //shift present to the past
-          console.log('REDONE PAST');
-          console.log(newPastRedone);
-          console.log('REDONE PRESENT');
-          console.log(next); //future is now the present
-          console.log('REDONE FUTURE');
-          console.log(newFuture);
+          //console.log('REDONE PAST');
+          //console.log(newPastRedone);
+          //console.log('REDONE PRESENT');
+          //console.log(next); //future is now the present
+          //console.log('REDONE FUTURE');
+          //console.log(newFuture);
           hasHistory = true;
           hasFuture = newFuture.filter(future => future.fetching === false && future.err==='').length>0;
   
@@ -67,12 +67,12 @@ const undoEnhancer = (reducer) => {
           hasFuture = true;
           
           
-          console.log('Undone PAST');
-          console.log(newPast);
-          console.log('Undone PRESENT');
-          console.log(previous); //future is now the present
-          console.log('Undone FUTURE');
-          console.log(newFutureUndone);
+          //console.log('Undone PAST');
+          //console.log(newPast);
+          //console.log('Undone PRESENT');
+          //console.log(previous); //future is now the present
+          //console.log('Undone FUTURE');
+          //console.log(newFutureUndone);
           
           return {
               undoState: {
@@ -87,7 +87,7 @@ const undoEnhancer = (reducer) => {
           }
           
         case UNDOFAILED:
-          console.log(action.err);
+          //console.log(action.err);
           return {...state, fetching:false, hasHistory:hasHistory, err:action.err};
         case CLEARPAST:
           return initState;

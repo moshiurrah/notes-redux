@@ -7,7 +7,7 @@ export const delingNotes = () => {
 };
 export const DELETED="DELETED";
 export const deletedNote = (noteContent) => {
-  console.log(noteContent);
+  //console.log(noteContent);
 	return {type:DELETED, notes:noteContent};
 };
 export const DELFAILED="DELFAILED";
@@ -20,7 +20,7 @@ export const deleteFailed = (err) => {
 
 export const delNoteAsync = (user, noteID, isdelAll=false) => {
 	return function (dispatch, getState) {
-  	console.log(getState());
+  	//console.log(getState());
 		dispatch(delingNotes());
 		
 		var delUrl = `/api/${user}/${noteID}`
@@ -30,7 +30,7 @@ export const delNoteAsync = (user, noteID, isdelAll=false) => {
 		  method: 'delete',
 		  url: delUrl
 		}).then (res => {
-			console.log(res.data.content);
+			//console.log(res.data.content);
 			if (isdelAll) {
 				dispatch(clearNotes());
 			} else {
