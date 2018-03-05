@@ -121,6 +121,7 @@ module.exports = function (app, passport) {
   function changeNote (req,res, action) {
   	console.log(action);
   	var toReturn ={};
+  	var errMsg = '';
 		Users.findById(req.params.id, function (err, user) {
 			if (err) {
 				return res.send(403, { error: "User not found!" });
@@ -132,21 +133,25 @@ module.exports = function (app, passport) {
 						user.notes=[];
 						user.notes=req.body.content;
 						toReturn= {content:user.notes};
+						errMsg = 'Note refresh failed!';
 						break;
 					case 'add':
 						user.notes.unshift(req.body);
 						console.log(user.notes[0]);
 						toReturn= {content:user.notes[0]};
+						errMsg = 'Adding note failed! Please check the length of the note.';
 						break;
 					case 'edit':
 						editNote.content=req.body.content;
 						editNote.color=req.body.color;
 						toReturn = {content:	editNote};
+						errMsg = 'Editing note failed! Please check the length of the note.';
 						break;
 					case 'delete':
 						editNote.remove({ _id: req.params.noteID }, function(err, note) {
 							if (err) return res.send(403, { error: "Remove Failed!" });
 						});
+						errMsg = 'Failed to delete note!';
 						toReturn = {content:editNote};
 						break;
 					case 'deleteall':
@@ -155,6 +160,7 @@ module.exports = function (app, passport) {
 							user.notes.id(user.notes[i]._id).remove();
 						}
 						//do a non mutating action here instead
+						errMsg = 'Failed to delete notes!';
 						toReturn = {};
 						break;
 					default:
@@ -163,7 +169,7 @@ module.exports = function (app, passport) {
 				user.save(function(err) {
 					if (err){
 						console.log(err);
-						return res.send(403, { error: "Changes Failed!" });
+						return res.send(403, { error:errMsg });
 					} else {
 						console.log('Notes Changed');
 						res.json(toReturn);

@@ -35,7 +35,8 @@ const undoEnhancer = (reducer) => {
           //console.log(next); //future is now the present
           //console.log('REDONE FUTURE');
           //console.log(newFuture);
-          hasHistory = true;
+          //hasHistory = true;
+          hasHistory = newPastRedone.filter(past => past.fetching === false && past.err==='').length>1;
           hasFuture = newFuture.filter(future => future.fetching === false && future.err==='').length>0;
   
           
@@ -64,7 +65,7 @@ const undoEnhancer = (reducer) => {
           const newFutureUndone = [present, ...future];
           //the first past is invalid?
           hasHistory = newPast.filter(past => past.fetching === false && past.err==='').length>1;
-          hasFuture = true;
+          hasFuture = newFutureUndone.filter(future => future.fetching === false && future.err==='').length>0;
           
           
           //console.log('Undone PAST');
@@ -94,9 +95,11 @@ const undoEnhancer = (reducer) => {
         default:
           // Delegate handling the action to the passed reducer
           const newPresent = reducer(present, action)
+          
           if (present === newPresent) {
             return state
           }
+          
           return {
             undoState: {
               past: [...past, present],

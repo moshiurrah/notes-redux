@@ -90,3 +90,7 @@ a:hover, a:visited, a:link, a:active {
 .dropdown-menu {
   min-width: 0px;
 }
+
+.errFooter {
+  margin-bottom: 50px;
+}
