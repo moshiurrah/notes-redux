@@ -58,6 +58,7 @@ class HeaderBase extends React.Component {
 	  )
   }
   renderFilter = () => {
+    var numColors=0;
     return (
       <div  className="btn-group  ml-2" role="group" aria-label="Button group with nested dropdown">
         <div className="btn-group" role="group">
@@ -66,15 +67,16 @@ class HeaderBase extends React.Component {
           </button>
           <div className="dropdown-menu"  aria-labelledby="btnGroupDrop1">
               {COLORS.map((color, index) => {
+                numColors=index;
                 return (
-                  <div className="dropdown-item" >
+                  <div key={index} className="dropdown-item" >
                     <ColorPalette color={color} key={index} onClick={this.changeColor}/>
                   </div>
                 )
               })}
-            <div className="dropdown-item" >
-              <a onClick={this.changeColor('')}>Clear</a>
-            </div>
+              <div key={numColors+1} className="dropdown-item" >
+                <a onClick={this.changeColor('')}>Clear</a>
+              </div>
           </div>
         </div>
       </div>

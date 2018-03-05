@@ -90,7 +90,7 @@ class UserProfileBase extends React.Component {
 	  
 		return (
 			<div>
-				<Header isBackReq={true} isUserReq={true}/>
+				<Header key={2} id={2} isBackReq={true} isUserReq={true}/>
 				<div className="container-fluid">
 					
 				  <div className="row">

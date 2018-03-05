@@ -17,6 +17,8 @@ const LoginBase = ({user}) => {
   return (
 			<div>
 			<Header
+				key={0} 
+				id={0}
 				isControlReq={false}
 			/>
 			<UserLogin/>

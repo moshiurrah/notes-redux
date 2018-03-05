@@ -25,16 +25,23 @@ const undoEnhancer = (reducer) => {
         case UNDOING:
           return {...state, fetching: true, err:''};
         case REDONE:
-                    //undone modified to allow desired time travel
+          //undone modified to allow desired time travel
           const next = action.desiredFuture;
-          const newFuture = future.slice(action.desiredFutureIndex, future.length-1);
+          const newFuture = future.slice(action.desiredFutureIndex+1, future.length);
+          const newPastRedone = [...past, present]; //shift present to the past
+          console.log('REDONE PAST');
+          console.log(newPastRedone);
+          console.log('REDONE PRESENT');
+          console.log(next); //future is now the present
+          console.log('REDONE FUTURE');
+          console.log(newFuture);
           hasHistory = true;
-          hasFuture = newFuture.filter(future => future.fetching === false && future.err==='').length>1;
+          hasFuture = newFuture.filter(future => future.fetching === false && future.err==='').length>0;
   
           
           return {
               undoState: {
-                past: [...past, present],
+                past: newPastRedone,
                 present: next,
                 future: newFuture
               },
@@ -47,23 +54,31 @@ const undoEnhancer = (reducer) => {
         case UNDONE:
           //undone modified to allow desired time travel
           const previous = action.desiredPast;
-          const newPast = past.slice(0,action.desiredPastIndex-1);
+          //old code, was maintaiining unsuccessful past
+          //const newPast = past.slice(0,action.desiredPastIndex-1);
+          //ditch uncsuccesful pasts
+          const successfulPast = past.filter( (past, index) => {
+    		    return past.fetching === false && past.err==='';
+    		  })
+    		  const newPast = successfulPast.slice(0,successfulPast.length-1);
+          const newFutureUndone = [present, ...future];
+          //the first past is invalid?
           hasHistory = newPast.filter(past => past.fetching === false && past.err==='').length>1;
           hasFuture = true;
           
-          //console.log("NNNNNNNNNNNEEEEEWWWW PAST!!!!!!");
-          //console.log(newPast);
-           //original UNDONE
-           /*
-          const previous = past[past.length - 1]
-          const newPast = past.slice(0, past.length - 1)
-          */
+          
+          console.log('Undone PAST');
+          console.log(newPast);
+          console.log('Undone PRESENT');
+          console.log(previous); //future is now the present
+          console.log('Undone FUTURE');
+          console.log(newFutureUndone);
           
           return {
               undoState: {
                 past: newPast,
                 present: previous,
-                future: [present, ...future]
+                future: newFutureUndone
               },
               fetching:false,
               hasHistory:hasHistory,

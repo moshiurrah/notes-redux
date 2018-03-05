@@ -234,7 +234,7 @@ class Board extends React.Component {
   renderNotes = () =>  {
 		return (
 			<div className="">
-				<Header isFilterReq={true} isUserReq={true}/>
+				<Header key={1} id={1} isFilterReq={true} isUserReq={true}/>
 				<ControlFooter add={this.toggleAdd}
 								//addDisabled={this.state.addDisabled}
 								user={this.props.user.user._id}

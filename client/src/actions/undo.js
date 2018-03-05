@@ -40,6 +40,8 @@ export const undoAsync = (user) => {
 		const hasHistory = getState().notesReducer.hasHistory;
 		console.log(past);
 		var desiredIndex=past.length-1;
+		
+		//is this still necessary? probably a good double check
 		const successfulPast = past.filter( (past, index) => {
 		  desiredIndex=index;
 		  return past.fetching === false && past.err==='';
@@ -82,9 +84,9 @@ export const redoAsync = (user) => {
 		const future = getState().notesReducer.undoState.future;
 		const hasFuture = getState().notesReducer.hasFuture;
 		console.log(future);
-		var desiredIndex=future.length-1;
+		var desiredIndex=0;
 		const successfulFuture = future.filter( (future, index) => {
-		  desiredIndex=index;
+		  //desiredIndex=index;
 		  return future.fetching === false && future.err==='';
 		})
 		console.log(successfulFuture);
