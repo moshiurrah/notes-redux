@@ -1,10 +1,10 @@
 'use strict';
 
-var GitHubStrategy = require('passport-github').Strategy;
-var FacebookStrategy = require('passport-facebook').Strategy;
+//var GitHubStrategy = require('passport-github').Strategy;
+//var FacebookStrategy = require('passport-facebook').Strategy;
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('../models/users');
-var configAuth = require('./auth');
+//var configAuth = require('./auth');
 
 module.exports = function (passport) {
 	passport.serializeUser(function (user, done) {
@@ -90,6 +90,7 @@ module.exports = function (passport) {
 	}));
 	//Facebook login strategdy
 	//taken from: https://scotch.io/tutorials/easy-node-authentication-facebook#configuring-passports-facebook-strategy-configpassportjs
+	/*
 	passport.use(new FacebookStrategy({
 
         // pull in our app id and secret from our auth.js file
@@ -98,6 +99,7 @@ module.exports = function (passport) {
         callbackURL     : configAuth.facebookAuth.callbackURL
 
     },
+    
     // facebook will send back the token and profile
     function(token, refreshToken, profile, done) {
         // asynchronous
@@ -137,9 +139,10 @@ module.exports = function (passport) {
         });
 
     }));
+    */
 
 
-	
+	/*
 	passport.use(new GitHubStrategy({
 		clientID: configAuth.githubAuth.clientID,
 		clientSecret: configAuth.githubAuth.clientSecret,
@@ -174,5 +177,6 @@ module.exports = function (passport) {
 			});
 		});
 	}));
+	*/
 	
 };
