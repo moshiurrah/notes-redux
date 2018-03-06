@@ -14,7 +14,7 @@
     "redux-thunk": "^2.2.0"
   },
   "proxy": "http://localhost:8080",
-  "homepage": "https://notesapp-mtanzim.c9users.io/",
+  "homepage": "https://rednotes.herokuapp.com/",
   "althome": "",
   "scripts": {
     "start": "PORT=8081 react-scripts start",
