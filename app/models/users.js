@@ -26,7 +26,7 @@ var User = new Schema({
     password        :String
     
   },
-  notes: { type: [Notes.schema], default: [] }
+  notes: { type: [Notes.schema], default: [{content:"Weclome to the notes app! Please find the control menu on the bottom right corner."}]}
 });
 
 //generate a common user display name

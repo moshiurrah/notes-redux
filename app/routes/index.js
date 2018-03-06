@@ -268,7 +268,7 @@ module.exports = function (app, passport) {
 					    	console.log(user) // null
 					    	console.log(err);
 					  	});
-							res.json({content:"Account deleted! Goodbye forver :`("});
+							res.json({content:"Account deleted! Goodbye forever :`("});
 				  	}
 				})
 	    		
