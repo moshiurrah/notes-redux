@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    
     "react": "^16.2.0",
     "react-circular-progressbar": "^0.8.0",
     "react-dom": "^16.2.0",
@@ -17,7 +18,7 @@
   "homepage": "https://rednotes.herokuapp.com/",
   "althome": "",
   "scripts": {
-    "start": "PORT=8081 react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

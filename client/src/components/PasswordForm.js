@@ -56,7 +56,7 @@ class PasswordFormBase extends React.Component {
 	handleSavePass = (event) => {
 	  event.preventDefault();
 	  if (this.state.newPass !== this.state.newPassVerify) {
-	    this.setState({localErr:"New passwords don't match!!"});
+	    this.setState({localErr:"New passwords don't match!!!"});
 	  } else {
 	  	this.setState ({isDisabled:true, opacity:0.3});
 	  	this.props.changePass(this.props.user.user._id,this.state.curPass, this.state.newPass)
