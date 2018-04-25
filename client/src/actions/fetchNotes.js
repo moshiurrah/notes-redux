@@ -1,28 +1,28 @@
 import axios from 'axios';
 
-export const DEL="DELETE";
-export const DELALL="DELALL";
-export const EDIT="EDIT";
+export const DEL = "DELETE";
+export const DELALL = "DELALL";
+export const EDIT = "EDIT";
 
 //async getNotes
-export const FETCHNGNOTES="FETCHNGNOTES";
+export const FETCHNGNOTES = "FETCHNGNOTES";
 export const fetchingNotes = () => {
-	return {type:FETCHNGNOTES};
+	return { type: FETCHNGNOTES };
 };
 
-export const CLEARNOTES="CLEARNOTES";
+export const CLEARNOTES = "CLEARNOTES";
 export const clearNotes = () => {
-	return {type:CLEARNOTES};
+	return { type: CLEARNOTES };
 };
 
-export const GOTNOTES="GOTNOTES";
+export const GOTNOTES = "GOTNOTES";
 export const gotNotes = (notes) => {
-	return {type:GOTNOTES, notes:notes};
+	return { type: GOTNOTES, notes: notes };
 };
 
-export const GETFAILED="GETFAILED";
+export const GETFAILED = "GETFAILED";
 export const getFailed = (err) => {
-	return {type:GETFAILED, err:err};
+	return { type: GETFAILED, err: err };
 };
 
 
@@ -34,13 +34,13 @@ export const getNotesAsync = (user) => {
 			dispatch(fetchingNotes());
 			//axios login
 			return axios({
-			  method: 'get',
-			  url: `/api/${user}`,
-			}).then (res => {
+				method: 'get',
+				url: `/api/${user}`,
+			}).then(res => {
 				//console.log(res.data.content);
 				//dispatch(gotNotes(res.data.content));
 				dispatch(gotNotes(res.data.content));
-			}).catch (err =>{
+			}).catch(err => {
 				dispatch(getFailed(err));
 			});
 		}

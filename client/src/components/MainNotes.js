@@ -5,7 +5,7 @@ import LoginPage from './LoginPage'
 import UserProfile from './UserProfile'
 
 import { Provider } from 'react-redux'
-import  noteRootReducer  from '../reducers/index';
+import noteRootReducer from '../reducers/index';
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 
@@ -15,13 +15,13 @@ import thunk from 'redux-thunk'
 // with /roster or /schedule. The / route will only match
 // when the pathname is exactly the string "/"
 const MainNotesContainer = () => (
-  <main>
-    <Switch>
-      <Route exact path='/' component={Notes}/>
-      <Route path='/login' component={LoginPage}/>
-      <Route path='/user' component={UserProfile}/>
-    </Switch>
-  </main>
+	<main>
+		<Switch>
+			<Route exact path='/' component={Notes} />
+			<Route path='/login' component={LoginPage} />
+			<Route path='/user' component={UserProfile} />
+		</Switch>
+	</main>
 )
 
 
@@ -32,8 +32,8 @@ class MainNotes extends React.Component {
 	// change code below this line
 	render() {
 		return (
-			<Provider store = {store}>
-				<MainNotesContainer/>
+			<Provider store={store}>
+				<MainNotesContainer />
 			</Provider>
 		);
 	}
