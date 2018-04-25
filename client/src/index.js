@@ -8,6 +8,6 @@ import { BrowserRouter } from 'react-router-dom'
 
 ReactDOM.render((
   <BrowserRouter>
-    <MainNotes/>
+    <MainNotes />
   </BrowserRouter>), document.getElementById('root'));
 //registerServiceWorker();
